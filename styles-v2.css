@@ -586,16 +586,42 @@ h2 {
 }
 
 .service-icon {
-  width: 58px;
-  height: 58px;
-  display: grid;
-  place-items: center;
-  margin: 2.2rem 0 1.7rem;
-  border: 1px solid rgba(185, 133, 60, 0.45);
-  border-radius: 50%;
-  color: var(--maroon);
-  font-family: var(--serif);
-  font-size: 1.15rem;
+  width: 82px;
+  height: 82px;
+  display: block;
+  flex: 0 0 auto;
+  margin: 1.45rem 0 1.35rem;
+  border: 0;
+  border-radius: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  color: transparent;
+  font-size: 0;
+}
+
+.service-card:nth-child(1) .service-icon {
+  background-image: url("assets/icons/manifestation-grid.png");
+}
+
+.service-card:nth-child(2) .service-icon {
+  background-image: url("assets/icons/name-energy.png");
+}
+
+.service-card:nth-child(3) .service-icon {
+  background-image: url("assets/icons/personal-numerology.png");
+}
+
+.service-card:nth-child(4) .service-icon {
+  background-image: url("assets/icons/business-career.png");
+}
+
+.service-card:nth-child(5) .service-icon {
+  background-image: url("assets/icons/critical-number.png");
+}
+
+.service-card:nth-child(6) .service-icon {
+  background-image: url("assets/icons/rudraksha-consultancy.png");
 }
 
 .service-card h3,
