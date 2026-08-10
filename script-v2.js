@@ -29,39 +29,40 @@ navigation?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-// Surface the practitioner's academic credential without competing with the brand.
-const credentialText = "PhD in Numerology";
-
+// Present academic credentials as part of the consultation story, not as a standalone badge.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
   .hero-credential {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55rem;
-    margin: 0.2rem 0 1.35rem;
-    padding: 0.48rem 0.8rem;
-    border: 1px solid rgba(185, 133, 60, 0.38);
-    border-radius: 999px;
-    background: rgba(255, 253, 249, 0.72);
+    margin: 0.35rem 0 1.35rem;
     color: var(--maroon);
-    font-size: 0.76rem;
-    font-weight: 750;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    box-shadow: 0 8px 24px rgba(54, 32, 23, 0.05);
   }
 
-  .hero-credential::before {
-    content: "✦";
+  .hero-credential-message {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-family: var(--serif);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  .hero-credential-detail {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     color: var(--gold);
-    font-size: 0.72rem;
+    font-size: 0.76rem;
+    font-weight: 750;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-credential-detail::before {
+    content: "✦";
+    font-size: 0.68rem;
   }
 
   .about-credential {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: fit-content;
     margin-top: 1.35rem;
     padding-top: 1rem;
     border-top: 1px solid var(--line);
@@ -69,20 +70,28 @@ credentialStyles.textContent = `
     font-family: var(--serif);
     font-size: 1rem;
     font-weight: 600;
+    line-height: 1.7;
   }
 
   .about-credential::before {
     content: "✦";
+    margin-right: 0.55rem;
     color: var(--gold);
-    font-family: inherit;
     font-size: 0.8rem;
   }
 
   @media (max-width: 640px) {
     .hero-credential {
       margin-bottom: 1.1rem;
+    }
+
+    .hero-credential-message {
+      font-size: 1rem;
+    }
+
+    .hero-credential-detail {
       font-size: 0.68rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
     }
   }
 `;
@@ -92,9 +101,18 @@ const heroHeading = document.querySelector(".hero h1");
 const existingSignature = document.querySelector(".hero .signature-line");
 
 if (heroHeading && !document.querySelector(".hero-credential")) {
-  const heroCredential = document.createElement("p");
+  const heroCredential = document.createElement("div");
   heroCredential.className = "hero-credential";
-  heroCredential.textContent = credentialText;
+
+  const heroMessage = document.createElement("span");
+  heroMessage.className = "hero-credential-message";
+  heroMessage.textContent = "Numerology guidance backed by experience, academic distinction & insight";
+
+  const heroDetail = document.createElement("span");
+  heroDetail.className = "hero-credential-detail";
+  heroDetail.textContent = "Ph.D. in Numerology • Gold Medallist • Experienced Practitioner";
+
+  heroCredential.append(heroMessage, heroDetail);
 
   if (existingSignature) {
     existingSignature.insertAdjacentElement("afterend", heroCredential);
@@ -107,6 +125,6 @@ const aboutIntro = document.querySelector(".about .split-layout > div:first-chil
 if (aboutIntro && !document.querySelector(".about-credential")) {
   const aboutCredential = document.createElement("p");
   aboutCredential.className = "about-credential";
-  aboutCredential.textContent = credentialText;
+  aboutCredential.textContent = "Every consultation is personally guided by an experienced practitioner who holds a Ph.D. in Numerology and is a Gold Medallist, bringing together academic depth, practical experience and intuitive insight.";
   aboutIntro.appendChild(aboutCredential);
 }
