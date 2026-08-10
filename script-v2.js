@@ -125,6 +125,6 @@ const aboutIntro = document.querySelector(".about .split-layout > div:first-chil
 if (aboutIntro && !document.querySelector(".about-credential")) {
   const aboutCredential = document.createElement("p");
   aboutCredential.className = "about-credential";
-  aboutCredential.textContent = "Every consultation is personally guided, bringing together deep numerological knowledge, practical experience and intuitive insight.";
+  aboutCredential.textContent = "Every consultation is personally guided, drawing on deep numerological knowledge and practical experience, with careful attention to what matters most to you.";
   aboutIntro.appendChild(aboutCredential);
 }
