@@ -11,13 +11,14 @@
     <title>Rudrankaa | Numerology Guidance</title>
     <style>
       /* Prevent the source logo from expanding if an external stylesheet is delayed or cached. */
-      .site-header .brand-logo-frame { position: static !important; width: 220px !important; height: 58px !important; display: grid !important; place-items: center; overflow: visible !important; }
-      .site-header .brand-logo { position: static !important; inset: auto !important; display: block !important; width: 100% !important; height: 100% !important; max-width: 100% !important; object-fit: contain !important; object-position: left center !important; }
+      .site-header .brand-logo-frame { position: relative !important; width: 220px !important; height: 72px !important; display: block !important; overflow: hidden !important; }
+      .site-header .brand-logo { position: absolute !important; top: -38px !important; left: 0 !important; width: 220px !important; height: auto !important; max-width: none !important; object-fit: initial !important; }
       @media (max-width: 640px) {
-        .site-header .brand-logo-frame { width: 174px !important; height: 48px !important; }
+        .site-header .brand-logo-frame { width: 174px !important; height: 60px !important; }
+        .site-header .brand-logo { top: -30px !important; width: 174px !important; }
       }
     </style>
-    <link rel="stylesheet" href="styles-v2.css?v=3" />
+    <link rel="stylesheet" href="styles-v2.css?v=4" />
     <script defer src="script-v2.js"></script>
   </head>
   <body>
