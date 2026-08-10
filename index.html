@@ -9,8 +9,17 @@
     />
     <meta name="theme-color" content="#f7f0e4" />
     <title>Rudrankaa | Numerology Guidance</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script defer src="script.js"></script>
+    <style>
+      /* Prevent the source logo from expanding if an external stylesheet is delayed or cached. */
+      .brand-logo-frame { position: relative; width: 220px; height: 58px; display: block; overflow: hidden; }
+      .brand-logo { position: absolute; top: -39px; left: 0; width: 220px; max-width: none; height: auto; }
+      @media (max-width: 640px) {
+        .brand-logo-frame { width: 174px; height: 48px; }
+        .brand-logo { top: -31px; width: 174px; }
+      }
+    </style>
+    <link rel="stylesheet" href="styles-v2.css" />
+    <script defer src="script-v2.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
