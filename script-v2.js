@@ -29,7 +29,7 @@ navigation?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-// Present academic credentials as part of the consultation story, not as a standalone badge.
+// Present academic credentials once in the hero, then reinforce personal expertise lower on the page.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
   .hero-credential {
@@ -125,6 +125,6 @@ const aboutIntro = document.querySelector(".about .split-layout > div:first-chil
 if (aboutIntro && !document.querySelector(".about-credential")) {
   const aboutCredential = document.createElement("p");
   aboutCredential.className = "about-credential";
-  aboutCredential.textContent = "Every consultation is personally guided by an experienced practitioner who holds a Ph.D. in Numerology and is a Gold Medallist, bringing together academic depth, practical experience and intuitive insight.";
+  aboutCredential.textContent = "Every consultation is personally guided, bringing together deep numerological knowledge, practical experience and intuitive insight.";
   aboutIntro.appendChild(aboutCredential);
 }
