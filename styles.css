@@ -90,20 +90,20 @@ a {
 }
 
 .brand-logo-frame {
-  position: relative;
   width: 220px;
   height: 58px;
-  display: block;
-  overflow: hidden;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: visible;
 }
 
 .brand-logo {
-  position: absolute;
-  top: -39px;
-  left: 0;
-  width: 220px;
-  max-width: none;
-  height: auto;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .brand-mark {
@@ -984,11 +984,6 @@ h2 {
   .brand-logo-frame {
     width: 174px;
     height: 48px;
-  }
-
-  .brand-logo {
-    top: -31px;
-    width: 174px;
   }
 
   h1 {
