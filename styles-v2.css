@@ -579,6 +579,7 @@ h2 {
 }
 
 .service-number {
+  display: none;
   align-self: flex-end;
   color: #a4958c;
   font-family: var(--serif);
@@ -733,7 +734,7 @@ h2 {
 }
 
 .principle-grid span {
-  display: block;
+  display: none;
   margin-bottom: 3.6rem;
   color: var(--gold);
   font-family: var(--serif);
