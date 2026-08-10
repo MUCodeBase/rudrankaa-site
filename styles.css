@@ -89,6 +89,23 @@ a {
   text-decoration: none;
 }
 
+.brand-logo-frame {
+  position: relative;
+  width: 220px;
+  height: 58px;
+  display: block;
+  overflow: hidden;
+}
+
+.brand-logo {
+  position: absolute;
+  top: -39px;
+  left: 0;
+  width: 220px;
+  max-width: none;
+  height: auto;
+}
+
 .brand-mark {
   width: 40px;
   height: 40px;
@@ -530,7 +547,7 @@ h2 {
 
 .service-card {
   position: relative;
-  min-height: 420px;
+  min-height: 390px;
   display: flex;
   flex-direction: column;
   padding: 2rem;
@@ -698,12 +715,16 @@ h2 {
 .contact-card {
   position: relative;
   overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  align-items: center;
+  gap: min(8vw, 90px);
   padding: 86px min(9vw, 110px);
   background:
     radial-gradient(circle at 90% 15%, rgba(217, 183, 121, 0.22), transparent 28%),
     var(--maroon);
   color: white;
-  text-align: center;
+  text-align: left;
 }
 
 .contact-card::before,
@@ -733,7 +754,7 @@ h2 {
   height: 42px;
   display: grid;
   place-items: center;
-  margin: 0 auto 1.2rem;
+  margin: 0 0 1.2rem;
   border: 1px solid rgba(217, 183, 121, 0.5);
   border-radius: 50%;
   color: var(--gold-light);
@@ -741,13 +762,18 @@ h2 {
 
 .contact-card h2 {
   max-width: 720px;
-  margin-inline: auto;
 }
 
-.contact-card > p:not(.section-label) {
+.contact-copy > p:not(.section-label) {
   max-width: 600px;
-  margin: 0 auto 2rem;
+  margin: 0 0 2rem;
   color: rgba(255, 255, 255, 0.7);
+}
+
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
 }
 
 .button-light {
@@ -761,10 +787,47 @@ h2 {
   box-shadow: 0 15px 36px rgba(0, 0, 0, 0.18);
 }
 
-.contact-card small {
+.button-outline-light {
+  border-color: rgba(255, 255, 255, 0.42);
+  color: white;
+}
+
+.button-outline-light:hover,
+.button-outline-light:focus-visible {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.qr-card {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1.2rem;
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+}
+
+.qr-card img {
+  width: 100%;
+  height: auto;
   display: block;
-  margin-top: 1rem;
-  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 0.8rem;
+}
+
+.qr-card strong {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.qr-card span {
+  margin-top: 0.2rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
 }
 
 .site-footer {
@@ -910,6 +973,16 @@ h2 {
     font-size: 0.8rem;
   }
 
+  .brand-logo-frame {
+    width: 174px;
+    height: 48px;
+  }
+
+  .brand-logo {
+    top: -31px;
+    width: 174px;
+  }
+
   h1 {
     font-size: clamp(3.1rem, 16vw, 4.6rem);
   }
@@ -988,7 +1061,24 @@ h2 {
 
   .contact-card {
     width: 100%;
+    grid-template-columns: 1fr;
     padding: 70px 25px;
+    text-align: center;
+  }
+
+  .contact-symbol,
+  .contact-copy > p:not(.section-label) {
+    margin-inline: auto;
+  }
+
+  .contact-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .qr-card {
+    width: min(270px, 100%);
+    margin-inline: auto;
   }
 
   .footer-main,
