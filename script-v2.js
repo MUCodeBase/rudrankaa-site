@@ -32,8 +32,8 @@ navigation?.querySelectorAll("a").forEach((link) => {
 // Keep the hero credibility sequence clear: positioning first, qualification as proof.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
-  /* Desktop: expose more of the lower logo so the damroo is fully visible.
-     Use the same selector specificity as the inline fallback rule so this later rule wins. */
+  /* Desktop: keep enough vertical room for the complete damroo, then mask only
+     the lower tagline area of the source logo. */
   .site-header .brand-logo-frame {
     height: 88px !important;
   }
@@ -45,7 +45,7 @@ credentialStyles.textContent = `
     right: 0;
     bottom: 0;
     z-index: 2;
-    height: 4px;
+    height: 13px;
     background: #fffdf9;
     pointer-events: none;
   }
