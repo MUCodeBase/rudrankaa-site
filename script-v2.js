@@ -32,13 +32,13 @@ navigation?.querySelectorAll("a").forEach((link) => {
 // Keep the hero credibility sequence clear: positioning first, qualification as proof.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
-  /* Desktop needs a little more vertical room so the damroo is not clipped.
-     Keep the lower-edge mask for the faint source-image artifact. */
-  .brand-logo-frame {
-    height: 80px !important;
+  /* Desktop: expose more of the lower logo so the damroo is fully visible.
+     Use the same selector specificity as the inline fallback rule so this later rule wins. */
+  .site-header .brand-logo-frame {
+    height: 88px !important;
   }
 
-  .brand-logo-frame::after {
+  .site-header .brand-logo-frame::after {
     content: "";
     position: absolute;
     left: 0;
@@ -115,11 +115,11 @@ credentialStyles.textContent = `
   }
 
   @media (max-width: 640px) {
-    .brand-logo-frame {
+    .site-header .brand-logo-frame {
       height: 60px !important;
     }
 
-    .brand-logo-frame::after {
+    .site-header .brand-logo-frame::after {
       height: 3px;
     }
 
