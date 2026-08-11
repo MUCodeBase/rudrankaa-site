@@ -29,42 +29,48 @@ navigation?.querySelectorAll("a").forEach((link) => {
   });
 });
 
-// Present academic credentials once in the hero, then reinforce personal expertise lower on the page.
+// Keep the hero credibility sequence clear: positioning first, qualification as proof.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
+  /* Crop the source logo a little more tightly so the faint remnant below the artwork is hidden. */
+  .brand-logo-frame {
+    height: 66px;
+  }
+
   .hero-credential {
-    margin: 0.35rem 0 1.35rem;
+    max-width: 680px;
+    margin: 0.2rem 0 1.55rem;
     color: var(--maroon);
   }
 
   .hero-credential-message {
     display: block;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.62rem;
     font-family: var(--serif);
-    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-size: clamp(1.02rem, 1.35vw, 1.18rem);
     font-weight: 600;
-    line-height: 1.45;
+    line-height: 1.42;
   }
 
   .hero-credential-detail {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    padding: 0.38rem 0.7rem;
+    gap: 0.5rem;
+    padding: 0.18rem 0 0.18rem 0.78rem;
     border-left: 2px solid var(--gold);
-    background: rgba(185, 133, 60, 0.07);
+    background: transparent;
     color: var(--maroon);
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     font-weight: 800;
-    letter-spacing: 0.055em;
-    line-height: 1.35;
+    letter-spacing: 0.045em;
+    line-height: 1.4;
     text-transform: uppercase;
   }
 
   .hero-credential-detail::before {
     content: "✦";
     color: var(--gold);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
   }
 
   .about-credential {
@@ -85,19 +91,50 @@ credentialStyles.textContent = `
     font-size: 0.8rem;
   }
 
-  @media (max-width: 640px) {
-    .hero-credential {
-      margin-bottom: 1.1rem;
-    }
-
+  @media (min-width: 901px) {
     .hero-credential-message {
-      font-size: 1rem;
+      max-width: 620px;
     }
 
     .hero-credential-detail {
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      padding: 0.36rem 0.58rem;
+      font-size: 0.92rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .brand-logo-frame {
+      height: 52px;
+    }
+
+    .hero-credential {
+      margin-top: 0.05rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .hero-credential-message {
+      margin-bottom: 0.5rem;
+      font-size: 0.98rem;
+      line-height: 1.38;
+    }
+
+    .hero-credential-detail {
+      display: flex;
+      width: 100%;
+      padding: 0.12rem 0 0.12rem 0.65rem;
+      font-size: 0.77rem;
+      letter-spacing: 0.025em;
+      line-height: 1.45;
+    }
+
+    .signature-line {
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-lead {
+      margin-top: 0.1rem;
+      margin-bottom: 1.55rem;
+      font-size: 1.02rem;
+      line-height: 1.55;
     }
   }
 `;
