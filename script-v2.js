@@ -34,7 +34,7 @@ const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
   /* Keep the full logo visible while masking only the faint lower-edge artifact in the source image. */
   .brand-logo-frame {
-    height: 66px;
+    height: 76px !important;
   }
 
   .brand-logo-frame::after {
@@ -115,7 +115,7 @@ credentialStyles.textContent = `
 
   @media (max-width: 640px) {
     .brand-logo-frame {
-      height: 52px;
+      height: 60px !important;
     }
 
     .brand-logo-frame::after {
