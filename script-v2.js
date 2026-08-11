@@ -32,9 +32,10 @@ navigation?.querySelectorAll("a").forEach((link) => {
 // Keep the hero credibility sequence clear: positioning first, qualification as proof.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
-  /* Keep the full logo visible while masking only the faint lower-edge artifact in the source image. */
+  /* Desktop needs a little more vertical room so the damroo is not clipped.
+     Keep the lower-edge mask for the faint source-image artifact. */
   .brand-logo-frame {
-    height: 76px !important;
+    height: 80px !important;
   }
 
   .brand-logo-frame::after {
