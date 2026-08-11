@@ -39,7 +39,7 @@ credentialStyles.textContent = `
 
   .hero-credential-message {
     display: block;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.6rem;
     font-family: var(--serif);
     font-size: clamp(1rem, 1.5vw, 1.2rem);
     font-weight: 600;
@@ -49,17 +49,22 @@ credentialStyles.textContent = `
   .hero-credential-detail {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    color: var(--gold);
-    font-size: 0.76rem;
-    font-weight: 750;
-    letter-spacing: 0.08em;
+    gap: 0.55rem;
+    padding: 0.38rem 0.7rem;
+    border-left: 2px solid var(--gold);
+    background: rgba(185, 133, 60, 0.07);
+    color: var(--maroon);
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0.055em;
+    line-height: 1.35;
     text-transform: uppercase;
   }
 
   .hero-credential-detail::before {
     content: "✦";
-    font-size: 0.68rem;
+    color: var(--gold);
+    font-size: 0.78rem;
   }
 
   .about-credential {
@@ -90,8 +95,9 @@ credentialStyles.textContent = `
     }
 
     .hero-credential-detail {
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      padding: 0.36rem 0.58rem;
     }
   }
 `;
