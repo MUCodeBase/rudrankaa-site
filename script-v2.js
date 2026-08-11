@@ -44,7 +44,7 @@ credentialStyles.textContent = `
     right: 0;
     bottom: 0;
     z-index: 2;
-    height: 7px;
+    height: 4px;
     background: #fffdf9;
     pointer-events: none;
   }
@@ -119,7 +119,7 @@ credentialStyles.textContent = `
     }
 
     .brand-logo-frame::after {
-      height: 6px;
+      height: 3px;
     }
 
     .hero-credential {
