@@ -45,7 +45,7 @@ credentialStyles.textContent = `
     right: 0;
     bottom: 0;
     z-index: 2;
-    height: 13px;
+    height: 15px;
     background: #fffdf9;
     pointer-events: none;
   }
