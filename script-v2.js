@@ -32,9 +32,21 @@ navigation?.querySelectorAll("a").forEach((link) => {
 // Keep the hero credibility sequence clear: positioning first, qualification as proof.
 const credentialStyles = document.createElement("style");
 credentialStyles.textContent = `
-  /* Crop the source logo a little more tightly so the faint remnant below the artwork is hidden. */
+  /* Keep the full logo visible while masking only the faint lower-edge artifact in the source image. */
   .brand-logo-frame {
     height: 66px;
+  }
+
+  .brand-logo-frame::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    height: 7px;
+    background: #fffdf9;
+    pointer-events: none;
   }
 
   .hero-credential {
@@ -104,6 +116,10 @@ credentialStyles.textContent = `
   @media (max-width: 640px) {
     .brand-logo-frame {
       height: 52px;
+    }
+
+    .brand-logo-frame::after {
+      height: 6px;
     }
 
     .hero-credential {
