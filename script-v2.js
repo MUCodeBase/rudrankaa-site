@@ -104,6 +104,32 @@ credentialStyles.textContent = `
     font-size: 0.8rem;
   }
 
+  /* Trademark treatment: keep the source logo artwork unchanged and position
+     the mark as an independent presentation element. */
+  .site-header .brand {
+    position: relative;
+  }
+
+  .brand-trademark {
+    position: absolute;
+    left: 214px;
+    top: 17px;
+    z-index: 4;
+    color: var(--maroon);
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    font-weight: 700;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .trademark-notice {
+    margin: 0.95rem 0 0;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.7rem;
+    line-height: 1.5;
+  }
+
   @media (min-width: 901px) {
     .hero-credential-message {
       max-width: 620px;
@@ -121,6 +147,12 @@ credentialStyles.textContent = `
 
     .site-header .brand-logo-frame::after {
       height: 3px;
+    }
+
+    .brand-trademark {
+      left: 169px;
+      top: 11px;
+      font-size: 0.55rem;
     }
 
     .hero-credential {
@@ -152,6 +184,11 @@ credentialStyles.textContent = `
       margin-bottom: 1.55rem;
       font-size: 1.02rem;
       line-height: 1.55;
+    }
+
+    .trademark-notice {
+      margin-top: 0.8rem;
+      font-size: 0.68rem;
     }
   }
 `;
@@ -187,4 +224,21 @@ if (aboutIntro && !document.querySelector(".about-credential")) {
   aboutCredential.className = "about-credential";
   aboutCredential.textContent = "Every consultation is personally guided, drawing on deep numerological knowledge and practical experience, with careful attention to what matters most to you.";
   aboutIntro.appendChild(aboutCredential);
+}
+
+const headerBrand = document.querySelector(".site-header .brand");
+if (headerBrand && !headerBrand.querySelector(".brand-trademark")) {
+  const trademark = document.createElement("span");
+  trademark.className = "brand-trademark";
+  trademark.textContent = "™";
+  trademark.setAttribute("aria-hidden", "true");
+  headerBrand.appendChild(trademark);
+}
+
+const footerBottom = document.querySelector(".site-footer .footer-bottom");
+if (footerBottom && !document.querySelector(".trademark-notice")) {
+  const trademarkNotice = document.createElement("p");
+  trademarkNotice.className = "trademark-notice";
+  trademarkNotice.textContent = "RUDRANKAA™ and the Rudrankaa logo are trademarks.";
+  footerBottom.insertAdjacentElement("afterend", trademarkNotice);
 }
