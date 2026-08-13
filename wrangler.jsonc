@@ -1,0 +1,10 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rudrankaa-preview",
+  "compatibility_date": "2026-08-13",
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "directory": "."
+  }
+}
