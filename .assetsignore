@@ -1,0 +1,15 @@
+# Files that must never be published as Cloudflare static assets
+.git/
+.github/
+.wrangler/
+node_modules/
+
+# Repository / deployment configuration
+.gitignore
+.assetsignore
+wrangler.jsonc
+CNAME
+README.md
+
+# Keep project documentation out of the public preview asset bundle
+*.md
