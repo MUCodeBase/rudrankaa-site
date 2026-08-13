@@ -104,29 +104,36 @@ credentialStyles.textContent = `
     font-size: 0.8rem;
   }
 
-  /* Trademark treatment: keep the source logo artwork unchanged and position
-     the mark as an independent presentation element. */
-  .site-header .brand {
-    position: relative;
-  }
-
+  /* Keep the source logo artwork unchanged. The trademark mark sits inside
+     the logo frame so it remains aligned at every viewport size. */
   .brand-trademark {
     position: absolute;
-    left: 214px;
-    top: 17px;
+    right: 7px;
+    top: 10px;
     z-index: 4;
     color: var(--maroon);
     font-family: var(--sans);
-    font-size: 0.62rem;
-    font-weight: 700;
+    font-size: 0.76rem;
+    font-weight: 750;
     line-height: 1;
     pointer-events: none;
   }
 
+  .footer-legal-left {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 0.48rem;
+  }
+
+  .footer-legal-left > * {
+    margin: 0;
+  }
+
   .trademark-notice {
-    margin: 0.95rem 0 0;
+    margin: 0;
     color: rgba(255, 255, 255, 0.42);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     line-height: 1.5;
   }
 
@@ -150,9 +157,9 @@ credentialStyles.textContent = `
     }
 
     .brand-trademark {
-      left: 169px;
-      top: 11px;
-      font-size: 0.55rem;
+      right: 6px;
+      top: 7px;
+      font-size: 0.66rem;
     }
 
     .hero-credential {
@@ -186,9 +193,12 @@ credentialStyles.textContent = `
       line-height: 1.55;
     }
 
+    .footer-legal-left {
+      gap: 0.5rem;
+    }
+
     .trademark-notice {
-      margin-top: 0.8rem;
-      font-size: 0.68rem;
+      font-size: 0.72rem;
     }
   }
 `;
@@ -226,19 +236,30 @@ if (aboutIntro && !document.querySelector(".about-credential")) {
   aboutIntro.appendChild(aboutCredential);
 }
 
-const headerBrand = document.querySelector(".site-header .brand");
-if (headerBrand && !headerBrand.querySelector(".brand-trademark")) {
+const logoFrame = document.querySelector(".site-header .brand-logo-frame");
+if (logoFrame && !logoFrame.querySelector(".brand-trademark")) {
   const trademark = document.createElement("span");
   trademark.className = "brand-trademark";
   trademark.textContent = "™";
   trademark.setAttribute("aria-hidden", "true");
-  headerBrand.appendChild(trademark);
+  logoFrame.appendChild(trademark);
 }
 
 const footerBottom = document.querySelector(".site-footer .footer-bottom");
 if (footerBottom && !document.querySelector(".trademark-notice")) {
+  const legalLeft = document.createElement("div");
+  legalLeft.className = "footer-legal-left";
+
+  const copyrightItem = footerBottom.firstElementChild;
+  if (copyrightItem) {
+    footerBottom.insertBefore(legalLeft, copyrightItem);
+    legalLeft.appendChild(copyrightItem);
+  } else {
+    footerBottom.prepend(legalLeft);
+  }
+
   const trademarkNotice = document.createElement("p");
   trademarkNotice.className = "trademark-notice";
   trademarkNotice.textContent = "RUDRANKAA™ and the Rudrankaa logo are trademarks.";
-  footerBottom.insertAdjacentElement("afterend", trademarkNotice);
+  legalLeft.appendChild(trademarkNotice);
 }
