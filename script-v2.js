@@ -228,6 +228,11 @@ if (heroHeading && !document.querySelector(".hero-credential")) {
   }
 }
 
+const aboutLabel = document.querySelector(".about .section-label");
+if (aboutLabel && aboutLabel.textContent.trim() === "About Rudrankaa") {
+  aboutLabel.textContent = "About Rudrankaa™";
+}
+
 const aboutIntro = document.querySelector(".about .split-layout > div:first-child");
 if (aboutIntro && !document.querySelector(".about-credential")) {
   const aboutCredential = document.createElement("p");
