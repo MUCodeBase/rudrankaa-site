@@ -1,13 +1,25 @@
 (() => {
   const birthNumberRefinementStyles = document.createElement("style");
   birthNumberRefinementStyles.textContent = `
-    /* Keep the revealed number meaning comfortably below the sticky header. */
+    /* Keep the revealed number meaning comfortably below the sticky header,
+       while leaving enough of the following section visible to signal that
+       the page continues. */
     .birth-number-detail {
+      position: relative;
+      padding-bottom: 28px !important;
       scroll-margin-top: 118px;
     }
 
+    .birth-detail-card {
+      padding: clamp(1.65rem, 3.4vw, 2.8rem) !important;
+    }
+
+    .birth-detail-number {
+      font-size: clamp(5rem, 9vw, 7.8rem) !important;
+    }
+
     .birth-detail-actions {
-      margin-top: 1.55rem;
+      margin-top: 1.2rem;
     }
 
     .birth-detail-back {
@@ -34,13 +46,84 @@
       outline: none;
     }
 
+    .birth-scroll-cue {
+      position: absolute;
+      left: 50%;
+      bottom: 2px;
+      z-index: 2;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.08rem;
+      transform: translateX(-50%);
+      padding: 0.25rem 0.65rem;
+      border: 0;
+      background: rgba(255, 253, 249, 0.9);
+      color: var(--maroon);
+      font-family: var(--sans);
+      font-size: 0.67rem;
+      font-weight: 750;
+      letter-spacing: 0.045em;
+      line-height: 1.25;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .birth-scroll-cue::before {
+      content: "⌄⌄";
+      display: block;
+      color: var(--gold);
+      font-size: 0.9rem;
+      line-height: 0.8;
+      letter-spacing: -0.12em;
+      animation: birth-scroll-nudge 1.6s ease-in-out 2;
+    }
+
+    .birth-scroll-cue.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .birth-scroll-cue.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+    }
+
+    @keyframes birth-scroll-nudge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .birth-scroll-cue::before { animation: none; }
+      .birth-scroll-cue { transition: none; }
+    }
+
     @media (max-width: 640px) {
       .birth-number-detail {
+        padding-bottom: 32px !important;
         scroll-margin-top: 88px;
       }
 
+      .birth-detail-card {
+        padding: 1.65rem 1.2rem 1.9rem !important;
+        gap: 1.2rem !important;
+      }
+
+      .birth-detail-number {
+        font-size: 4.9rem !important;
+      }
+
       .birth-detail-actions {
-        margin-top: 1.35rem;
+        margin-top: 1.1rem;
+      }
+
+      .birth-scroll-cue {
+        bottom: 3px;
+        font-size: 0.64rem;
       }
     }
   `;
@@ -59,7 +142,9 @@
     });
   }
 
-  const detailDescriptionRefinement = document.querySelector(".birth-number-detail .birth-detail-description");
+  const detailSectionRefinement = document.querySelector(".birth-number-detail");
+  const detailDescriptionRefinement = detailSectionRefinement?.querySelector(".birth-detail-description");
+  const detailShellRefinement = detailSectionRefinement?.querySelector(".shell");
   const numberCardRefinement = document.querySelector(".number-card");
   const siteHeaderRefinement = document.querySelector(".site-header");
 
@@ -93,5 +178,67 @@
 
     actions.appendChild(backButton);
     detailDescriptionRefinement.insertAdjacentElement("afterend", actions);
+  }
+
+  if (
+    detailSectionRefinement &&
+    detailShellRefinement &&
+    !detailSectionRefinement.querySelector(".birth-scroll-cue")
+  ) {
+    const scrollCue = document.createElement("button");
+    scrollCue.type = "button";
+    scrollCue.className = "birth-scroll-cue";
+    scrollCue.textContent = "Scroll to discover more";
+    scrollCue.setAttribute("aria-label", "Scroll to discover more content");
+    detailSectionRefinement.appendChild(scrollCue);
+
+    const hideScrollCue = () => {
+      scrollCue.classList.remove("is-visible");
+      scrollCue.classList.add("is-hidden");
+    };
+
+    const showScrollCue = () => {
+      scrollCue.classList.remove("is-hidden");
+      scrollCue.classList.add("is-visible");
+    };
+
+    const scrollToNextSection = () => {
+      hideScrollCue();
+      const nextSection = detailSectionRefinement.nextElementSibling;
+      if (!nextSection) return;
+
+      const headerHeight = siteHeaderRefinement?.getBoundingClientRect().height || 0;
+      const nextTop = nextSection.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: Math.max(0, nextTop - headerHeight - 16),
+        behavior: "smooth"
+      });
+    };
+
+    scrollCue.addEventListener("click", scrollToNextSection);
+
+    const userScrollKeys = new Set(["ArrowDown", "PageDown", "End", " "]);
+    window.addEventListener("wheel", hideScrollCue, { passive: true });
+    window.addEventListener("touchmove", hideScrollCue, { passive: true });
+    window.addEventListener("keydown", (event) => {
+      if (userScrollKeys.has(event.key)) hideScrollCue();
+    });
+
+    const visibilityObserver = new MutationObserver(() => {
+      if (!detailSectionRefinement.hidden) {
+        window.setTimeout(showScrollCue, 650);
+      } else {
+        hideScrollCue();
+      }
+    });
+
+    visibilityObserver.observe(detailSectionRefinement, {
+      attributes: true,
+      attributeFilter: ["hidden"]
+    });
+
+    if (!detailSectionRefinement.hidden) {
+      window.setTimeout(showScrollCue, 650);
+    }
   }
 })();
