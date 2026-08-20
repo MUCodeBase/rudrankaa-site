@@ -1,12 +1,11 @@
 (() => {
   const birthNumberRefinementStyles = document.createElement("style");
   birthNumberRefinementStyles.textContent = `
-    /* Keep the revealed number meaning comfortably below the sticky header,
-       while leaving enough of the following section visible to signal that
-       the page continues. */
+    /* Keep the revealed number meaning close enough to the sticky header that
+       the continuation cue remains naturally visible in the same viewport. */
     .birth-number-detail {
-      padding-bottom: 18px !important;
-      scroll-margin-top: 118px;
+      padding-bottom: 12px !important;
+      scroll-margin-top: 96px;
     }
 
     .birth-detail-card {
@@ -45,17 +44,18 @@
       outline: none;
     }
 
-    /* Continuation cue sits in normal flow. The cue itself is lifted clearly
-       into the white space so it never appears pinned to the viewport edge. */
+    /* The continuation cue stays in normal document flow. Keeping this block
+       compact avoids clipping while still leaving a graceful visual pause
+       before the maroon reassurance band. */
     .birth-scroll-cue-wrap {
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 104px;
-      padding: 0.3rem 1rem 2.55rem;
+      align-items: center;
+      min-height: 72px;
+      padding: 0.35rem 1rem 0.85rem;
       background: var(--paper);
       opacity: 1;
-      overflow: hidden;
+      overflow: visible;
       transition: opacity 220ms ease, min-height 220ms ease, padding 220ms ease;
     }
 
@@ -75,7 +75,6 @@
       flex-direction: column;
       align-items: center;
       gap: 0.14rem;
-      transform: translateY(-38px);
       padding: 0.18rem 0.85rem;
       border: 0;
       background: transparent;
@@ -116,8 +115,8 @@
 
     @media (max-width: 640px) {
       .birth-number-detail {
-        padding-bottom: 16px !important;
-        scroll-margin-top: 88px;
+        padding-bottom: 10px !important;
+        scroll-margin-top: 72px;
       }
 
       .birth-detail-card {
@@ -134,12 +133,11 @@
       }
 
       .birth-scroll-cue-wrap {
-        min-height: 94px;
-        padding: 0.25rem 0.8rem 2.25rem;
+        min-height: 66px;
+        padding: 0.3rem 0.8rem 0.72rem;
       }
 
       .birth-scroll-cue {
-        transform: translateY(-24px);
         padding: 0.15rem 0.65rem;
         font-size: 0.8rem;
       }
@@ -243,7 +241,7 @@
         siteHeaderRefinement?.getBoundingClientRect().bottom || 0
       );
       const reassuranceRect = reassuranceSection.getBoundingClientRect();
-      const desiredBandTop = headerBottom + 22;
+      const desiredBandTop = headerBottom + 4;
       const targetTop = window.scrollY + reassuranceRect.top - desiredBandTop;
 
       window.scrollTo({
