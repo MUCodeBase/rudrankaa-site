@@ -28,9 +28,8 @@
       }
     }
 
-    /* Treat the large numeral and its planet as one identity unit. The fixed
-       number box and fixed gap make the spacing independent of the individual
-       Georgia glyph shape (1, 4, 5, 7, 9, etc.). */
+    /* Treat the large numeral and its planet as one identity unit. The number
+       box has a fixed height and the planet follows with one fixed gap. */
     .birth-detail-identity {
       display: flex;
       flex-direction: column;
@@ -46,6 +45,8 @@
       align-items: flex-end;
       margin: 0;
       line-height: 1 !important;
+      transform-origin: left bottom;
+      will-change: transform;
     }
 
     /* The live planet label remains secondary to the numeral but prominent
@@ -119,6 +120,42 @@
     introBandLines[0].textContent = "Numbers reveal patterns. Your choices shape your path.";
   }
 
+  /* Georgia uses different visible ink heights for different numeral glyphs.
+     Equal CSS font-size therefore does not mean equal perceived numeral size.
+     Measure the actual rendered glyphs and optically normalise the selected
+     number to the tallest 1–9 reference while keeping its proportions intact. */
+  const normaliseVisibleNumeralSize = (detailNumber) => {
+    const value = detailNumber.textContent.trim();
+    if (!/^[1-9]$/.test(value)) return;
+
+    const style = window.getComputedStyle(detailNumber);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    const fontSize = Number.parseFloat(style.fontSize) || 100;
+    const fontFamily = style.fontFamily || "Georgia, serif";
+    const fontWeight = style.fontWeight || "400";
+    const fontStyle = style.fontStyle || "normal";
+    context.font = `${fontStyle} ${fontWeight} ${fontSize}px ${fontFamily}`;
+
+    const glyphHeight = (digit) => {
+      const metrics = context.measureText(digit);
+      const ascent = metrics.actualBoundingBoxAscent || fontSize * 0.72;
+      const descent = metrics.actualBoundingBoxDescent || 0;
+      return ascent + descent;
+    };
+
+    const referenceHeight = Math.max(...["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(glyphHeight));
+    const currentHeight = glyphHeight(value);
+    const scale = currentHeight > 0 ? referenceHeight / currentHeight : 1;
+
+    // Optical compensation remains bounded so browser/font differences cannot
+    // create an unexpectedly oversized numeral.
+    const safeScale = Math.min(1.28, Math.max(0.96, scale));
+    detailNumber.style.transform = `scale(${safeScale})`;
+  };
+
   // Reuse the existing live number and planet elements so the original
   // birth-number logic continues updating them for Numbers 1–9. Wrap them in
   // one fixed-gap identity stack instead of spacing the planet with margins.
@@ -142,6 +179,25 @@
 
     if (detailPlanet.parentElement !== identity) {
       identity.appendChild(detailPlanet);
+    }
+
+    normaliseVisibleNumeralSize(detailNumber);
+
+    if (!detailNumber.dataset.opticalObserverAttached) {
+      const numeralObserver = new MutationObserver(() => {
+        normaliseVisibleNumeralSize(detailNumber);
+      });
+
+      numeralObserver.observe(detailNumber, {
+        childList: true,
+        characterData: true,
+        subtree: true
+      });
+      detailNumber.dataset.opticalObserverAttached = "true";
+
+      window.addEventListener("resize", () => normaliseVisibleNumeralSize(detailNumber), {
+        passive: true
+      });
     }
 
     return true;
