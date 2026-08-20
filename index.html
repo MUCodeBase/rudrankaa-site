@@ -19,9 +19,9 @@
       }
     </style>
     <link rel="stylesheet" href="styles-v2.css?v=8" />
-    <link rel="stylesheet" href="myth-busters.css?v=1" />
+    <link rel="stylesheet" href="myth-busters.css?v=2" />
     <script defer src="script-v2.js"></script>
-    <script defer src="myth-busters.js?v=1"></script>
+    <script defer src="myth-busters.js?v=2"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -295,10 +295,18 @@
           <div
             class="myth-busters-grid"
             id="myth-busters-grid"
+            data-gallery-view="home"
+            data-item-limit="4"
             aria-live="polite"
             aria-busy="true"
           >
             <p class="myth-busters-status">Loading Myth Busters…</p>
+          </div>
+
+          <div class="myth-busters-home-actions">
+            <a class="button button-primary myth-busters-view-all" href="myth-busters.html">
+              View all Myth Busters <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </section>

@@ -36,6 +36,66 @@
   text-align: center;
 }
 
+.myth-busters-home-actions,
+.myth-busters-archive-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.4rem;
+}
+
+.myth-busters-view-all {
+  gap: 0.55rem;
+}
+
+.myth-busters-view-all span {
+  font-size: 1.05rem;
+  transition: transform 180ms ease;
+}
+
+.myth-busters-view-all:hover span,
+.myth-busters-view-all:focus-visible span {
+  transform: translateX(3px);
+}
+
+.myth-busters-page {
+  min-height: 100vh;
+}
+
+.myth-busters-archive {
+  min-height: calc(100vh - 250px);
+}
+
+.myth-busters-back {
+  display: inline-flex;
+  margin-bottom: 2rem;
+  color: var(--maroon);
+  font-size: 0.9rem;
+  font-weight: 750;
+  text-underline-offset: 5px;
+}
+
+.myth-busters-archive-controls {
+  flex-direction: column;
+}
+
+.myth-busters-count {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.myth-busters-load-more {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.myth-busters-load-more[hidden] {
+  display: none;
+}
+
 .myth-buster-card {
   min-width: 0;
   margin: 0;
@@ -258,6 +318,16 @@
 @media (max-width: 640px) {
   .myth-busters-grid {
     gap: 1.25rem;
+  }
+
+  .myth-busters-home-actions,
+  .myth-busters-archive-controls {
+    margin-top: 1.8rem;
+  }
+
+  .myth-busters-view-all,
+  .myth-busters-load-more {
+    width: 100%;
   }
 
   .myth-buster-caption {

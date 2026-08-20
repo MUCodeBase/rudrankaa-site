@@ -4,6 +4,8 @@
   const dialogImage = dialog?.querySelector(".myth-buster-dialog-image");
   const dialogTitle = dialog?.querySelector("#myth-buster-dialog-title");
   const dialogClose = dialog?.querySelector(".myth-buster-dialog-close");
+  const loadMoreButton = document.querySelector("#myth-busters-load-more");
+  const galleryCount = document.querySelector("#myth-busters-count");
 
   const createZoomButton = (className, action, label, text) => {
     const button = document.createElement("button");
@@ -200,6 +202,46 @@
     return figure;
   };
 
+  const parsePositiveInteger = (value, fallback) => {
+    const parsedValue = Number.parseInt(value, 10);
+    return Number.isInteger(parsedValue) && parsedValue > 0 ? parsedValue : fallback;
+  };
+
+  const itemLabel = (count) => `${count} Myth Buster${count === 1 ? "" : "s"}`;
+
+  const renderHomeGallery = (entries) => {
+    const itemLimit = parsePositiveInteger(gallery.dataset.itemLimit, 4);
+    gallery.replaceChildren(...entries.slice(0, itemLimit).map(createCard));
+  };
+
+  const renderArchiveGallery = (entries) => {
+    const pageSize = parsePositiveInteger(gallery.dataset.pageSize, 8);
+    let visibleCount = 0;
+
+    const updateArchiveControls = () => {
+      if (galleryCount) {
+        galleryCount.textContent = visibleCount >= entries.length
+          ? `Showing all ${itemLabel(entries.length)}`
+          : `Showing ${visibleCount} of ${itemLabel(entries.length)}`;
+      }
+
+      if (loadMoreButton) {
+        loadMoreButton.hidden = visibleCount >= entries.length;
+      }
+    };
+
+    const showNextPage = () => {
+      const nextEntries = entries.slice(visibleCount, visibleCount + pageSize);
+      gallery.append(...nextEntries.map(createCard));
+      visibleCount += nextEntries.length;
+      updateArchiveControls();
+    };
+
+    gallery.replaceChildren();
+    loadMoreButton?.addEventListener("click", showNextPage);
+    showNextPage();
+  };
+
   fetch("assets/myth-busters/manifest.json", { cache: "no-cache" })
     .then((response) => {
       if (!response.ok) {
@@ -213,11 +255,21 @@
         return;
       }
 
-      gallery.replaceChildren(...entries.map(createCard));
+      if (gallery.dataset.galleryView === "home") {
+        renderHomeGallery(entries);
+      } else if (gallery.dataset.galleryView === "archive") {
+        renderArchiveGallery(entries);
+      } else {
+        gallery.replaceChildren(...entries.map(createCard));
+      }
     })
     .catch((error) => {
       console.error(error);
       gallery.innerHTML = '<p class="myth-busters-status">Myth Busters are temporarily unavailable.</p>';
+      loadMoreButton?.setAttribute("hidden", "");
+      if (galleryCount) {
+        galleryCount.textContent = "";
+      }
     })
     .finally(() => {
       gallery.setAttribute("aria-busy", "false");

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Explore the complete Rudrankaa Myth Busters archive—thoughtful perspectives on commonly held numerology beliefs."
+    />
+    <meta name="theme-color" content="#f7f0e4" />
+    <title>Myth Busters | Rudrankaa</title>
+    <link rel="stylesheet" href="styles-v2.css?v=8" />
+    <link rel="stylesheet" href="myth-busters.css?v=2" />
+    <script defer src="script.js"></script>
+    <script defer src="myth-busters.js?v=2"></script>
+  </head>
+  <body class="myth-busters-page" id="top">
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="index.html#top" aria-label="Rudrankaa home">
+          <span class="brand-mark" aria-hidden="true">ॐ</span>
+          <span class="brand-name">RUDRANKAA™</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="Open navigation"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+          <a href="index.html#about">About</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#process">How it works</a>
+          <a href="#main" aria-current="page">Myth Busters</a>
+          <a href="index.html#testimonials">Testimonials</a>
+          <a href="index.html#faq">FAQ</a>
+          <a class="nav-cta" href="index.html#contact">Book a consultation</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="myth-busters myth-busters-archive section-pad" aria-labelledby="myth-busters-title">
+        <div class="shell">
+          <a class="myth-busters-back" href="index.html#myth-busters">← Back to homepage</a>
+
+          <div class="myth-busters-heading">
+            <div>
+              <p class="section-label">Rudrankaa Myth Busters</p>
+              <h1 id="myth-busters-title">Myth versus truth.</h1>
+            </div>
+            <p>
+              Browse the complete collection of thoughtful perspectives on
+              commonly held beliefs, presented with clarity and care.
+            </p>
+          </div>
+
+          <div
+            class="myth-busters-grid"
+            id="myth-busters-grid"
+            data-gallery-view="archive"
+            data-page-size="8"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <p class="myth-busters-status">Loading Myth Busters…</p>
+          </div>
+
+          <div class="myth-busters-archive-controls">
+            <p class="myth-busters-count" id="myth-busters-count" aria-live="polite"></p>
+            <button
+              class="button button-primary myth-busters-load-more"
+              id="myth-busters-load-more"
+              type="button"
+              aria-controls="myth-busters-grid"
+              hidden
+            >
+              Load more Myth Busters
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <dialog class="myth-buster-dialog" id="myth-buster-dialog" aria-labelledby="myth-buster-dialog-title">
+        <div class="myth-buster-dialog-bar">
+          <p id="myth-buster-dialog-title">Rudrankaa Myth Buster</p>
+          <button type="button" class="myth-buster-dialog-close" aria-label="Close Myth Buster">×</button>
+        </div>
+        <img class="myth-buster-dialog-image" src="" alt="" />
+      </dialog>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-main">
+        <div>
+          <a class="brand footer-brand" href="index.html#top" aria-label="Rudrankaa home">
+            <span class="brand-mark" aria-hidden="true">ॐ</span>
+            <span class="brand-name">RUDRANKAA</span>
+          </a>
+          <p>Turning numerical intelligence into purposeful growth.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+          <a href="index.html#about">About</a>
+          <a href="index.html#services">Services</a>
+          <a href="index.html#process">How it works</a>
+          <a href="#main">Myth Busters</a>
+          <a href="index.html#testimonials">Testimonials</a>
+          <a href="index.html#faq">FAQ</a>
+          <a href="index.html#contact">Contact</a>
+        </nav>
+      </div>
+      <div class="shell footer-bottom">
+        <span>© <span id="year"></span> Rudrankaa. All rights reserved.</span>
+        <span>Numerology guidance is intended for personal reflection and does not replace professional advice.</span>
+      </div>
+    </footer>
+  </body>
+</html>

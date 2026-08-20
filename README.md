@@ -35,3 +35,5 @@ upload duplicate filenames that differ only by capitalization.
 Upload only the single portrait flyer used for both mobile and desktop. The responsive gallery preserves the complete image without cropping it.
 
 When a matching image is added or removed, the `Update Myth Busters gallery` GitHub Actions workflow regenerates `assets/myth-busters/manifest.json`. The website then displays the newest date first and preserves ascending sequence order within the same date.
+
+The homepage displays the four newest flyers. `myth-busters.html` provides the complete archive and reveals eight flyers at a time through its **Load More** control. Both views use the same manifest and image files.
