@@ -1,0 +1,215 @@
+.myth-busters {
+  background:
+    radial-gradient(circle at 92% 12%, rgba(185, 133, 60, 0.13), transparent 28%),
+    var(--ivory);
+}
+
+.myth-busters-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.62fr);
+  align-items: end;
+  gap: 4rem;
+  margin-bottom: 3.2rem;
+}
+
+.myth-busters-heading h2 {
+  margin-bottom: 0;
+}
+
+.myth-busters-heading > p {
+  max-width: 430px;
+  margin: 0 0 0.35rem auto;
+  color: var(--ink-soft);
+}
+
+.myth-busters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 420px));
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.myth-busters-status {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.myth-buster-card {
+  min-width: 0;
+  margin: 0;
+}
+
+.myth-buster-open {
+  width: 100%;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(77, 32, 29, 0.2);
+  background: var(--paper);
+  box-shadow: 0 18px 46px rgba(54, 32, 23, 0.1);
+  color: inherit;
+  cursor: zoom-in;
+  text-align: left;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.myth-buster-open:hover,
+.myth-buster-open:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(185, 133, 60, 0.62);
+  box-shadow: 0 24px 60px rgba(54, 32, 23, 0.16);
+}
+
+.myth-buster-image-frame {
+  aspect-ratio: 853 / 1280;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #f7f0e6;
+}
+
+.myth-buster-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.myth-buster-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-top: 1px solid var(--line);
+}
+
+.myth-buster-caption strong {
+  color: var(--maroon);
+  font-family: var(--serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.myth-buster-caption time {
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-size: 0.73rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.myth-buster-dialog {
+  width: min(900px, calc(100% - 28px));
+  max-height: calc(100dvh - 28px);
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(217, 183, 121, 0.72);
+  background: var(--paper);
+  box-shadow: 0 32px 90px rgba(30, 18, 15, 0.4);
+}
+
+.myth-buster-dialog::backdrop {
+  background: rgba(30, 18, 15, 0.84);
+  backdrop-filter: blur(6px);
+}
+
+.myth-buster-dialog-bar {
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0.85rem 0.65rem 1.1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--maroon-deep);
+  color: white;
+}
+
+.myth-buster-dialog-bar p {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1rem;
+}
+
+.myth-buster-dialog-close {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  border-radius: 50%;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.myth-buster-dialog-close:hover,
+.myth-buster-dialog-close:focus-visible {
+  border-color: var(--gold-light);
+  color: var(--gold-light);
+}
+
+.myth-buster-dialog-image {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: calc(100dvh - 86px);
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .myth-busters-heading {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .myth-busters-heading > p {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .myth-busters-grid {
+    gap: 1.25rem;
+  }
+
+  .myth-buster-caption {
+    padding: 0.9rem 0.95rem;
+  }
+
+  .myth-buster-dialog {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .myth-buster-open {
+    transition: none;
+  }
+}
+
+@media print {
+  .myth-busters-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .myth-buster-open {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  .myth-buster-dialog {
+    display: none;
+  }
+}

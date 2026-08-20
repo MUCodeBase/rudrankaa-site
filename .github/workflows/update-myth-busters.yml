@@ -1,0 +1,42 @@
+name: Update Myth Busters gallery
+
+on:
+  push:
+    paths:
+      - "assets/myth-busters/**"
+      - "!assets/myth-busters/manifest.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the updated branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Generate the gallery manifest
+        run: node scripts/build-myth-busters-manifest.mjs
+
+      - name: Commit the manifest when it changed
+        shell: bash
+        run: |
+          if git diff --quiet -- assets/myth-busters/manifest.json; then
+            echo "The Myth Busters manifest is already current."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- assets/myth-busters/manifest.json
+          git commit -m "Update Myth Busters gallery index"
+          git push

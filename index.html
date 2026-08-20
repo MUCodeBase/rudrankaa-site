@@ -19,7 +19,9 @@
       }
     </style>
     <link rel="stylesheet" href="styles-v2.css?v=8" />
+    <link rel="stylesheet" href="myth-busters.css?v=1" />
     <script defer src="script-v2.js"></script>
+    <script defer src="myth-busters.js?v=1"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -50,6 +52,7 @@
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#process">How it works</a>
+          <a href="#myth-busters">Myth Busters</a>
           <a href="#testimonials">Testimonials</a>
           <a href="#faq">FAQ</a>
           <a class="nav-cta" href="#contact">Book a consultation</a>
@@ -276,6 +279,38 @@
         </div>
       </section>
 
+      <section class="myth-busters section-pad" id="myth-busters" aria-labelledby="myth-busters-title">
+        <div class="shell">
+          <div class="myth-busters-heading">
+            <div>
+              <p class="section-label">Rudrankaa Myth Busters</p>
+              <h2 id="myth-busters-title">Myth versus truth.</h2>
+            </div>
+            <p>
+              Thoughtful perspectives on commonly held beliefs, presented with
+              clarity and care.
+            </p>
+          </div>
+
+          <div
+            class="myth-busters-grid"
+            id="myth-busters-grid"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            <p class="myth-busters-status">Loading Myth Busters…</p>
+          </div>
+        </div>
+      </section>
+
+      <dialog class="myth-buster-dialog" id="myth-buster-dialog" aria-labelledby="myth-buster-dialog-title">
+        <div class="myth-buster-dialog-bar">
+          <p id="myth-buster-dialog-title">Rudrankaa Myth Buster</p>
+          <button type="button" class="myth-buster-dialog-close" aria-label="Close Myth Buster">×</button>
+        </div>
+        <img class="myth-buster-dialog-image" src="" alt="" />
+      </dialog>
+
       <section class="testimonials section-pad" id="testimonials">
         <div class="shell">
           <div class="testimonial-heading">
@@ -420,6 +455,7 @@
           <a href="#about">About</a>
           <a href="#services">Services</a>
           <a href="#process">How it works</a>
+          <a href="#myth-busters">Myth Busters</a>
           <a href="#testimonials">Testimonials</a>
           <a href="#faq">FAQ</a>
           <a href="#contact">Contact</a>
