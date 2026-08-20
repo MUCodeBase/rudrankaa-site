@@ -29,6 +29,10 @@
     }
 
     @media (min-width: 1200px) {
+      .hero .hero-grid > div:first-child {
+        transform: translateY(-82px);
+      }
+
       .hero .number-card,
       .hero .floating-symbol {
         transform: translateY(-228px);
@@ -36,6 +40,10 @@
     }
 
     @media (min-width: 1000px) and (max-width: 1199px) {
+      .hero .hero-grid > div:first-child {
+        transform: translateY(-55px);
+      }
+
       .hero .number-card,
       .hero .floating-symbol {
         transform: translateY(-155px);
@@ -43,6 +51,10 @@
     }
 
     @media (min-width: 901px) and (max-width: 999px) {
+      .hero .hero-grid > div:first-child {
+        transform: translateY(-30px);
+      }
+
       .hero .number-card,
       .hero .floating-symbol {
         transform: translateY(-100px);
