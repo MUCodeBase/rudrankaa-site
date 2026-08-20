@@ -16,6 +16,14 @@
       font-size: clamp(5rem, 9vw, 7.8rem) !important;
     }
 
+    .birth-day-input {
+      transition: color 160ms ease;
+    }
+
+    .birth-day-input.is-default-example {
+      color: #9a8f88;
+    }
+
     .birth-detail-actions {
       margin-top: 1.2rem;
     }
@@ -166,12 +174,32 @@
     birthSummaryRefinement.textContent = "Enter your birth date or choose a number to explore its energy.";
   }
 
+  // Keep the planet naming format consistent with the other eight numbers.
+  if (typeof birthNumberData !== "undefined" && birthNumberData[3]) {
+    birthNumberData[3].planet = "Jupiter";
+  }
+
   if (birthDayInputRefinement) {
-    // Make the visible example actionable: clicking Find my number immediately
-    // calculates 12 unless the visitor replaces it with their own birth day.
-    if (!birthDayInputRefinement.value) {
-      birthDayInputRefinement.value = "12";
+    const defaultBirthDate = "19";
+    const birthNumberFormRefinement = birthDayInputRefinement.closest(".birth-number-form");
+
+    birthDayInputRefinement.placeholder = defaultBirthDate;
+
+    if (!birthDayInputRefinement.value || birthDayInputRefinement.value === "12") {
+      birthDayInputRefinement.value = defaultBirthDate;
     }
+
+    if (birthDayInputRefinement.value === defaultBirthDate) {
+      birthDayInputRefinement.classList.add("is-default-example");
+    }
+
+    birthDayInputRefinement.addEventListener("input", () => {
+      birthDayInputRefinement.classList.remove("is-default-example");
+    });
+
+    birthNumberFormRefinement?.addEventListener("submit", () => {
+      birthDayInputRefinement.classList.remove("is-default-example");
+    });
 
     birthDayInputRefinement.addEventListener("focus", () => {
       window.setTimeout(() => birthDayInputRefinement.select(), 0);
