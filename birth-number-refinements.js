@@ -45,15 +45,14 @@
       outline: none;
     }
 
-    /* Continuation cue sits in normal document flow, directly between the
-       number interpretation and the existing maroon reassurance band. Give
-       it extra breathing room below so it never feels pinned to the edge. */
+    /* Continuation cue sits in normal flow, but deliberately toward the top
+       of its breathing-space area so it never feels pinned to the viewport edge. */
     .birth-scroll-cue-wrap {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 88px;
-      padding: 0.55rem 1rem 2rem;
+      align-items: flex-start;
+      min-height: 104px;
+      padding: 0.3rem 1rem 2.55rem;
       background: var(--paper);
       opacity: 1;
       overflow: hidden;
@@ -82,7 +81,7 @@
       color: var(--maroon);
       font-family: var(--sans);
       font-size: 0.84rem;
-      font-weight: 750;
+      font-weight: 700;
       letter-spacing: 0.03em;
       line-height: 1.3;
       cursor: pointer;
@@ -134,8 +133,8 @@
       }
 
       .birth-scroll-cue-wrap {
-        min-height: 82px;
-        padding: 0.5rem 0.8rem 1.8rem;
+        min-height: 94px;
+        padding: 0.25rem 0.8rem 2.25rem;
       }
 
       .birth-scroll-cue {
@@ -234,37 +233,41 @@
       cueWrap.classList.remove("is-hidden");
     };
 
-    const scrollToReassurance = () => {
-      hideScrollCue();
+    const centreReassuranceBand = () => {
       if (!reassuranceSection) return;
 
-      // Wait for the cue wrapper to collapse before measuring the reassurance
-      // band. This avoids landing a few pixels off after the layout shifts.
-      window.setTimeout(() => {
-        const headerHeight = siteHeaderRefinement?.getBoundingClientRect().height || 0;
-        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-        const reassuranceRect = reassuranceSection.getBoundingClientRect();
-        const reassuranceTop = reassuranceRect.top + window.scrollY;
-        const reassuranceHeight = reassuranceRect.height;
-        const availableHeight = Math.max(0, viewportHeight - headerHeight);
-        const breathingRoom = 24;
+      const viewportHeight = window.visualViewport?.height ||
+        window.innerHeight ||
+        document.documentElement.clientHeight;
+      const headerBottom = Math.max(
+        0,
+        siteHeaderRefinement?.getBoundingClientRect().bottom || 0
+      );
+      const reassuranceRect = reassuranceSection.getBoundingClientRect();
+      const usableHeight = Math.max(0, viewportHeight - headerBottom);
+      const desiredBandTop = headerBottom + Math.max(
+        20,
+        (usableHeight - reassuranceRect.height) / 2
+      );
+      const targetTop = window.scrollY + reassuranceRect.top - desiredBandTop;
 
-        let targetTop;
-        if (reassuranceHeight + breathingRoom * 2 <= availableHeight) {
-          const centeredInset = Math.max(
-            breathingRoom,
-            (availableHeight - reassuranceHeight) / 2
-          );
-          targetTop = reassuranceTop - headerHeight - centeredInset;
-        } else {
-          targetTop = reassuranceTop - headerHeight - breathingRoom;
-        }
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: "smooth"
+      });
+    };
 
-        window.scrollTo({
-          top: Math.max(0, targetTop),
-          behavior: "smooth"
-        });
-      }, 240);
+    const scrollToReassurance = () => {
+      if (!reassuranceSection) return;
+
+      // Remove the cue from layout completely before measuring. Two animation
+      // frames let the browser settle the new geometry reliably.
+      cueWrap.hidden = true;
+      cueWrap.classList.remove("is-hidden");
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(centreReassuranceBand);
+      });
     };
 
     scrollCue.addEventListener("click", scrollToReassurance);
