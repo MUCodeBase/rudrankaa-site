@@ -270,6 +270,12 @@ if (footerBottom && !document.querySelector(".trademark-notice")) {
 }
 
 const birthNumberFeature = document.createElement("script");
-birthNumberFeature.src = "birth-number.js?v=1";
+birthNumberFeature.src = "birth-number.js?v=2";
 birthNumberFeature.async = false;
+birthNumberFeature.addEventListener("load", () => {
+  const birthNumberRefinements = document.createElement("script");
+  birthNumberRefinements.src = "birth-number-refinements.js?v=1";
+  birthNumberRefinements.async = false;
+  document.head.appendChild(birthNumberRefinements);
+});
 document.head.appendChild(birthNumberFeature);
