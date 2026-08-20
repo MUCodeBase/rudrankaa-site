@@ -28,23 +28,36 @@
       }
     }
 
-    /* Reserve a consistent visual block for every numeral. Different Georgia
-       glyphs sit differently inside the same line box, so this prevents 4, 5,
-       7 and 9 from visually crowding the planet label. */
-    .birth-detail-card > div:first-child .birth-detail-number {
-      min-height: 0.93em;
+    /* Treat the large numeral and its planet as one identity unit. The fixed
+       number box and fixed gap make the spacing independent of the individual
+       Georgia glyph shape (1, 4, 5, 7, 9, etc.). */
+    .birth-detail-identity {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.72rem;
     }
 
-    /* The live planet label is moved beneath the large numeral and given more
-       prominence while remaining clearly secondary to the number itself. */
-    .birth-detail-card > div:first-child .birth-detail-planet {
+    .birth-detail-identity .birth-detail-number {
+      width: 100%;
+      height: 1em;
+      min-height: 0 !important;
+      display: flex;
+      align-items: flex-end;
+      margin: 0;
+      line-height: 1 !important;
+    }
+
+    /* The live planet label remains secondary to the numeral but prominent
+       enough to be immediately recognisable as the governing planet. */
+    .birth-detail-identity .birth-detail-planet {
       display: block;
-      margin: 0.3rem 0 0;
+      margin: 0;
       color: var(--gold);
       font-size: 1rem;
       font-weight: 850;
       letter-spacing: 0.12em;
-      line-height: 1.25;
+      line-height: 1.2;
       text-transform: uppercase;
     }
 
@@ -82,8 +95,11 @@
     }
 
     @media (max-width: 640px) {
-      .birth-detail-card > div:first-child .birth-detail-planet {
-        margin-top: 0.25rem;
+      .birth-detail-identity {
+        gap: 0.62rem;
+      }
+
+      .birth-detail-identity .birth-detail-planet {
         font-size: 0.94rem;
       }
     }
@@ -103,25 +119,37 @@
     introBandLines[0].textContent = "Numbers reveal patterns. Your choices shape your path.";
   }
 
-  // Reuse the existing live planet element so updates for Numbers 1–9 continue
-  // to come from the original birth-number logic. If that section is still
-  // being created, observe briefly and move it as soon as it exists.
-  const placePlanetBelowNumber = () => {
+  // Reuse the existing live number and planet elements so the original
+  // birth-number logic continues updating them for Numbers 1–9. Wrap them in
+  // one fixed-gap identity stack instead of spacing the planet with margins.
+  const buildNumberIdentity = () => {
     const detailNumber = document.querySelector(".birth-detail-number");
     const detailPlanet = document.querySelector(".birth-detail-planet");
 
     if (!detailNumber || !detailPlanet) return false;
 
-    if (detailPlanet.parentElement !== detailNumber.parentElement) {
-      detailNumber.insertAdjacentElement("afterend", detailPlanet);
+    let identity = document.querySelector(".birth-detail-identity");
+
+    if (!identity) {
+      identity = document.createElement("div");
+      identity.className = "birth-detail-identity";
+      detailNumber.parentElement?.insertBefore(identity, detailNumber);
+    }
+
+    if (detailNumber.parentElement !== identity) {
+      identity.appendChild(detailNumber);
+    }
+
+    if (detailPlanet.parentElement !== identity) {
+      identity.appendChild(detailPlanet);
     }
 
     return true;
   };
 
-  if (!placePlanetBelowNumber()) {
+  if (!buildNumberIdentity()) {
     const detailObserver = new MutationObserver(() => {
-      if (placePlanetBelowNumber()) {
+      if (buildNumberIdentity()) {
         detailObserver.disconnect();
       }
     });
