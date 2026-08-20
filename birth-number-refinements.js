@@ -46,13 +46,14 @@
     }
 
     /* Continuation cue sits in normal document flow, directly between the
-       number interpretation and the existing maroon reassurance band. */
+       number interpretation and the existing maroon reassurance band. Give
+       it extra breathing room below so it never feels pinned to the edge. */
     .birth-scroll-cue-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 62px;
-      padding: 0.65rem 1rem 0.8rem;
+      min-height: 88px;
+      padding: 0.55rem 1rem 2rem;
       background: var(--paper);
       opacity: 1;
       overflow: hidden;
@@ -133,8 +134,8 @@
       }
 
       .birth-scroll-cue-wrap {
-        min-height: 58px;
-        padding: 0.55rem 0.8rem 0.72rem;
+        min-height: 82px;
+        padding: 0.5rem 0.8rem 1.8rem;
       }
 
       .birth-scroll-cue {
@@ -237,12 +238,33 @@
       hideScrollCue();
       if (!reassuranceSection) return;
 
-      const headerHeight = siteHeaderRefinement?.getBoundingClientRect().height || 0;
-      const nextTop = reassuranceSection.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({
-        top: Math.max(0, nextTop - headerHeight - 16),
-        behavior: "smooth"
-      });
+      // Wait for the cue wrapper to collapse before measuring the reassurance
+      // band. This avoids landing a few pixels off after the layout shifts.
+      window.setTimeout(() => {
+        const headerHeight = siteHeaderRefinement?.getBoundingClientRect().height || 0;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const reassuranceRect = reassuranceSection.getBoundingClientRect();
+        const reassuranceTop = reassuranceRect.top + window.scrollY;
+        const reassuranceHeight = reassuranceRect.height;
+        const availableHeight = Math.max(0, viewportHeight - headerHeight);
+        const breathingRoom = 24;
+
+        let targetTop;
+        if (reassuranceHeight + breathingRoom * 2 <= availableHeight) {
+          const centeredInset = Math.max(
+            breathingRoom,
+            (availableHeight - reassuranceHeight) / 2
+          );
+          targetTop = reassuranceTop - headerHeight - centeredInset;
+        } else {
+          targetTop = reassuranceTop - headerHeight - breathingRoom;
+        }
+
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          behavior: "smooth"
+        });
+      }, 240);
     };
 
     scrollCue.addEventListener("click", scrollToReassurance);
