@@ -274,13 +274,13 @@ birthNumberFeature.src = "birth-number.js?v=2";
 birthNumberFeature.async = false;
 birthNumberFeature.addEventListener("load", () => {
   const birthNumberRefinements = document.createElement("script");
-  birthNumberRefinements.src = "birth-number-refinements.js?v=8";
+  birthNumberRefinements.src = "birth-number-refinements.js?v=9";
   birthNumberRefinements.async = false;
   document.head.appendChild(birthNumberRefinements);
 });
 document.head.appendChild(birthNumberFeature);
 
 const heroNumberPadRefinement = document.createElement("script");
-heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=2";
+heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=3";
 heroNumberPadRefinement.async = false;
 document.head.appendChild(heroNumberPadRefinement);
