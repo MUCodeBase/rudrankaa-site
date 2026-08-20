@@ -6,7 +6,7 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const repositoryRoot = path.resolve(scriptDirectory, "..");
 const galleryDirectory = path.join(repositoryRoot, "assets", "myth-busters");
 const manifestPath = path.join(galleryDirectory, "manifest.json");
-const filenamePattern = /^MB_(\d{2})(\d{2})(\d{4})_(\d+)\.jpg$/i;
+const filenamePattern = /^MB_(\d{2})(\d{2})(\d{4})_(\d+)\.jpeg$/i;
 
 const files = await readdir(galleryDirectory, { withFileTypes: true });
 const imageFiles = files
@@ -18,7 +18,7 @@ const invalidFiles = imageFiles.filter((file) => !filenamePattern.test(file));
 if (invalidFiles.length > 0) {
   throw new Error(
     `Invalid Myth Buster filename${invalidFiles.length === 1 ? "" : "s"}: ${invalidFiles.join(", ")}. ` +
-      "Use MB_DDMMYYYY_X.jpg, for example MB_20082026_1.jpg."
+      "Use MB_DDMMYYYY_X.jpeg, for example MB_20082026_1.jpeg."
   );
 }
 
