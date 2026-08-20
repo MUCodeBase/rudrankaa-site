@@ -46,6 +46,19 @@
       outline: none;
     }
 
+    .birth-trust-note {
+      max-width: 680px;
+      margin: 0.72rem auto 1.9rem;
+      padding: 0 1.25rem;
+      color: var(--ink-soft);
+      font-family: var(--serif);
+      font-size: 0.86rem;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1.55;
+      text-align: center;
+    }
+
     .birth-scroll-cue {
       position: absolute;
       left: 50%;
@@ -54,17 +67,17 @@
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.08rem;
+      gap: 0.12rem;
       transform: translateX(-50%);
-      padding: 0.25rem 0.65rem;
+      padding: 0.3rem 0.8rem;
       border: 0;
-      background: rgba(255, 253, 249, 0.9);
+      background: rgba(255, 253, 249, 0.94);
       color: var(--maroon);
       font-family: var(--sans);
-      font-size: 0.67rem;
+      font-size: 0.8rem;
       font-weight: 750;
-      letter-spacing: 0.045em;
-      line-height: 1.25;
+      letter-spacing: 0.035em;
+      line-height: 1.3;
       cursor: pointer;
       opacity: 0;
       pointer-events: none;
@@ -75,9 +88,9 @@
       content: "⌄⌄";
       display: block;
       color: var(--gold);
-      font-size: 0.9rem;
+      font-size: 1.12rem;
       line-height: 0.8;
-      letter-spacing: -0.12em;
+      letter-spacing: -0.1em;
       animation: birth-scroll-nudge 1.6s ease-in-out 2;
     }
 
@@ -121,9 +134,21 @@
         margin-top: 1.1rem;
       }
 
+      .birth-trust-note {
+        margin: 0.65rem auto 2rem;
+        padding: 0 1.15rem;
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
       .birth-scroll-cue {
         bottom: 3px;
-        font-size: 0.64rem;
+        padding: 0.28rem 0.65rem;
+        font-size: 0.75rem;
+      }
+
+      .birth-scroll-cue::before {
+        font-size: 1.05rem;
       }
     }
   `;
@@ -178,6 +203,17 @@
 
     actions.appendChild(backButton);
     detailDescriptionRefinement.insertAdjacentElement("afterend", actions);
+  }
+
+  if (
+    detailSectionRefinement &&
+    detailShellRefinement &&
+    !detailSectionRefinement.querySelector(".birth-trust-note")
+  ) {
+    const trustNote = document.createElement("p");
+    trustNote.className = "birth-trust-note";
+    trustNote.textContent = "Numbers reveal patterns. Your choices shape your path.";
+    detailShellRefinement.insertAdjacentElement("afterend", trustNote);
   }
 
   if (
