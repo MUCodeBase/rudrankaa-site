@@ -150,6 +150,22 @@
   document.head.appendChild(birthNumberRefinementStyles);
 
   const birthDayInputRefinement = document.querySelector("#birth-day");
+  const birthDateLabelRefinement = document.querySelector(".birth-number-label");
+  const birthDateNoteRefinement = document.querySelector(".birth-number-note");
+  const birthSummaryRefinement = document.querySelector(".number-card .birth-summary");
+
+  if (birthDateLabelRefinement) {
+    birthDateLabelRefinement.textContent = "What date were you born?";
+  }
+
+  if (birthDateNoteRefinement) {
+    birthDateNoteRefinement.textContent = "Enter only the date of the month (1–31). No full birth date is required.";
+  }
+
+  if (birthSummaryRefinement && !birthSummaryRefinement.querySelector("strong")) {
+    birthSummaryRefinement.textContent = "Enter your birth date or choose a number to explore its energy.";
+  }
+
   if (birthDayInputRefinement) {
     // Make the visible example actionable: clicking Find my number immediately
     // calculates 12 unless the visitor replaces it with their own birth day.
