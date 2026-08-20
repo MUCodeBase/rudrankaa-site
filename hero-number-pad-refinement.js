@@ -51,4 +51,16 @@
   `;
 
   document.head.appendChild(heroPadStyles);
+
+  // Keep the existing maroon reassurance band and gold separator, changing
+  // only its wording.
+  const introBandInner = document.querySelector(".intro-band .intro-band-inner");
+  const introBandLines = introBandInner ? [...introBandInner.querySelectorAll("p")] : [];
+
+  if (introBandLines.length >= 2) {
+    introBandLines[0].textContent = "Numbers reveal patterns.";
+    introBandLines[1].textContent = "Your choices shape your path.";
+  } else if (introBandLines.length === 1) {
+    introBandLines[0].textContent = "Numbers reveal patterns. Your choices shape your path.";
+  }
 })();
