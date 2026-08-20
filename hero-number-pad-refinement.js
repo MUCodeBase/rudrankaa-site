@@ -12,15 +12,15 @@
       }
 
       .hero .number-card .card-kicker {
-        margin-bottom: 1.15rem;
+        margin-bottom: 1.05rem;
       }
 
       .hero .birth-number-form {
-        margin-bottom: 1rem;
+        margin-bottom: 0.92rem;
       }
 
       .hero .birth-number-note {
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.44rem;
       }
 
       .hero .number-grid {
@@ -31,21 +31,21 @@
     @media (min-width: 1200px) {
       .hero .number-card,
       .hero .floating-symbol {
-        transform: translateY(-180px);
+        transform: translateY(-228px);
       }
     }
 
     @media (min-width: 1000px) and (max-width: 1199px) {
       .hero .number-card,
       .hero .floating-symbol {
-        transform: translateY(-120px);
+        transform: translateY(-155px);
       }
     }
 
     @media (min-width: 901px) and (max-width: 999px) {
       .hero .number-card,
       .hero .floating-symbol {
-        transform: translateY(-80px);
+        transform: translateY(-100px);
       }
     }
   `;
