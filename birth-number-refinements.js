@@ -5,8 +5,7 @@
        while leaving enough of the following section visible to signal that
        the page continues. */
     .birth-number-detail {
-      position: relative;
-      padding-bottom: 28px !important;
+      padding-bottom: 18px !important;
       scroll-margin-top: 118px;
     }
 
@@ -46,63 +45,62 @@
       outline: none;
     }
 
-    .birth-trust-note {
-      max-width: 680px;
-      margin: 0.72rem auto 1.9rem;
-      padding: 0 1.25rem;
-      color: var(--ink-soft);
-      font-family: var(--serif);
-      font-size: 0.86rem;
-      font-style: italic;
-      font-weight: 500;
-      line-height: 1.55;
-      text-align: center;
+    /* Continuation cue sits in normal document flow, directly between the
+       number interpretation and the existing maroon reassurance band. */
+    .birth-scroll-cue-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 62px;
+      padding: 0.65rem 1rem 0.8rem;
+      background: var(--paper);
+      opacity: 1;
+      overflow: hidden;
+      transition: opacity 220ms ease, min-height 220ms ease, padding 220ms ease;
+    }
+
+    .birth-scroll-cue-wrap[hidden] {
+      display: none;
+    }
+
+    .birth-scroll-cue-wrap.is-hidden {
+      min-height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
     }
 
     .birth-scroll-cue {
-      position: absolute;
-      left: 50%;
-      bottom: 2px;
-      z-index: 2;
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.12rem;
-      transform: translateX(-50%);
-      padding: 0.3rem 0.8rem;
+      gap: 0.14rem;
+      padding: 0.18rem 0.85rem;
       border: 0;
-      background: rgba(255, 253, 249, 0.94);
+      background: transparent;
       color: var(--maroon);
       font-family: var(--sans);
-      font-size: 0.8rem;
+      font-size: 0.84rem;
       font-weight: 750;
-      letter-spacing: 0.035em;
+      letter-spacing: 0.03em;
       line-height: 1.3;
       cursor: pointer;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 220ms ease, transform 220ms ease;
     }
 
     .birth-scroll-cue::before {
       content: "⌄⌄";
       display: block;
       color: var(--gold);
-      font-size: 1.12rem;
-      line-height: 0.8;
+      font-size: 1.22rem;
+      line-height: 0.82;
       letter-spacing: -0.1em;
       animation: birth-scroll-nudge 1.6s ease-in-out 2;
     }
 
-    .birth-scroll-cue.is-visible {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .birth-scroll-cue.is-hidden {
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(-50%, 6px);
+    .birth-scroll-cue:hover,
+    .birth-scroll-cue:focus-visible {
+      color: var(--maroon-deep);
+      outline: none;
     }
 
     @keyframes birth-scroll-nudge {
@@ -112,12 +110,12 @@
 
     @media (prefers-reduced-motion: reduce) {
       .birth-scroll-cue::before { animation: none; }
-      .birth-scroll-cue { transition: none; }
+      .birth-scroll-cue-wrap { transition: none; }
     }
 
     @media (max-width: 640px) {
       .birth-number-detail {
-        padding-bottom: 32px !important;
+        padding-bottom: 16px !important;
         scroll-margin-top: 88px;
       }
 
@@ -134,21 +132,18 @@
         margin-top: 1.1rem;
       }
 
-      .birth-trust-note {
-        margin: 0.65rem auto 2rem;
-        padding: 0 1.15rem;
-        font-size: 0.8rem;
-        line-height: 1.5;
+      .birth-scroll-cue-wrap {
+        min-height: 58px;
+        padding: 0.55rem 0.8rem 0.72rem;
       }
 
       .birth-scroll-cue {
-        bottom: 3px;
-        padding: 0.28rem 0.65rem;
-        font-size: 0.75rem;
+        padding: 0.15rem 0.65rem;
+        font-size: 0.8rem;
       }
 
       .birth-scroll-cue::before {
-        font-size: 1.05rem;
+        font-size: 1.14rem;
       }
     }
   `;
@@ -169,9 +164,11 @@
 
   const detailSectionRefinement = document.querySelector(".birth-number-detail");
   const detailDescriptionRefinement = detailSectionRefinement?.querySelector(".birth-detail-description");
-  const detailShellRefinement = detailSectionRefinement?.querySelector(".shell");
   const numberCardRefinement = document.querySelector(".number-card");
   const siteHeaderRefinement = document.querySelector(".site-header");
+
+  // Remove the temporary duplicate reassurance line from the prior iteration.
+  document.querySelector(".birth-trust-note")?.remove();
 
   if (
     detailDescriptionRefinement &&
@@ -207,51 +204,48 @@
 
   if (
     detailSectionRefinement &&
-    detailShellRefinement &&
-    !detailSectionRefinement.querySelector(".birth-trust-note")
+    !document.querySelector(".birth-scroll-cue-wrap")
   ) {
-    const trustNote = document.createElement("p");
-    trustNote.className = "birth-trust-note";
-    trustNote.textContent = "Numbers reveal patterns. Your choices shape your path.";
-    detailShellRefinement.insertAdjacentElement("afterend", trustNote);
-  }
+    // Capture the existing next section before inserting the cue. On the
+    // current page this is the maroon reassurance band that should remain.
+    const reassuranceSection = detailSectionRefinement.nextElementSibling;
 
-  if (
-    detailSectionRefinement &&
-    detailShellRefinement &&
-    !detailSectionRefinement.querySelector(".birth-scroll-cue")
-  ) {
+    const cueWrap = document.createElement("div");
+    cueWrap.className = "birth-scroll-cue-wrap";
+    cueWrap.hidden = detailSectionRefinement.hidden;
+
     const scrollCue = document.createElement("button");
     scrollCue.type = "button";
     scrollCue.className = "birth-scroll-cue";
     scrollCue.textContent = "Scroll to discover more";
     scrollCue.setAttribute("aria-label", "Scroll to discover more content");
-    detailSectionRefinement.appendChild(scrollCue);
+
+    cueWrap.appendChild(scrollCue);
+    detailSectionRefinement.insertAdjacentElement("afterend", cueWrap);
 
     const hideScrollCue = () => {
-      scrollCue.classList.remove("is-visible");
-      scrollCue.classList.add("is-hidden");
+      if (cueWrap.hidden || cueWrap.classList.contains("is-hidden")) return;
+      cueWrap.classList.add("is-hidden");
     };
 
     const showScrollCue = () => {
-      scrollCue.classList.remove("is-hidden");
-      scrollCue.classList.add("is-visible");
+      cueWrap.hidden = false;
+      cueWrap.classList.remove("is-hidden");
     };
 
-    const scrollToNextSection = () => {
+    const scrollToReassurance = () => {
       hideScrollCue();
-      const nextSection = detailSectionRefinement.nextElementSibling;
-      if (!nextSection) return;
+      if (!reassuranceSection) return;
 
       const headerHeight = siteHeaderRefinement?.getBoundingClientRect().height || 0;
-      const nextTop = nextSection.getBoundingClientRect().top + window.scrollY;
+      const nextTop = reassuranceSection.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
         top: Math.max(0, nextTop - headerHeight - 16),
         behavior: "smooth"
       });
     };
 
-    scrollCue.addEventListener("click", scrollToNextSection);
+    scrollCue.addEventListener("click", scrollToReassurance);
 
     const userScrollKeys = new Set(["ArrowDown", "PageDown", "End", " "]);
     window.addEventListener("wheel", hideScrollCue, { passive: true });
@@ -262,9 +256,10 @@
 
     const visibilityObserver = new MutationObserver(() => {
       if (!detailSectionRefinement.hidden) {
+        cueWrap.hidden = false;
         window.setTimeout(showScrollCue, 650);
       } else {
-        hideScrollCue();
+        cueWrap.hidden = true;
       }
     });
 
