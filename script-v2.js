@@ -281,6 +281,6 @@ birthNumberFeature.addEventListener("load", () => {
 document.head.appendChild(birthNumberFeature);
 
 const heroNumberPadRefinement = document.createElement("script");
-heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=3";
+heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=4";
 heroNumberPadRefinement.async = false;
 document.head.appendChild(heroNumberPadRefinement);
