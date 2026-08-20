@@ -268,3 +268,8 @@ if (footerBottom && !document.querySelector(".trademark-notice")) {
   trademarkNotice.textContent = "RUDRANKAA™ and the Rudrankaa logo are trademarks.";
   legalLeft.appendChild(trademarkNotice);
 }
+
+const birthNumberFeature = document.createElement("script");
+birthNumberFeature.src = "birth-number.js?v=1";
+birthNumberFeature.async = false;
+document.head.appendChild(birthNumberFeature);
