@@ -45,8 +45,8 @@
       outline: none;
     }
 
-    /* Continuation cue sits in normal flow, but deliberately toward the top
-       of its breathing-space area so it never feels pinned to the viewport edge. */
+    /* Continuation cue sits in normal flow. The cue itself is lifted clearly
+       into the white space so it never appears pinned to the viewport edge. */
     .birth-scroll-cue-wrap {
       display: flex;
       justify-content: center;
@@ -75,6 +75,7 @@
       flex-direction: column;
       align-items: center;
       gap: 0.14rem;
+      transform: translateY(-38px);
       padding: 0.18rem 0.85rem;
       border: 0;
       background: transparent;
@@ -138,6 +139,7 @@
       }
 
       .birth-scroll-cue {
+        transform: translateY(-24px);
         padding: 0.15rem 0.65rem;
         font-size: 0.8rem;
       }
@@ -233,22 +235,15 @@
       cueWrap.classList.remove("is-hidden");
     };
 
-    const centreReassuranceBand = () => {
+    const alignReassuranceBelowHeader = () => {
       if (!reassuranceSection) return;
 
-      const viewportHeight = window.visualViewport?.height ||
-        window.innerHeight ||
-        document.documentElement.clientHeight;
       const headerBottom = Math.max(
         0,
         siteHeaderRefinement?.getBoundingClientRect().bottom || 0
       );
       const reassuranceRect = reassuranceSection.getBoundingClientRect();
-      const usableHeight = Math.max(0, viewportHeight - headerBottom);
-      const desiredBandTop = headerBottom + Math.max(
-        20,
-        (usableHeight - reassuranceRect.height) / 2
-      );
+      const desiredBandTop = headerBottom + 22;
       const targetTop = window.scrollY + reassuranceRect.top - desiredBandTop;
 
       window.scrollTo({
@@ -266,7 +261,7 @@
       cueWrap.classList.remove("is-hidden");
 
       window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(centreReassuranceBand);
+        window.requestAnimationFrame(alignReassuranceBelowHeader);
       });
     };
 
