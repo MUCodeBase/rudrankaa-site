@@ -274,7 +274,7 @@ birthNumberFeature.src = "birth-number.js?v=2";
 birthNumberFeature.async = false;
 birthNumberFeature.addEventListener("load", () => {
   const birthNumberRefinements = document.createElement("script");
-  birthNumberRefinements.src = "birth-number-refinements.js?v=7";
+  birthNumberRefinements.src = "birth-number-refinements.js?v=8";
   birthNumberRefinements.async = false;
   document.head.appendChild(birthNumberRefinements);
 });
