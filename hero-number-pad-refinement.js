@@ -28,15 +28,22 @@
       }
     }
 
-    /* Once the live planet label is moved beneath the large numeral, make it
-       a slightly stronger secondary identifier without competing with the number. */
+    /* Reserve a consistent visual block for every numeral. Different Georgia
+       glyphs sit differently inside the same line box, so this prevents 4, 5,
+       7 and 9 from visually crowding the planet label. */
+    .birth-detail-card > div:first-child .birth-detail-number {
+      min-height: 0.93em;
+    }
+
+    /* The live planet label is moved beneath the large numeral and given more
+       prominence while remaining clearly secondary to the number itself. */
     .birth-detail-card > div:first-child .birth-detail-planet {
       display: block;
-      margin: 0.9rem 0 0;
+      margin: 0.3rem 0 0;
       color: var(--gold);
-      font-size: 0.92rem;
+      font-size: 1rem;
       font-weight: 850;
-      letter-spacing: 0.13em;
+      letter-spacing: 0.12em;
       line-height: 1.25;
       text-transform: uppercase;
     }
@@ -76,8 +83,8 @@
 
     @media (max-width: 640px) {
       .birth-detail-card > div:first-child .birth-detail-planet {
-        margin-top: 0.7rem;
-        font-size: 0.86rem;
+        margin-top: 0.25rem;
+        font-size: 0.94rem;
       }
     }
   `;
@@ -124,6 +131,4 @@
       subtree: true
     });
   }
-
-  // Deployment touch: keep this asset distinct from the prior cached preview.
 })();
