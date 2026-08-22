@@ -48,7 +48,8 @@
 }
 
 .service-details-trigger::after {
-  content: " →";
+  content: "→";
+  margin-left: 0.4rem;
 }
 
 .service-card-actions > a:hover,
