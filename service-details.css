@@ -6,41 +6,58 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 1.35rem;
+  justify-content: space-between;
+  gap: 2rem;
   margin-top: auto;
 }
 
 .service-card-actions > a,
 .service-card-actions > button {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
   margin-top: 0 !important;
-  flex: 0 0 auto;
+  padding: 0.35rem 0;
+  border: 0 !important;
+  border-bottom: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: color 180ms ease;
+}
+
+.service-card-actions > a {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .service-details-trigger {
   align-self: auto;
-  padding: 0.15rem 0 0.28rem;
-  border: 0;
-  border-bottom: 1px solid rgba(77, 32, 29, 0.34);
-  background: transparent;
   color: var(--maroon);
   font: inherit;
   font-size: 0.84rem;
-  font-weight: 760;
+  font-weight: 740;
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: border-color 180ms ease, color 180ms ease;
 }
 
 .service-details-trigger::after {
   content: " →";
 }
 
+.service-card-actions > a:hover,
+.service-card-actions > a:focus-visible,
 .service-details-trigger:hover,
 .service-details-trigger:focus-visible {
-  border-color: var(--gold);
   color: var(--maroon-deep);
+  text-decoration: underline !important;
+  text-decoration-color: rgba(77, 32, 29, 0.52) !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 6px !important;
 }
 
+.service-card-actions > a:focus-visible,
 .service-details-trigger:focus-visible,
 .service-dialog-close:focus-visible,
 .service-dialog-cta:focus-visible {
@@ -138,14 +155,12 @@
 
   .service-card-actions {
     flex-wrap: nowrap;
-    gap: 1.65rem;
+    gap: 1.5rem;
   }
 
   .service-card-actions > a,
   .service-card-actions > button {
-    min-height: 36px;
-    display: inline-flex;
-    align-items: center;
+    min-height: 44px;
   }
 
   .service-details-dialog {
