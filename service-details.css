@@ -2,9 +2,22 @@
   margin-bottom: 1.4rem;
 }
 
-.service-details-trigger {
+.service-card-actions {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
   margin-top: auto;
-  align-self: flex-start;
+}
+
+.service-card-actions > a,
+.service-card-actions > button {
+  margin-top: 0 !important;
+  flex: 0 0 auto;
+}
+
+.service-details-trigger {
+  align-self: auto;
   padding: 0.15rem 0 0.28rem;
   border: 0;
   border-bottom: 1px solid rgba(77, 32, 29, 0.34);
@@ -121,6 +134,18 @@
 @media (max-width: 640px) {
   .service-card .service-summary {
     margin-bottom: 1.15rem;
+  }
+
+  .service-card-actions {
+    flex-wrap: nowrap;
+    gap: 1.65rem;
+  }
+
+  .service-card-actions > a,
+  .service-card-actions > button {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
   }
 
   .service-details-dialog {
