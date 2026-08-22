@@ -34,8 +34,10 @@
           "Personal Numerology Guidance helps you understand the numerical influences relevant to different areas of your life.",
           "The consultation may include alignment of your name with your date of birth, your current Name & Number Mahadasha, your Personal Year and its opportunities and cautions, and the compatibility of your mobile number with your date of birth.",
           "It can also help identify more favourable periods for specific tasks, goals or important decisions, allowing you to consider timing as part of your planning.",
-          "Where relevant, the consultation may include marriage compatibility for people planning marriage, along with personalised numerological remedies or recommendations based on the overall analysis.",
+          "Where relevant, the consultation may also include marriage compatibility for those planning marriage, helping assess numerical compatibility between partners.",
         ],
+        conclusion:
+          "The overall analysis is brought together into personalised numerological guidance, with customised remedies or recommendations where appropriate.",
       },
     ],
     [
@@ -109,6 +111,13 @@
       copy.textContent = paragraph;
       dialogCopy.appendChild(copy);
     });
+
+    if (content.conclusion) {
+      const conclusion = document.createElement("p");
+      conclusion.className = "service-dialog-conclusion";
+      conclusion.textContent = content.conclusion;
+      dialogCopy.appendChild(conclusion);
+    }
 
     if (typeof dialog.showModal === "function") {
       dialog.showModal();
