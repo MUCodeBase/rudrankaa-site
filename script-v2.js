@@ -293,13 +293,38 @@ if (!document.querySelector('link[href^="legal.css"]')) {
   document.head.appendChild(legalStylesheet);
 }
 
-const manifestationGridCard = Array.from(document.querySelectorAll(".service-card")).find(
-  (card) => card.querySelector("h3")?.textContent.trim() === "Manifestation Grid Activation"
-);
-const manifestationGridCopy = manifestationGridCard?.querySelector("p");
-if (manifestationGridCopy) {
-  manifestationGridCopy.textContent = "Activate your intentions. Align your focus. Support purposeful action.";
-}
+const serviceCopyUpdates = new Map([
+  [
+    "Manifestation Grid Activation",
+    "Activate your intentions. Align your focus. Support purposeful action.",
+  ],
+  [
+    "Name Energy Alignment",
+    "Explore the numerological patterns and alignment connected with your name.",
+  ],
+  [
+    "Personal Numerology Guidance",
+    "Life • Relationships • Personal Decisions.",
+  ],
+  [
+    "Business & Career Numerology",
+    "Career Direction • Business Decisions • Brand & Business Alignment.",
+  ],
+  [
+    "Rudraksha Consultancy",
+    "Personalised Rudraksha selection and numerology-based guidance.",
+  ],
+]);
+
+document.querySelectorAll(".service-card").forEach((card) => {
+  const title = card.querySelector("h3")?.textContent.trim();
+  const copy = title ? serviceCopyUpdates.get(title) : null;
+  const description = card.querySelector("p");
+
+  if (copy && description) {
+    description.textContent = copy;
+  }
+});
 
 const contactActions = document.querySelector("#contact .contact-actions");
 if (contactActions && !document.querySelector(".consultation-disclaimer")) {
