@@ -138,7 +138,19 @@
     trigger.setAttribute("aria-haspopup", "dialog");
     trigger.textContent = "View details";
     trigger.addEventListener("click", () => openService(originalTitle, content));
-    card.appendChild(trigger);
+
+    const enquiryLink = Array.from(card.querySelectorAll("a")).find((link) =>
+      link.textContent.trim().toLowerCase().startsWith("enquire")
+    );
+
+    const actions = document.createElement("div");
+    actions.className = "service-card-actions";
+
+    if (enquiryLink) {
+      actions.appendChild(enquiryLink);
+    }
+    actions.appendChild(trigger);
+    card.appendChild(actions);
   });
 
   closeButton?.addEventListener("click", () => dialog.close());
