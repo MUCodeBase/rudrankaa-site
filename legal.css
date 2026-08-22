@@ -12,6 +12,12 @@
   margin: 0;
 }
 
+.consultation-disclaimer p::before {
+  content: "Disclaimer: ";
+  color: #fff;
+  font-weight: 700;
+}
+
 .consultation-disclaimer a,
 .footer-disclaimer-link {
   color: inherit;
