@@ -64,7 +64,19 @@
     const answerElement = item.querySelector("p");
 
     if (answer && answerElement) {
-      answerElement.textContent = answer;
+      if (question === "Are consultations private?") {
+        answerElement.replaceChildren();
+        answerElement.append(
+          "Rudrankaa treats consultation details with care and confidentiality and uses personal information only as reasonably necessary to provide and administer the requested Service, in accordance with the Rudrankaa "
+        );
+
+        const privacyLink = document.createElement("a");
+        privacyLink.href = "privacy.html";
+        privacyLink.textContent = "Privacy Policy";
+        answerElement.append(privacyLink, ".");
+      } else {
+        answerElement.textContent = answer;
+      }
     }
   });
 
