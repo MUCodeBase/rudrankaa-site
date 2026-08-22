@@ -102,8 +102,27 @@
     }
 
     @media (max-width: 640px) {
+      /* The mobile layout has no intentional horizontal scrolling. Contain
+         decorative/transformed ink at the viewport so iOS cannot pan the page
+         sideways after a number is selected. Hidden is the Safari fallback;
+         supporting browsers use clip without creating a scroll container. */
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+        overscroll-behavior-x: none;
+      }
+
+      @supports (overflow-x: clip) {
+        html,
+        body {
+          overflow-x: clip;
+        }
+      }
+
       .birth-number-detail {
         overflow-x: clip;
+        touch-action: pan-y pinch-zoom;
       }
 
       .birth-detail-identity {

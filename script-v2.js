@@ -270,7 +270,7 @@ if (footerBottom && !document.querySelector(".trademark-notice")) {
 }
 
 const birthNumberFeature = document.createElement("script");
-birthNumberFeature.src = "birth-number.js?v=2";
+birthNumberFeature.src = "birth-number.js?v=3";
 birthNumberFeature.async = false;
 birthNumberFeature.addEventListener("load", () => {
   const birthNumberRefinements = document.createElement("script");
@@ -281,6 +281,6 @@ birthNumberFeature.addEventListener("load", () => {
 document.head.appendChild(birthNumberFeature);
 
 const heroNumberPadRefinement = document.createElement("script");
-heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=6";
+heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=7";
 heroNumberPadRefinement.async = false;
 document.head.appendChild(heroNumberPadRefinement);

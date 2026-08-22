@@ -288,7 +288,19 @@ if (numberCard && numberGrid && heroSection && !numberCard.querySelector(".birth
     }
 
     window.setTimeout(() => {
-      detailSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      const detailStyle = window.getComputedStyle(detailSection);
+      const scrollMarginTop = Number.parseFloat(detailStyle.scrollMarginTop) || 0;
+      const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+      const detailTop = detailSection.getBoundingClientRect().top + window.scrollY;
+
+      // Scroll only on the vertical axis. On mobile Safari, scrollIntoView can
+      // also preserve or introduce a small horizontal offset when a descendant
+      // has transformed glyph geometry (most visibly for Numbers 1 and 2).
+      window.scrollTo({
+        top: Math.max(0, detailTop - Math.max(scrollMarginTop, headerHeight)),
+        left: 0,
+        behavior: "smooth"
+      });
     }, 120);
   };
 
