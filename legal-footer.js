@@ -33,28 +33,28 @@
     document.head.appendChild(compactFooterStyles);
   }
 
-  // Keep FAQ guidance aligned with the site's legal and service wording without
-  // altering the underlying questions or expanding the base page markup.
+  // Keep the existing FAQ questions while aligning their answers with the
+  // site's service, privacy and legal wording.
   const faqAnswers = new Map([
     [
-      "What information do you need from me?",
-      "Your date of birth, full name and the primary question or area you want guidance on. Depending on the service, additional details relevant to the requested analysis may be required. Please provide only information reasonably necessary for the consultation."
+      "What information is needed for a consultation?",
+      "Your relevant name and date-of-birth details, together with the question or area where you are seeking clarity. Depending on the Service requested, additional details relevant to the numerological analysis may be needed. Please provide only information reasonably necessary for the consultation."
     ],
     [
-      "Do you offer online consultations?",
-      "Yes. Consultation format and timing can be discussed while arranging your session. A consultation is confirmed when Rudrankaa communicates confirmation."
+      "Are consultations private?",
+      "Rudrankaa treats consultation details with care and confidentiality and uses personal information only as reasonably necessary to provide and administer the requested Service, in accordance with the Rudrankaa Privacy Policy."
     ],
     [
-      "Can numerology predict the future?",
+      "Does numerology predict every outcome?",
       "Numerology is an interpretive discipline that may highlight patterns, cycles and tendencies. It does not determine or guarantee future events or outcomes, and personal choice and free will remain important."
     ],
     [
-      "Do you recommend remedies?",
-      "Where appropriate, guidance may include name alignment, number alignment, manifestation grids, or Rudraksha, crystal and yantra recommendations within traditional and numerological frameworks. Such guidance does not guarantee a particular outcome."
+      "Can one consultation cover more than one area?",
+      "Yes. Depending on the scope of the consultation, you may bring together relevant insights across personal, name, career, business or number-alignment themes. The appropriate scope can be discussed when arranging the consultation."
     ],
     [
-      "Is business numerology only for business owners?",
-      "No. Business & Career Numerology may also offer a numerological perspective for professionals considering career direction, partnerships, launches or other important work-related decisions. It is intended as an additional perspective alongside practical judgment."
+      "How can I book?",
+      "Use WhatsApp, phone or email from the consultation section below to share your question and arrange a suitable time. A request does not by itself guarantee availability; a consultation is confirmed when Rudrankaa communicates confirmation."
     ]
   ]);
 
