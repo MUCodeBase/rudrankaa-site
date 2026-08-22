@@ -6,6 +6,7 @@
   const dialogClose = dialog?.querySelector(".myth-buster-dialog-close");
   const loadMoreButton = document.querySelector("#myth-busters-load-more");
   const galleryCount = document.querySelector("#myth-busters-count");
+  const mobileHomeGallery = window.matchMedia("(max-width: 640px)");
 
   const createZoomButton = (className, action, label, text) => {
     const button = document.createElement("button");
@@ -210,7 +211,9 @@
   const itemLabel = (count) => `${count} Myth Buster${count === 1 ? "" : "s"}`;
 
   const renderHomeGallery = (entries) => {
-    const itemLimit = parsePositiveInteger(gallery.dataset.itemLimit, 4);
+    const desktopItemLimit = parsePositiveInteger(gallery.dataset.itemLimit, 4);
+    const mobileItemLimit = parsePositiveInteger(gallery.dataset.mobileItemLimit, 2);
+    const itemLimit = mobileHomeGallery.matches ? mobileItemLimit : desktopItemLimit;
     gallery.replaceChildren(...entries.slice(0, itemLimit).map(createCard));
   };
 
@@ -257,6 +260,13 @@
 
       if (gallery.dataset.galleryView === "home") {
         renderHomeGallery(entries);
+        const rerenderHomeGallery = () => renderHomeGallery(entries);
+
+        if (typeof mobileHomeGallery.addEventListener === "function") {
+          mobileHomeGallery.addEventListener("change", rerenderHomeGallery);
+        } else {
+          mobileHomeGallery.addListener(rerenderHomeGallery);
+        }
       } else if (gallery.dataset.galleryView === "archive") {
         renderArchiveGallery(entries);
       } else {
