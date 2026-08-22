@@ -34,11 +34,17 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      min-width: 0;
+      max-width: 100%;
       gap: 0.72rem;
     }
 
     .birth-detail-identity .birth-detail-number {
-      width: 100%;
+      /* Scale only the numeral-sized box. Scaling a full-width box can extend
+         the document beyond the viewport when Safari enlarges Number 1. */
+      width: auto;
+      max-width: 100%;
+      align-self: flex-start;
       height: 1em;
       min-height: 0 !important;
       display: flex;
@@ -96,6 +102,10 @@
     }
 
     @media (max-width: 640px) {
+      .birth-number-detail {
+        overflow-x: clip;
+      }
+
       .birth-detail-identity {
         gap: 0.62rem;
       }
