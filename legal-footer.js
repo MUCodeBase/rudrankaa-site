@@ -20,8 +20,77 @@
         margin: 0 !important;
         padding: 0 !important;
       }
+
+      .testimonial-experience-note {
+        max-width: 760px;
+        margin: 1.35rem auto 0;
+        color: var(--ink-soft);
+        font-size: 0.78rem;
+        line-height: 1.55;
+        text-align: center;
+      }
     `;
     document.head.appendChild(compactFooterStyles);
+  }
+
+  // Keep the existing FAQ questions while aligning their answers with the
+  // site's service, privacy and legal wording.
+  const faqAnswers = new Map([
+    [
+      "What information is needed for a consultation?",
+      "Your relevant name and date-of-birth details, together with the question or area where you are seeking clarity. Depending on the Service requested, additional details relevant to the numerological analysis may be needed. Please provide only information reasonably necessary for the consultation."
+    ],
+    [
+      "Are consultations private?",
+      "Rudrankaa treats consultation details with care and confidentiality and uses personal information only as reasonably necessary to provide and administer the requested Service, in accordance with the Rudrankaa Privacy Policy."
+    ],
+    [
+      "Does numerology predict every outcome?",
+      "Numerology is an interpretive discipline that may highlight patterns, cycles and tendencies. It does not determine or guarantee future events or outcomes, and personal choice and free will remain important."
+    ],
+    [
+      "Can one consultation cover more than one area?",
+      "Yes. Depending on the scope of the consultation, you may bring together relevant insights across personal, name, career, business or number-alignment themes. The appropriate scope can be discussed when arranging the consultation."
+    ],
+    [
+      "How can I book?",
+      "Use WhatsApp, phone or email from the consultation section below to share your question and arrange a suitable time. A request does not by itself guarantee availability; a consultation is confirmed when Rudrankaa communicates confirmation."
+    ]
+  ]);
+
+  document.querySelectorAll("#faq details").forEach((item) => {
+    const question = item.querySelector("summary")?.textContent.trim();
+    const answer = question ? faqAnswers.get(question) : null;
+    const answerElement = item.querySelector("p");
+
+    if (answer && answerElement) {
+      if (question === "Are consultations private?") {
+        answerElement.replaceChildren();
+        answerElement.append(
+          "Rudrankaa treats consultation details with care and confidentiality and uses personal information only as reasonably necessary to provide and administer the requested Service, in accordance with the Rudrankaa "
+        );
+
+        const privacyLink = document.createElement("a");
+        privacyLink.href = "privacy.html";
+        privacyLink.textContent = "Privacy Policy";
+        answerElement.append(privacyLink, ".");
+      } else {
+        answerElement.textContent = answer;
+      }
+    }
+  });
+
+  // Preserve client testimonial wording exactly as supplied; add only a quiet
+  // context note clarifying that individual experiences can differ.
+  const testimonialsSection = document.querySelector("#testimonials");
+  const firstTestimonial = testimonialsSection?.querySelector(".testimonial-card");
+  const testimonialGrid = firstTestimonial?.parentElement;
+
+  if (testimonialGrid && !testimonialsSection.querySelector(".testimonial-experience-note")) {
+    const testimonialNote = document.createElement("p");
+    testimonialNote.className = "testimonial-experience-note";
+    testimonialNote.textContent = "Testimonials reflect individual experiences and do not guarantee similar outcomes.";
+    testimonialGrid.insertAdjacentElement("afterend", testimonialNote);
   }
 
   const footer = document.querySelector(".site-footer");
