@@ -289,7 +289,7 @@ document.head.appendChild(heroNumberPadRefinement);
 if (!document.querySelector('link[href^="legal.css"]')) {
   const legalStylesheet = document.createElement("link");
   legalStylesheet.rel = "stylesheet";
-  legalStylesheet.href = "legal.css?v=1";
+  legalStylesheet.href = "legal.css?v=2";
   document.head.appendChild(legalStylesheet);
 }
 
@@ -358,3 +358,8 @@ if (footerGuidance && !footerGuidance.querySelector(".footer-disclaimer-link")) 
   fullDisclaimerLink.textContent = "Disclaimer";
   footerGuidance.appendChild(fullDisclaimerLink);
 }
+
+const legalFooterFeature = document.createElement("script");
+legalFooterFeature.src = "legal-footer.js?v=1";
+legalFooterFeature.async = false;
+document.head.appendChild(legalFooterFeature);
