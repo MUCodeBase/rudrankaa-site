@@ -1,3 +1,8 @@
+.service-card h3 {
+  min-height: 3.9rem;
+  line-height: 1.25;
+}
+
 .service-card .service-summary {
   margin-bottom: 1.4rem;
 }
@@ -158,6 +163,11 @@
 }
 
 @media (max-width: 640px) {
+  .service-card h3 {
+    min-height: 0;
+    line-height: inherit;
+  }
+
   .service-card .service-summary {
     margin-bottom: 1.15rem;
   }
