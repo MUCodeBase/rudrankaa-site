@@ -293,38 +293,21 @@ if (!document.querySelector('link[href^="legal.css"]')) {
   document.head.appendChild(legalStylesheet);
 }
 
-const serviceCopyUpdates = new Map([
-  [
-    "Manifestation Grid Activation",
-    "Activate your intentions. Align your focus. Support purposeful action.",
-  ],
-  [
-    "Name Energy Alignment",
-    "Explore the numerological patterns and alignment connected with your name.",
-  ],
-  [
-    "Personal Numerology Guidance",
-    "Life • Relationships • Personal Decisions.",
-  ],
-  [
-    "Business & Career Numerology",
-    "Career Direction • Business Decisions • Brand & Business Alignment.",
-  ],
-  [
-    "Rudraksha Consultancy",
-    "Personalised Rudraksha selection and numerology-based guidance.",
-  ],
-]);
+// Service summaries and detailed descriptions remain separate from the base
+// markup so they can be reviewed and iterated without expanding the tiles.
+if (!document.querySelector('link[href^="service-details.css"]')) {
+  const serviceDetailsStylesheet = document.createElement("link");
+  serviceDetailsStylesheet.rel = "stylesheet";
+  serviceDetailsStylesheet.href = "service-details.css?v=1";
+  document.head.appendChild(serviceDetailsStylesheet);
+}
 
-document.querySelectorAll(".service-card").forEach((card) => {
-  const title = card.querySelector("h3")?.textContent.trim();
-  const copy = title ? serviceCopyUpdates.get(title) : null;
-  const description = card.querySelector("p");
-
-  if (copy && description) {
-    description.textContent = copy;
-  }
-});
+if (!document.querySelector('script[src^="service-details.js"]')) {
+  const serviceDetailsFeature = document.createElement("script");
+  serviceDetailsFeature.src = "service-details.js?v=1";
+  serviceDetailsFeature.async = false;
+  document.head.appendChild(serviceDetailsFeature);
+}
 
 const contactActions = document.querySelector("#contact .contact-actions");
 if (contactActions && !document.querySelector(".consultation-disclaimer")) {
