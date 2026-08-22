@@ -135,6 +135,15 @@
   margin-top: 1.15rem;
 }
 
+.service-dialog-copy .service-dialog-conclusion {
+  margin-top: 1.55rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(185, 133, 60, 0.34);
+  color: var(--maroon);
+  font-weight: 700;
+  line-height: 1.65;
+}
+
 .service-dialog-cta {
   display: inline-flex;
   align-items: center;
@@ -192,6 +201,11 @@
   .service-dialog-copy {
     font-size: 0.95rem;
     line-height: 1.68;
+  }
+
+  .service-dialog-copy .service-dialog-conclusion {
+    margin-top: 1.35rem;
+    padding-top: 0.9rem;
   }
 
   .service-dialog-cta {
