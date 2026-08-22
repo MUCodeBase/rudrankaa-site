@@ -39,6 +39,106 @@
   white-space: nowrap;
 }
 
+/* Main-site footer directory */
+.site-footer .footer-main.footer-directory {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(3, minmax(145px, 1fr));
+  gap: clamp(2rem, 4vw, 4.25rem);
+  align-items: start;
+}
+
+.footer-directory-column {
+  min-width: 0;
+}
+
+.footer-directory-brand-column {
+  max-width: 340px;
+}
+
+.footer-directory-brand {
+  width: fit-content;
+  margin-bottom: 0.9rem;
+}
+
+.footer-directory-tagline {
+  margin: 0 0 0.8rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.footer-directory-copy {
+  margin: 0;
+  max-width: 30ch;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.footer-directory-heading {
+  margin: 0 0 0.72rem;
+  color: rgba(255, 255, 255, 0.94);
+  font-family: var(--sans);
+  font-size: 0.77rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.footer-directory-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.footer-directory-links a {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.84rem;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 160ms ease, transform 160ms ease;
+}
+
+.footer-directory-links a:hover,
+.footer-directory-links a:focus-visible {
+  color: #fff;
+  transform: translateX(2px);
+}
+
+.footer-contact-links a:last-child {
+  margin-top: 0.15rem !important;
+  color: rgba(255, 255, 255, 0.94);
+  font-weight: 700;
+}
+
+.site-footer .footer-bottom.footer-bottom-clean {
+  justify-content: flex-start;
+}
+
+.footer-legal-left {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.48rem;
+}
+
+.footer-legal-left > * {
+  margin: 0;
+}
+
+.trademark-notice {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* Dedicated legal pages */
 .legal-page {
   min-height: 100vh;
   background: #f7f0e4;
@@ -147,6 +247,12 @@
   line-height: 1.8;
 }
 
+.legal-section a {
+  color: #681f2e;
+  font-weight: 700;
+  text-underline-offset: 0.16em;
+}
+
 .legal-note {
   margin-top: 2.6rem;
   padding: 1.25rem 1.35rem;
@@ -174,9 +280,41 @@
   flex-wrap: wrap;
 }
 
+.legal-footer-stacked {
+  align-items: stretch;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.legal-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+}
+
+.legal-footer-links a[aria-current="page"] {
+  text-decoration-thickness: 2px;
+}
+
+.legal-footer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .legal-footer a {
   color: #681f2e;
   font-weight: 700;
+  text-underline-offset: 0.18em;
+}
+
+@media (max-width: 900px) {
+  .site-footer .footer-main.footer-directory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.25rem 2rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -189,6 +327,53 @@
   .footer-disclaimer-link {
     display: inline-block;
     margin: 0.35rem 0 0;
+  }
+
+  .site-footer .footer-main.footer-directory {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-directory-column:nth-child(1) {
+    order: 1;
+  }
+
+  .footer-directory-column:nth-child(4) {
+    order: 2;
+  }
+
+  .footer-directory-column:nth-child(2) {
+    order: 3;
+  }
+
+  .footer-directory-column:nth-child(3) {
+    order: 4;
+  }
+
+  .footer-directory-brand-column,
+  .footer-directory-copy {
+    max-width: none;
+  }
+
+  .footer-directory-heading {
+    margin-bottom: 0.72rem;
+  }
+
+  .footer-directory-links {
+    gap: 0.62rem;
+  }
+
+  .footer-directory-links a {
+    font-size: 0.88rem;
+  }
+
+  .footer-legal-left {
+    gap: 0.5rem;
+  }
+
+  .trademark-notice {
+    font-size: 0.72rem;
   }
 
   .legal-shell {
@@ -223,5 +408,11 @@
   .legal-section + .legal-section {
     margin-top: 1.7rem;
     padding-top: 1.7rem;
+  }
+
+  .legal-footer-links,
+  .legal-footer-meta {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
