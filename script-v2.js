@@ -284,3 +284,52 @@ const heroNumberPadRefinement = document.createElement("script");
 heroNumberPadRefinement.src = "hero-number-pad-refinement.js?v=7";
 heroNumberPadRefinement.async = false;
 document.head.appendChild(heroNumberPadRefinement);
+
+// Disclaimer and claim-clarity enhancement.
+if (!document.querySelector('link[href^="legal.css"]')) {
+  const legalStylesheet = document.createElement("link");
+  legalStylesheet.rel = "stylesheet";
+  legalStylesheet.href = "legal.css?v=1";
+  document.head.appendChild(legalStylesheet);
+}
+
+const manifestationGridCard = Array.from(document.querySelectorAll(".service-card")).find(
+  (card) => card.querySelector("h3")?.textContent.trim() === "Manifestation Grid Activation"
+);
+const manifestationGridCopy = manifestationGridCard?.querySelector("p");
+if (manifestationGridCopy) {
+  manifestationGridCopy.textContent = "Activate your intentions. Align your focus. Support purposeful action.";
+}
+
+const contactActions = document.querySelector("#contact .contact-actions");
+if (contactActions && !document.querySelector(".consultation-disclaimer")) {
+  const disclaimer = document.createElement("div");
+  disclaimer.className = "consultation-disclaimer";
+
+  const disclaimerText = document.createElement("p");
+  disclaimerText.append(
+    "Numerology is an interpretive discipline. Rudrankaa guidance is intended for reflection and self-development, does not guarantee outcomes, and is not a substitute for qualified medical, psychological, legal, financial, investment or tax advice. "
+  );
+
+  const fullDisclaimerLink = document.createElement("a");
+  fullDisclaimerLink.href = "disclaimer.html";
+  fullDisclaimerLink.textContent = "Read full disclaimer";
+  disclaimerText.appendChild(fullDisclaimerLink);
+
+  disclaimer.appendChild(disclaimerText);
+  contactActions.insertAdjacentElement("afterend", disclaimer);
+}
+
+const footerGuidance = footerBottom
+  ? Array.from(footerBottom.children).find((item) =>
+      item.textContent.includes("Numerology guidance is intended for personal reflection")
+    )
+  : null;
+
+if (footerGuidance && !footerGuidance.querySelector(".footer-disclaimer-link")) {
+  const fullDisclaimerLink = document.createElement("a");
+  fullDisclaimerLink.href = "disclaimer.html";
+  fullDisclaimerLink.className = "footer-disclaimer-link";
+  fullDisclaimerLink.textContent = "Disclaimer";
+  footerGuidance.appendChild(fullDisclaimerLink);
+}
