@@ -1,4 +1,29 @@
 (() => {
+  const legalStylesheet = document.querySelector('link[href^="legal.css"]');
+  if (legalStylesheet && legalStylesheet.getAttribute("href") !== "legal.css?v=3") {
+    legalStylesheet.setAttribute("href", "legal.css?v=3");
+  }
+
+  if (!document.querySelector("#footer-directory-spacing-fix")) {
+    const compactFooterStyles = document.createElement("style");
+    compactFooterStyles.id = "footer-directory-spacing-fix";
+    compactFooterStyles.textContent = `
+      .site-footer .footer-directory-heading {
+        margin-bottom: 0.72rem !important;
+      }
+
+      .site-footer .footer-directory-links {
+        gap: 0.55rem !important;
+      }
+
+      .site-footer .footer-directory-links > a {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+    `;
+    document.head.appendChild(compactFooterStyles);
+  }
+
   const footer = document.querySelector(".site-footer");
   const footerMain = footer?.querySelector(".footer-main");
   const footerBottom = footer?.querySelector(".footer-bottom");
