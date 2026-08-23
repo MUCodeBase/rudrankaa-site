@@ -1,0 +1,55 @@
+name: Apply Part 1 repository cleanup
+
+on:
+  push:
+    branches:
+      - cleanup/part1-repo-health
+    paths:
+      - ".github/workflows/part1-cleanup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: cleanup/part1-repo-health
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Apply controlled cleanup
+        run: node scripts/apply-part1-cleanup.mjs
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find . -type f \( -name "*.js" -o -name "*.mjs" \) -not -path "./.git/*" -print0)
+
+      - name: Validate site structure and assets
+        run: node scripts/validate-site.mjs
+
+      - name: Check whitespace errors
+        run: git diff --check
+
+      - name: Commit validated cleanup
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No cleanup changes to commit."
+            exit 0
+          fi
+          git commit -m "Clean repository health debt"
+          git push origin HEAD:cleanup/part1-repo-health
