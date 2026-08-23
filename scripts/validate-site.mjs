@@ -87,6 +87,25 @@ for (const htmlFile of repositoryFiles.filter((file) => file.endsWith(".html")))
   }
 }
 
+const homepageHtml = await readFile(path.join(repositoryRoot, "index.html"), "utf8");
+const serviceCardCount = (homepageHtml.match(/<article class="service-card(?: featured-card)?">/g) || []).length;
+const serviceKeyMatches = Array.from(homepageHtml.matchAll(/data-service-key="([^"]+)"/g), (match) => match[1]);
+const expectedServiceKeys = new Set([
+  "manifestation-grid",
+  "name-energy",
+  "personal-numerology",
+  "business-career",
+  "critical-number",
+  "rudraksha-crystal-yantra",
+]);
+
+if (serviceCardCount !== 6) {
+  errors.push(`Expected exactly 6 homepage service cards, found ${serviceCardCount}.`);
+}
+if (serviceKeyMatches.length !== 6 || serviceKeyMatches.some((key) => !expectedServiceKeys.has(key)) || new Set(serviceKeyMatches).size !== 6) {
+  errors.push("Homepage service detail triggers must contain the 6 unique approved service keys.");
+}
+
 for (const cssFile of repositoryFiles.filter((file) => file.endsWith(".css"))) {
   const css = await readFile(path.join(repositoryRoot, cssFile), "utf8");
 
