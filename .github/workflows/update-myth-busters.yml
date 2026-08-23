@@ -21,16 +21,18 @@ permissions:
 jobs:
   update-gallery:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out the updated branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.ref_name }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
+          package-manager-cache: false
 
       - name: Install WebP tools
         run: |
