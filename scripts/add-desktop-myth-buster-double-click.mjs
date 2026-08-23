@@ -25,18 +25,15 @@ await replaceExact(
 
 await replaceExact(
   "myth-busters.js",
-  `  dialogViewport?.addEventListener("pointerdown", (event) => {\n    const pointerPoint = { x: event.clientX, y: event.clientY };`,
-  `  dialogViewport?.addEventListener("pointerdown", (event) => {\n    lastInteractionPointerType = event.pointerType || "mouse";\n    const pointerPoint = { x: event.clientX, y: event.clientY };`
-);
-
-await replaceExact(
-  "myth-busters.js",
   `  window.addEventListener("resize", refitFlyerWhenWidthChanges);\n\n  dialogViewport?.addEventListener("pointerdown", (event) => {`,
   `  window.addEventListener("resize", refitFlyerWhenWidthChanges);\n\n  dialogViewport?.addEventListener("dblclick", (event) => {\n    if (lastInteractionPointerType !== "mouse") {\n      return;\n    }\n\n    event.preventDefault();\n    const targetZoom = zoom > minimumZoom ? minimumZoom : doubleTapZoom;\n    if (targetZoom === minimumZoom) {\n      renderZoom(minimumZoom, false);\n    } else {\n      renderZoomAroundPoint(targetZoom, event.clientX, event.clientY);\n    }\n  });\n\n  dialogViewport?.addEventListener("pointerdown", (event) => {`
 );
 
-await replaceExact("index.html", 'src="myth-busters.js?v=5"', 'src="myth-busters.js?v=6"');
-await replaceExact("myth-busters.html", 'src="myth-busters.js?v=5"', 'src="myth-busters.js?v=6"');
+await replaceExact(
+  "myth-busters.js",
+  `  dialogViewport?.addEventListener("pointerdown", (event) => {\n    const pointerPoint = { x: event.clientX, y: event.clientY };`,
+  `  dialogViewport?.addEventListener("pointerdown", (event) => {\n    lastInteractionPointerType = event.pointerType || "mouse";\n    const pointerPoint = { x: event.clientX, y: event.clientY };`
+);
 
 await rm(resolve("scripts/add-desktop-myth-buster-double-click.mjs"), { force: true });
 console.log("Desktop Myth Buster double-click zoom added successfully.");
