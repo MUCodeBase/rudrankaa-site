@@ -1,0 +1,134 @@
+name: Production v1.5 audit
+
+on:
+  push:
+    branches:
+      - audit/v1.5-production
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Wait for production deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=0
+          for attempt in {1..24}; do
+            html="$(curl -fsSL --max-time 20 https://rudrankaa.com/ || true)"
+            if grep -q 'styles-v2.css?v=11' <<<"$html" \
+              && grep -q 'assets/rudrankaa-logo-440.webp' <<<"$html" \
+              && grep -q 'myth-busters-loader.js?v=1' <<<"$html" \
+              && grep -q '<link rel="canonical" href="https://rudrankaa.com/"' <<<"$html"; then
+              ready=1
+              echo "Production is serving the merged v1.5 build."
+              break
+            fi
+            echo "Production not updated yet (attempt $attempt/24); retrying in 10s..."
+            sleep 10
+          done
+          test "$ready" -eq 1
+
+          curl -fsSI https://rudrankaa.com/ | tee /tmp/home-headers.txt
+          if grep -qi '^x-robots-tag:.*noindex' /tmp/home-headers.txt; then
+            echo "Production unexpectedly sends noindex via X-Robots-Tag."
+            exit 1
+          fi
+
+          robots="$(curl -fsSL https://rudrankaa.com/robots.txt)"
+          grep -q 'Sitemap: https://rudrankaa.com/sitemap.xml' <<<"$robots"
+          sitemap="$(curl -fsSL https://rudrankaa.com/sitemap.xml)"
+          grep -q '<loc>https://rudrankaa.com/</loc>' <<<"$sitemap"
+          echo "robots.txt and sitemap.xml verified."
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Install Lighthouse
+        run: npm install --global lighthouse@13
+
+      - name: Run mobile Lighthouse
+        run: |
+          lighthouse "https://rudrankaa.com/" \
+            --quiet \
+            --chrome-flags="--headless --no-sandbox" \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json \
+            --output-path=./lighthouse-production-mobile.json
+
+      - name: Run desktop Lighthouse
+        run: |
+          lighthouse "https://rudrankaa.com/" \
+            --quiet \
+            --chrome-flags="--headless --no-sandbox" \
+            --preset=desktop \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json \
+            --output-path=./lighthouse-production-desktop.json
+
+      - name: Print and validate audit summary
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const summarize = (label, path) => {
+            const r = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const score = (key) => Math.round((r.categories[key]?.score ?? 0) * 100);
+            const audit = (key) => r.audits[key]?.displayValue ?? r.audits[key]?.numericValue ?? 'n/a';
+            const failed = Object.values(r.audits)
+              .filter((a) => a.scoreDisplayMode === 'binary' && a.score === 0)
+              .map((a) => `${a.id}: ${a.title}`);
+            const result = {
+              performance: score('performance'),
+              accessibility: score('accessibility'),
+              bestPractices: score('best-practices'),
+              seo: score('seo'),
+            };
+            console.log(`LIGHTHOUSE ${label}`);
+            console.log(`Performance: ${result.performance}`);
+            console.log(`Accessibility: ${result.accessibility}`);
+            console.log(`Best Practices: ${result.bestPractices}`);
+            console.log(`SEO: ${result.seo}`);
+            console.log(`FCP: ${audit('first-contentful-paint')}`);
+            console.log(`LCP: ${audit('largest-contentful-paint')}`);
+            console.log(`TBT: ${audit('total-blocking-time')}`);
+            console.log(`CLS: ${audit('cumulative-layout-shift')}`);
+            console.log(`Speed Index: ${audit('speed-index')}`);
+            console.log(`Failed binary audits: ${failed.length ? failed.join(' | ') : 'none'}`);
+            console.log('---');
+            return result;
+          };
+          const mobile = summarize('PRODUCTION MOBILE', './lighthouse-production-mobile.json');
+          const desktop = summarize('PRODUCTION DESKTOP', './lighthouse-production-desktop.json');
+          const failures = [];
+          if (mobile.performance < 90) failures.push(`mobile performance ${mobile.performance} < 90`);
+          if (mobile.accessibility < 95) failures.push(`mobile accessibility ${mobile.accessibility} < 95`);
+          if (mobile.bestPractices < 95) failures.push(`mobile best practices ${mobile.bestPractices} < 95`);
+          if (mobile.seo < 95) failures.push(`mobile SEO ${mobile.seo} < 95`);
+          if (desktop.performance < 90) failures.push(`desktop performance ${desktop.performance} < 90`);
+          if (desktop.accessibility < 95) failures.push(`desktop accessibility ${desktop.accessibility} < 95`);
+          if (desktop.bestPractices < 95) failures.push(`desktop best practices ${desktop.bestPractices} < 95`);
+          if (desktop.seo < 95) failures.push(`desktop SEO ${desktop.seo} < 95`);
+          if (failures.length) {
+            console.error(`Production audit thresholds failed: ${failures.join('; ')}`);
+            process.exit(1);
+          }
+          NODE
+
+      - name: Upload production Lighthouse reports
+        uses: actions/upload-artifact@v6
+        with:
+          name: lighthouse-production-v1.5-reports
+          path: |
+            lighthouse-production-mobile.json
+            lighthouse-production-desktop.json
+          retention-days: 7
