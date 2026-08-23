@@ -26,7 +26,7 @@ jobs:
           node-version: 24
 
       - name: Apply controlled cleanup
-        run: node scripts/apply-part1-cleanup.mjs
+        run: node scripts/apply-part1-cleanup-v2.mjs
 
       - name: Restore permanent read-only Site health workflow
         shell: bash
