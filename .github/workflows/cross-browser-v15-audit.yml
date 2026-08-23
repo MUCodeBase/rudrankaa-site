@@ -1,0 +1,104 @@
+name: Cross-browser v1.5 audit
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.55.0
+          npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run desktop and mobile smoke tests
+        env:
+          BROWSER: ${{ matrix.browser }}
+          TARGET_URL: https://cleanup-v1-5-closure-rudrankaa-preview.reach-mup.workers.dev
+        run: |
+          node - <<'NODE'
+          const { chromium, firefox, webkit } = require('playwright');
+          const assert = require('node:assert/strict');
+
+          const browserType = { chromium, firefox, webkit }[process.env.BROWSER];
+          const target = process.env.TARGET_URL;
+
+          const runViewport = async (browser, label, viewport) => {
+            const context = await browser.newContext({ viewport });
+            const page = await context.newPage();
+            const pageErrors = [];
+            page.on('pageerror', (error) => pageErrors.push(error.message));
+
+            const response = await page.goto(target, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            assert.equal(response?.ok(), true, `${label}: homepage did not return OK`);
+            await page.waitForSelector('h1');
+            assert.match(await page.locator('h1').innerText(), /Discover the numbers behind/i);
+
+            const logoLoaded = await page.locator('.site-header .brand-logo').evaluate((img) => img.complete && img.naturalWidth > 0);
+            assert.equal(logoLoaded, true, `${label}: header logo did not load`);
+
+            await page.waitForSelector('#birth-day');
+            await page.locator('#birth-day').fill('19');
+            await page.getByRole('button', { name: 'Find my number' }).click();
+            await page.waitForSelector('.birth-number-detail:not([hidden])');
+            assert.equal((await page.locator('.birth-detail-title').innerText()).trim(), 'Number 1');
+            assert.equal((await page.locator('.birth-detail-planet').innerText()).trim(), 'Sun');
+
+            const serviceTrigger = page.locator('.service-details-trigger[data-service-key="name-energy"]');
+            await serviceTrigger.scrollIntoViewIfNeeded();
+            await serviceTrigger.click();
+            await page.waitForSelector('.service-details-dialog[open]');
+            assert.match(await page.locator('.service-dialog-copy').innerText(), /Chaldean numerology and pronology/i);
+            await page.getByRole('button', { name: 'Close service details' }).click();
+            await page.waitForFunction(() => !document.querySelector('.service-details-dialog')?.open);
+
+            const gallery = page.locator('#myth-busters-grid');
+            await gallery.scrollIntoViewIfNeeded();
+            await page.waitForFunction(() => document.querySelectorAll('#myth-busters-grid .myth-buster-card').length > 0, null, { timeout: 15000 });
+            const cardCount = await page.locator('#myth-busters-grid .myth-buster-card').count();
+            const expected = viewport.width <= 640 ? 2 : 4;
+            assert.equal(cardCount, expected, `${label}: expected ${expected} homepage Myth Busters, got ${cardCount}`);
+
+            await page.locator('#myth-busters-grid .myth-buster-open').first().click();
+            await page.waitForSelector('#myth-buster-dialog[open]');
+            await page.getByRole('button', { name: 'Close Myth Buster' }).click();
+            await page.waitForFunction(() => !document.querySelector('#myth-buster-dialog')?.open);
+
+            assert.deepEqual(pageErrors, [], `${label}: page errors: ${pageErrors.join(' | ')}`);
+            await context.close();
+            console.log(`${process.env.BROWSER} ${label}: PASS`);
+          };
+
+          (async () => {
+            const browser = await browserType.launch({ headless: true });
+            try {
+              await runViewport(browser, 'desktop', { width: 1365, height: 900 });
+              await runViewport(browser, 'mobile', { width: 390, height: 844 });
+            } finally {
+              await browser.close();
+            }
+          })().catch((error) => {
+            console.error(error);
+            process.exit(1);
+          });
+          NODE
