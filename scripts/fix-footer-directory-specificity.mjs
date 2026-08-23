@@ -16,7 +16,7 @@ const replaceExact = (oldText, newText, expectedCount) => {
 };
 
 replaceExact(".footer-directory-links {", ".site-footer .footer-directory-links {", 2);
-replaceExact(".footer-directory-links a {", ".site-footer .footer-directory-links a {", 1);
+replaceExact(".footer-directory-links a {", ".site-footer .footer-directory-links a {", 2);
 replaceExact(
   ".footer-directory-links a:hover,\n.footer-directory-links a:focus-visible {",
   ".site-footer .footer-directory-links a:hover,\n.site-footer .footer-directory-links a:focus-visible {",
