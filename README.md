@@ -57,3 +57,5 @@ Source PNGs above 3 MiB generate a workflow warning. Files above 5 MiB are rejec
 unexpectedly oversized asset does not silently enter the published gallery.
 
 The homepage displays the two highest-counter flyers on mobile and the four highest-counter flyers on larger screens. `myth-busters.html` provides the complete archive and reveals eight flyers at a time through its **Load More** control. Both views use the same manifest and image files.
+
+When a flyer is opened, the full-resolution image starts fitted to the available viewer width on both mobile and desktop for immediate readability. The flyer can be scrolled vertically, and the existing zoom buttons, pinch-to-zoom, double-tap zoom and drag/pan interactions remain available.
