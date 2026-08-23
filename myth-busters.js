@@ -436,7 +436,21 @@
   zoomReset?.addEventListener("click", () => renderZoom(minimumZoom, false));
   zoomIn?.addEventListener("click", () => renderZoom(zoom + zoomStep));
   dialogImage?.addEventListener("load", fitFlyer);
-  window.addEventListener("resize", fitFlyer);
+
+  const refitFlyerWhenWidthChanges = () => {
+    if (!dialog?.open || !dialogViewport || !fittedWidth) {
+      return;
+    }
+
+    const availableWidth = Math.max(1, dialogViewport.clientWidth);
+    if (Math.abs(availableWidth - fittedWidth) < 2) {
+      return;
+    }
+
+    fitFlyer();
+  };
+
+  window.addEventListener("resize", refitFlyerWhenWidthChanges);
 
   dialogViewport?.addEventListener("pointerdown", (event) => {
     const pointerPoint = { x: event.clientX, y: event.clientY };
