@@ -1,0 +1,184 @@
+name: Apply v1.5 closure
+
+on:
+  push:
+    branches:
+      - cleanup/v1.5-closure
+
+permissions:
+  contents: write
+
+jobs:
+  apply-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out closure branch
+        uses: actions/checkout@v7
+        with:
+          ref: cleanup/v1.5-closure
+          fetch-depth: 0
+
+      - name: Apply SEO, contrast and CSS-normalization updates
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"Expected exactly one {label}, found {count}")
+              return text.replace(old, new, 1)
+
+          html_paths = [
+              Path('index.html'),
+              Path('myth-busters.html'),
+              Path('disclaimer.html'),
+              Path('terms.html'),
+              Path('privacy.html'),
+          ]
+
+          canonical_urls = {
+              'index.html': 'https://rudrankaa.com/',
+              'myth-busters.html': 'https://rudrankaa.com/myth-busters.html',
+              'disclaimer.html': 'https://rudrankaa.com/disclaimer.html',
+              'terms.html': 'https://rudrankaa.com/terms.html',
+              'privacy.html': 'https://rudrankaa.com/privacy.html',
+          }
+
+          for path in html_paths:
+              html = path.read_text(encoding='utf-8')
+              if 'rel="canonical"' in html or 'assets/favicon.svg' in html:
+                  raise SystemExit(f'{path}: SEO head links already present unexpectedly')
+              marker = '</title>'
+              if html.count(marker) != 1:
+                  raise SystemExit(f'{path}: expected exactly one title closing tag')
+              common = (
+                  f'\n    <link rel="canonical" href="{canonical_urls[path.name]}" />'
+                  '\n    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />'
+                  '\n    <link rel="apple-touch-icon" href="assets/rudrankaa-logo-600.png" />'
+              )
+              if path.name == 'index.html':
+                  common += (
+                      '\n    <meta property="og:type" content="website" />'
+                      '\n    <meta property="og:site_name" content="Rudrankaa" />'
+                      '\n    <meta property="og:title" content="Rudrankaa | Numerology Guidance" />'
+                      '\n    <meta property="og:description" content="Thoughtful numerology guidance, name analysis and personal consultations to help you understand the patterns shaping your journey." />'
+                      '\n    <meta property="og:url" content="https://rudrankaa.com/" />'
+                      '\n    <meta property="og:image" content="https://rudrankaa.com/assets/rudrankaa-logo-600.png" />'
+                      '\n    <meta property="og:image:alt" content="Rudrankaa" />'
+                      '\n    <meta name="twitter:card" content="summary" />'
+                      '\n    <meta name="twitter:title" content="Rudrankaa | Numerology Guidance" />'
+                      '\n    <meta name="twitter:description" content="Thoughtful numerology guidance, name analysis and personal consultations." />'
+                      '\n    <meta name="twitter:image" content="https://rudrankaa.com/assets/rudrankaa-logo-600.png" />'
+                      '\n    <script type="application/ld+json">'
+                      '\n      {'
+                      '\n        "@context": "https://schema.org",'
+                      '\n        "@type": "Organization",'
+                      '\n        "name": "Rudrankaa",'
+                      '\n        "url": "https://rudrankaa.com/",'
+                      '\n        "logo": "https://rudrankaa.com/assets/rudrankaa-logo-600.png",'
+                      '\n        "description": "Thoughtful numerology guidance, name analysis and personal consultations.",'
+                      '\n        "contactPoint": {'
+                      '\n          "@type": "ContactPoint",'
+                      '\n          "telephone": "+91-91523-76399",'
+                      '\n          "email": "contact@rudrankaa.com",'
+                      '\n          "contactType": "customer support"'
+                      '\n        }'
+                      '\n      }'
+                      '\n    </script>'
+                  )
+              html = html.replace(marker, marker + common, 1)
+              path.write_text(html, encoding='utf-8')
+
+          index = Path('index.html')
+          html = index.read_text(encoding='utf-8')
+          inline_logo_style = '''    <style>\n      /* Prevent the source logo from expanding if an external stylesheet is delayed or cached. */\n      .site-header .brand-logo-frame { position: relative !important; width: 220px !important; height: 72px !important; display: block !important; overflow: hidden !important; }\n      .site-header .brand-logo { position: absolute !important; top: -38px !important; left: 0 !important; width: 220px !important; height: auto !important; max-width: none !important; object-fit: initial !important; }\n      @media (max-width: 640px) {\n        .site-header .brand-logo-frame { width: 174px !important; height: 60px !important; }\n        .site-header .brand-logo { top: -30px !important; width: 174px !important; }\n      }\n    </style>\n'''
+          html = replace_once(html, inline_logo_style, '', 'inline logo fallback style')
+          html = replace_once(html, 'styles-v2.css?v=9', 'styles-v2.css?v=10', 'homepage styles cache key')
+          html = replace_once(html, 'myth-busters.css?v=2', 'myth-busters.css?v=3', 'homepage Myth Busters CSS cache key')
+          html = replace_once(html, 'legal.css?v=5', 'legal.css?v=6', 'homepage legal CSS cache key')
+          html = replace_once(html, 'birth-number.css?v=1', 'birth-number.css?v=2', 'homepage Birth Number CSS cache key')
+          index.write_text(html, encoding='utf-8')
+
+          for name in ['myth-busters.html', 'disclaimer.html', 'terms.html', 'privacy.html']:
+              path = Path(name)
+              html = path.read_text(encoding='utf-8')
+              if 'styles-v2.css?v=9' in html:
+                  html = html.replace('styles-v2.css?v=9', 'styles-v2.css?v=10')
+              if 'myth-busters.css?v=2' in html:
+                  html = html.replace('myth-busters.css?v=2', 'myth-busters.css?v=3')
+              if 'legal.css?v=5' in html:
+                  html = html.replace('legal.css?v=5', 'legal.css?v=6')
+              path.write_text(html, encoding='utf-8')
+
+          styles = Path('styles-v2.css')
+          css = styles.read_text(encoding='utf-8')
+          css = replace_once(css, '  --gold: #b9853c;\n  --gold-light: #d9b779;', '  --gold: #b9853c;\n  --gold-text: #956323;\n  --gold-light: #d9b779;', 'accessible gold variable')
+          css = replace_once(css, '  width: 220px;\n  height: 72px;\n  display: block;', '  width: 220px;\n  height: 88px;\n  display: block;', 'desktop logo frame height')
+          css = replace_once(css, '.site-header .brand-logo-frame {\n  height: 88px !important;\n}\n\n', '', 'desktop logo override')
+          css = replace_once(css, '  .site-header .brand-logo-frame { height: 60px !important; }\n', '', 'mobile logo override')
+          css = replace_once(css, '.signature-line {\n  margin: -0.55rem 0 1rem;\n  color: var(--gold);', '.signature-line {\n  margin: -0.55rem 0 1rem;\n  color: var(--gold-text);', 'signature accessible gold')
+          css = replace_once(css, '.testimonial-card footer span {\n  color: var(--gold);', '.testimonial-card footer span {\n  color: var(--gold-text);', 'testimonial label accessible gold')
+          styles.write_text(css, encoding='utf-8')
+
+          birth = Path('birth-number.css')
+          css = birth.read_text(encoding='utf-8')
+          css = replace_once(css, '.birth-detail-planet {\n  display: block;\n  margin: 0;\n  color: var(--gold);', '.birth-detail-planet {\n  display: block;\n  margin: 0;\n  color: var(--gold-text);', 'Birth Number planet accessible gold')
+          birth.write_text(css, encoding='utf-8')
+
+          myth = Path('myth-busters.css')
+          css = myth.read_text(encoding='utf-8')
+          css = replace_once(css, '.myth-buster-caption time {\n  flex: 0 0 auto;\n  color: var(--gold);', '.myth-buster-caption time {\n  flex: 0 0 auto;\n  color: var(--gold-text);', 'Myth Buster date accessible gold')
+          myth.write_text(css, encoding='utf-8')
+
+          legal = Path('legal.css')
+          css = legal.read_text(encoding='utf-8')
+          css = replace_once(css, '.legal-eyebrow {\n  margin: 0 0 0.8rem;\n  color: #9c7441;', '.legal-eyebrow {\n  margin: 0 0 0.8rem;\n  color: #956323;', 'legal eyebrow accessible gold')
+          legal.write_text(css, encoding='utf-8')
+
+          Path('assets/favicon.svg').write_text('''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">\n  <rect width="64" height="64" rx="14" fill="#4d201d"/>\n  <text x="32" y="45" text-anchor="middle" font-size="38" font-family="Georgia, serif" fill="#d9b779">ॐ</text>\n</svg>\n''', encoding='utf-8')
+
+          Path('robots.txt').write_text('''User-agent: *\nAllow: /\n\nSitemap: https://rudrankaa.com/sitemap.xml\n''', encoding='utf-8')
+
+          Path('sitemap.xml').write_text('''<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://rudrankaa.com/</loc></url>\n  <url><loc>https://rudrankaa.com/myth-busters.html</loc></url>\n  <url><loc>https://rudrankaa.com/disclaimer.html</loc></url>\n  <url><loc>https://rudrankaa.com/terms.html</loc></url>\n  <url><loc>https://rudrankaa.com/privacy.html</loc></url>\n</urlset>\n''', encoding='utf-8')
+
+          validator = Path('scripts/validate-site.mjs')
+          js = validator.read_text(encoding='utf-8')
+          marker = 'const homepageHtml = await readFile(path.join(repositoryRoot, "index.html"), "utf8");\n'
+          seo_checks = '''const publicPageCanonicals = new Map([\n  ["index.html", "https://rudrankaa.com/"],\n  ["myth-busters.html", "https://rudrankaa.com/myth-busters.html"],\n  ["disclaimer.html", "https://rudrankaa.com/disclaimer.html"],\n  ["terms.html", "https://rudrankaa.com/terms.html"],\n  ["privacy.html", "https://rudrankaa.com/privacy.html"],\n]);\n\nfor (const [htmlFile, canonicalUrl] of publicPageCanonicals) {\n  const html = await readFile(path.join(repositoryRoot, htmlFile), "utf8");\n  if (!html.includes(`<link rel="canonical" href="${canonicalUrl}" />`)) {\n    errors.push(`${htmlFile}: missing or incorrect canonical URL.`);\n  }\n  if (!html.includes('assets/favicon.svg')) {\n    errors.push(`${htmlFile}: missing shared favicon reference.`);\n  }\n}\n\nfor (const requiredFile of ["assets/favicon.svg", "robots.txt", "sitemap.xml"]) {\n  if (!repositoryFileSet.has(requiredFile)) {\n    errors.push(`Missing SEO asset: ${requiredFile}`);\n  }\n}\n\n'''
+          if seo_checks.strip() in js:
+              raise SystemExit('SEO validator checks already present unexpectedly')
+          js = replace_once(js, marker, seo_checks + marker, 'homepage validator marker')
+          homepage_meta_checks = '''\nfor (const requiredHomepageSeo of [\n  'property="og:title"',\n  'property="og:description"',\n  'property="og:url" content="https://rudrankaa.com/"',\n  'name="twitter:card"',\n  'type="application/ld+json"',\n]) {\n  if (!homepageHtml.includes(requiredHomepageSeo)) {\n    errors.push(`index.html: missing SEO metadata marker ${requiredHomepageSeo}`);\n  }\n}\n\nif (homepageHtml.includes('Prevent the source logo from expanding if an external stylesheet is delayed or cached.')) {\n  errors.push('index.html: legacy inline logo fallback CSS should not be present.');\n}\n'''
+          service_marker = 'const serviceCardCount = (homepageHtml.match(/<article class="service-card(?: featured-card)?">/g) || []).length;\n'
+          js = replace_once(js, service_marker, homepage_meta_checks + '\n' + service_marker, 'service validator marker')
+          validator.write_text(js, encoding='utf-8')
+          PY
+
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          while IFS= read -r -d '' file; do
+            node --check "$file"
+          done < <(find . -type f \( -name "*.js" -o -name "*.mjs" \) -not -path "./.git/*" -print0)
+
+      - name: Validate site
+        run: node scripts/validate-site.mjs
+
+      - name: Check whitespace
+        run: git diff --check
+
+      - name: Commit closure changes
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html myth-busters.html disclaimer.html terms.html privacy.html styles-v2.css birth-number.css myth-busters.css legal.css scripts/validate-site.mjs assets/favicon.svg robots.txt sitemap.xml
+          if git diff --cached --quiet; then
+            echo "No closure changes to commit."
+            exit 0
+          fi
+          git commit -m "Complete v1.5 technical excellence closure"
+          git push origin HEAD:cleanup/v1.5-closure
