@@ -5,6 +5,7 @@
   --paper: #fffdf9;
   --sand: #e9dcc8;
   --gold: #b9853c;
+  --gold-text: #956323;
   --gold-light: #d9b779;
   --maroon: #4d201d;
   --maroon-deep: #2e1413;
@@ -92,7 +93,7 @@ a {
 .brand-logo-frame {
   position: relative;
   width: 220px;
-  height: 72px;
+  height: 88px;
   display: block;
   flex: 0 0 auto;
   overflow: hidden;
@@ -284,7 +285,7 @@ h2 {
 
 .signature-line {
   margin: -0.55rem 0 1rem;
-  color: var(--gold);
+  color: var(--gold-text);
   font-family: var(--serif);
   font-size: clamp(1rem, 1.6vw, 1.25rem);
   font-style: italic;
@@ -330,7 +331,14 @@ h2 {
 .text-link {
   font-size: 0.92rem;
   font-weight: 750;
+  text-decoration: none;
   text-underline-offset: 5px;
+}
+
+.text-link:hover,
+.text-link:focus-visible,
+.text-link:active {
+  text-decoration: underline;
 }
 
 .text-link span {
@@ -602,27 +610,27 @@ h2 {
 }
 
 .service-card:nth-child(1) .service-icon {
-  background-image: url("assets/icons/manifestation-grid.png");
+  background-image: url("assets/icons/manifestation-grid.webp");
 }
 
 .service-card:nth-child(2) .service-icon {
-  background-image: url("assets/icons/name-energy.png");
+  background-image: url("assets/icons/name-energy.webp");
 }
 
 .service-card:nth-child(3) .service-icon {
-  background-image: url("assets/icons/personal-numerology.png");
+  background-image: url("assets/icons/personal-numerology.webp");
 }
 
 .service-card:nth-child(4) .service-icon {
-  background-image: url("assets/icons/business-career.png");
+  background-image: url("assets/icons/business-career.webp");
 }
 
 .service-card:nth-child(5) .service-icon {
-  background-image: url("assets/icons/critical-number.png");
+  background-image: url("assets/icons/critical-number.webp");
 }
 
 .service-card:nth-child(6) .service-icon {
-  background-image: url("assets/icons/rudraksha-consultancy.png");
+  background-image: url("assets/icons/rudraksha-consultancy.webp");
 }
 
 .service-card h3,
@@ -914,7 +922,7 @@ h2 {
   gap: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.42);
+  color: rgba(255, 255, 255, 0.52);
   font-size: 0.72rem;
 }
 
@@ -1540,7 +1548,7 @@ h2 {
 }
 
 .testimonial-card footer span {
-  color: var(--gold);
+  color: var(--gold-text);
   font-size: 0.73rem;
   font-weight: 750;
   letter-spacing: 0.12em;
@@ -1649,10 +1657,6 @@ h2 {
 
 
 /* Static credibility elements previously injected at runtime. */
-.site-header .brand-logo-frame {
-  height: 88px !important;
-}
-
 .site-header .brand-logo-frame::after {
   content: "";
   position: absolute;
@@ -1738,7 +1742,6 @@ h2 {
 }
 
 @media (max-width: 640px) {
-  .site-header .brand-logo-frame { height: 60px !important; }
   .site-header .brand-logo-frame::after { height: 3px; }
   .brand-trademark { right: 6px; top: 7px; font-size: 0.66rem; }
   .hero-credential { margin-top: 0.05rem; margin-bottom: 1.35rem; }

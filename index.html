@@ -9,24 +9,48 @@
     />
     <meta name="theme-color" content="#f7f0e4" />
     <title>Rudrankaa | Numerology Guidance</title>
-    <style>
-      /* Prevent the source logo from expanding if an external stylesheet is delayed or cached. */
-      .site-header .brand-logo-frame { position: relative !important; width: 220px !important; height: 72px !important; display: block !important; overflow: hidden !important; }
-      .site-header .brand-logo { position: absolute !important; top: -38px !important; left: 0 !important; width: 220px !important; height: auto !important; max-width: none !important; object-fit: initial !important; }
-      @media (max-width: 640px) {
-        .site-header .brand-logo-frame { width: 174px !important; height: 60px !important; }
-        .site-header .brand-logo { top: -30px !important; width: 174px !important; }
+    <link rel="canonical" href="https://rudrankaa.com/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/rudrankaa-logo-600.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Rudrankaa" />
+    <meta property="og:title" content="Rudrankaa | Numerology Guidance" />
+    <meta property="og:description" content="Thoughtful numerology guidance, name analysis and personal consultations to help you understand the patterns shaping your journey." />
+    <meta property="og:url" content="https://rudrankaa.com/" />
+    <meta property="og:image" content="https://rudrankaa.com/assets/rudrankaa-logo-600.png" />
+    <meta property="og:image:alt" content="Rudrankaa" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Rudrankaa | Numerology Guidance" />
+    <meta name="twitter:description" content="Thoughtful numerology guidance, name analysis and personal consultations." />
+    <meta name="twitter:image" content="https://rudrankaa.com/assets/rudrankaa-logo-600.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Rudrankaa",
+        "url": "https://rudrankaa.com/",
+        "logo": "https://rudrankaa.com/assets/rudrankaa-logo-600.png",
+        "description": "Thoughtful numerology guidance, name analysis and personal consultations.",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+91-91523-76399",
+          "email": "contact@rudrankaa.com",
+          "contactType": "customer support"
+        }
       }
-    </style>
-    <link rel="stylesheet" href="styles-v2.css?v=9" />
-    <link rel="stylesheet" href="myth-busters.css?v=2" />
-    <link rel="stylesheet" href="legal.css?v=5" />
-    <link rel="stylesheet" href="service-details.css?v=2" />
-    <link rel="stylesheet" href="birth-number.css?v=1" />
+    </script>
+    <link rel="stylesheet" href="styles-v2.css?v=11" />
+    <link rel="stylesheet" href="myth-busters.css?v=3" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="myth-busters.css?v=3" /></noscript>
+    <link rel="stylesheet" href="legal.css?v=6" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="legal.css?v=6" /></noscript>
+    <link rel="stylesheet" href="service-details.css?v=2" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="service-details.css?v=2" /></noscript>
+    <link rel="stylesheet" href="birth-number.css?v=2" />
     <script defer src="site-navigation.js?v=1"></script>
     <script defer src="birth-number.js?v=4"></script>
     <script defer src="service-details.js?v=5"></script>
-    <script defer src="myth-busters.js?v=6"></script>
+    <script defer src="myth-busters-loader.js?v=1"></script>
   </head>
   <body id="top">
     <a class="skip-link" href="#main">Skip to content</a>
@@ -37,8 +61,10 @@
           <span class="brand-logo-frame">
             <img
               class="brand-logo"
-              src="assets/rudrankaa-logo-600.png"
+              src="assets/rudrankaa-logo-440.webp"
               alt="Rudrankaa"
+              width="440"
+              height="315"
             />
             <span class="brand-trademark" aria-hidden="true">™</span>
           </span>
@@ -125,10 +151,10 @@
       <section class="about section-pad" id="about">
         <img
           class="section-watermark about-watermark"
-          src="assets/watermarks/ardhanarishwar-watermark.webp"
+          src="assets/watermarks/ardhanarishwar-watermark-520.webp"
           alt=""
-          width="600"
-          height="600"
+          width="520"
+          height="520"
           loading="lazy"
           fetchpriority="low"
           decoding="async"
@@ -434,10 +460,10 @@
         <div class="shell contact-card">
           <img
             class="section-watermark contact-watermark"
-            src="assets/watermarks/om-watermark.webp"
+            src="assets/watermarks/om-watermark-420.webp"
             alt=""
-            width="600"
-            height="600"
+            width="420"
+            height="420"
             loading="lazy"
             fetchpriority="low"
             decoding="async"
@@ -468,6 +494,8 @@
             <img
               src="assets/whatsapp-qr.png"
               alt="WhatsApp QR code for Rudrankaa"
+              loading="lazy"
+              decoding="async"
             />
             <strong>Scan to connect on WhatsApp</strong>
             <span>+91 91523 76399</span>
@@ -479,7 +507,7 @@
     <footer class="site-footer">
       <div class="shell footer-main footer-directory">
         <div class="footer-directory-column footer-directory-brand-column">
-          <a class="brand footer-brand footer-directory-brand" href="#top" aria-label="Rudrankaa home">
+          <a class="brand footer-brand footer-directory-brand" href="#top">
             <span class="brand-mark" aria-hidden="true">ॐ</span>
             <span class="brand-name">RUDRANKAA™</span>
           </a>
