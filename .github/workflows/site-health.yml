@@ -28,6 +28,9 @@ jobs:
           node-version: 24
           package-manager-cache: false
 
+      - name: Harden migration matching
+        run: node scripts/harden-part2-migration.mjs
+
       - name: Apply structural consolidation
         run: node scripts/apply-part2-consolidation.mjs
 
