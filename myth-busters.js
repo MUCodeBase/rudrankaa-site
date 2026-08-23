@@ -483,10 +483,16 @@
       return;
     }
 
-    if (panPointerId === event.pointerId && panLastPoint && zoom > minimumZoom) {
+    const canScrollVertically = dialogViewport.scrollHeight > dialogViewport.clientHeight;
+
+    if (
+      panPointerId === event.pointerId &&
+      panLastPoint &&
+      (zoom > minimumZoom || canScrollVertically)
+    ) {
       event.preventDefault();
       dialogViewport.scrollBy({
-        left: panLastPoint.x - currentPoint.x,
+        left: zoom > minimumZoom ? panLastPoint.x - currentPoint.x : 0,
         top: panLastPoint.y - currentPoint.y,
       });
     }

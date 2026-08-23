@@ -1,16 +1,39 @@
 # Rudrankaa Website
 
-Responsive one-page website for Rudrankaa, prepared for GitHub Pages and the custom domain `rudrankaa.com`.
+Responsive static website for Rudrankaa, published from the `main` branch with GitHub Pages and the custom domain `rudrankaa.com`.
 
-## Files
+## Main structure
 
-- `index.html` — website content and page structure
-- `styles.css` — complete responsive design
-- `script.js` — mobile navigation and small interface enhancements
+- `index.html` — homepage structure and core content
+- `styles-v2.css` — shared responsive site styling
+- `script-v2.js` — homepage behaviour and feature bootstrap
+- `birth-number.js`, `birth-number-refinements.js`, `hero-number-pad-refinement.js` — current interactive Birth Number experience
+- `service-details.js` / `service-details.css` — service detail interactions
+- `myth-busters.html`, `myth-busters.js`, `myth-busters.css` — Myth Busters archive and viewer
+- `disclaimer.html`, `terms.html`, `privacy.html`, `legal.css`, `legal-footer.js` — legal and footer content
+- `assets/` — approved site images, service icons, watermarks and Myth Buster assets
+- `scripts/` — repository automation and validation scripts
 
-## Publishing
+## Publishing discipline
 
-The site is designed to publish directly from the repository's `main` branch using GitHub Pages.
+Use the controlled workflow for website changes:
+
+**stable release → branch → preview → inspect → iterate → approve → merge → production → release**
+
+Avoid direct feature changes on `main`. Preview branches are deployed separately through the configured Cloudflare Workers preview environment.
+
+## Automated health checks
+
+The `Site health` GitHub Actions workflow runs for pull requests and for pushes to `main`. It:
+
+1. syntax-checks all JavaScript and MJS files;
+2. checks local HTML/CSS asset references;
+3. detects duplicate HTML IDs;
+4. validates the Myth Busters manifest, counters, thumbnails and sort order;
+5. fails when a Myth Buster source PNG exceeds 5 MiB and warns above 3 MiB; and
+6. checks for whitespace errors.
+
+For the check to block an unsafe merge, configure branch protection/rulesets so the Site health validation job is required before merging to `main`. Repository CI can reject a pushed file from a healthy release, but it cannot erase a file that has already been pushed into Git history.
 
 ## Myth Busters gallery
 
@@ -20,42 +43,28 @@ Published source flyers live in `assets/myth-busters/` and must use this filenam
 MB_<counter>_DDMMYYYY.png
 ```
 
-Examples for two flyers published on 20 August 2026:
+For example:
 
 ```text
-MB_1_20082026.png
-MB_2_20082026.png
+MB_05_22082026.png
+MB_06_23082026.png
 ```
 
-The `MB` prefix and `.png` extension are case-insensitive, so names such as
-`mb_1_20082026.png` and `Mb_2_20082026.PNG` are also accepted. The counter must
-be a unique positive number. The date, underscores and field order must still
-follow the format exactly. Do not upload duplicate filenames that differ only
-by capitalization.
+The `MB` prefix and `.png` extension are case-insensitive. The counter must be a unique positive number. The date, underscores and field order must follow the format exactly, and filenames must not differ only by capitalization.
 
-The gallery sorts flyers by counter in descending order, so the highest counter
-appears first regardless of the date. Legacy date-first JPG and JPEG files are
-ignored during migration and should be removed after their PNG replacements
-have been uploaded.
+The gallery sorts flyers by counter in descending order, so the highest counter appears first regardless of the date.
 
-Upload only the single portrait PNG source flyer used for both mobile and desktop.
-The responsive gallery preserves the complete artwork without cropping it.
+Upload only the single portrait PNG source flyer used for both mobile and desktop. Do not manually create or edit files in `assets/myth-busters/thumbnails/` or manually edit `assets/myth-busters/manifest.json`.
 
-When a matching source image is added, changed or removed, the `Update Myth Busters gallery`
-GitHub Actions workflow automatically:
+When a matching source image is added, changed or removed, the `Update Myth Busters gallery` workflow automatically:
 
 1. checks the source PNG size;
-2. generates a lightweight WebP card image in `assets/myth-busters/thumbnails/`;
-3. removes any orphaned generated thumbnails; and
-4. regenerates `assets/myth-busters/manifest.json` in descending counter order.
+2. generates a lightweight 720 px-wide WebP card image;
+3. removes orphaned generated thumbnails; and
+4. regenerates the manifest in descending counter order.
 
-Do not manually upload or edit files in the `thumbnails` folder. The source PNG remains the
-full-quality artwork and is loaded only when a visitor opens a Myth Buster. Gallery cards use
-the generated WebP image to reduce page bandwidth while preserving the original for detailed viewing.
+Source PNGs above 3 MiB generate a warning. A source above 5 MiB causes gallery generation and Site health validation to fail. If such a file was already pushed to a branch, the failure prevents it from being treated as a healthy release but does not remove that object from Git history.
 
-Source PNGs above 3 MiB generate a workflow warning. Files above 5 MiB are rejected so an
-unexpectedly oversized asset does not silently enter the published gallery.
+The homepage displays the two highest-counter flyers on mobile and the four highest-counter flyers on larger screens. `myth-busters.html` provides the complete archive and reveals eight flyers at a time through **Load More**. Gallery cards use lightweight WebP thumbnails; the full-resolution PNG is loaded only when a visitor opens a flyer.
 
-The homepage displays the two highest-counter flyers on mobile and the four highest-counter flyers on larger screens. `myth-busters.html` provides the complete archive and reveals eight flyers at a time through its **Load More** control. Both views use the same manifest and image files.
-
-When a flyer is opened, the full-resolution image starts fitted to the available viewer width on both mobile and desktop for immediate readability. The flyer can be scrolled vertically, and the existing zoom buttons, pinch-to-zoom, double-tap zoom and drag/pan interactions remain available.
+The full-resolution viewer starts fitted to the available width on mobile and desktop. At the 100% fit-to-width baseline, portrait flyers can be read by vertical scrolling. Zoom controls, pinch-to-zoom, double-tap zoom and drag/pan remain available up to 300%.
