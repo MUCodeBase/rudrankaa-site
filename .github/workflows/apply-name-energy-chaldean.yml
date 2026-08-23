@@ -1,0 +1,44 @@
+name: Apply Name Energy Chaldean wording
+
+on:
+  push:
+    branches:
+      - content/name-energy-chaldean
+
+permissions:
+  contents: write
+
+jobs:
+  update-copy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out review branch
+        uses: actions/checkout@v7
+        with:
+          ref: content/name-energy-chaldean
+          fetch-depth: 0
+
+      - name: Update exact service tile copy
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          old = 'Numerology-based name alignment using your date of birth, layered calculations and sound-vibration analysis, including personalised naming guidance for newborns.'
+          new = 'Name alignment rooted in Chaldean numerology, using your date of birth, layered calculations and sound-vibration analysis, including personalised naming guidance for newborns.'
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one old summary, found {text.count(old)}')
+          text = text.replace(old, new)
+          path.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Commit content update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Clarify Chaldean basis of Name Energy Alignment"
+          git push origin HEAD:content/name-energy-chaldean
