@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - audit/v1.5-production
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
