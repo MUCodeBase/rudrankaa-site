@@ -1,4 +1,4 @@
-import { readdir, writeFile } from "node:fs/promises";
+import { access, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -47,7 +47,9 @@ for (const file of galleryFiles) {
   filenamesByLowercase.set(lowercaseName, file);
 }
 
-const entries = galleryFiles.map((file) => {
+const entries = [];
+
+for (const file of galleryFiles) {
   const [, counterText, dayText, monthText, yearText] = file.match(filenamePattern);
   const counter = Number(counterText);
   const day = Number(dayText);
@@ -64,12 +66,22 @@ const entries = galleryFiles.map((file) => {
     throw new Error(`Invalid date or counter in Myth Buster filename: ${file}`);
   }
 
-  return {
+  const thumbnail = `thumbnails/${path.parse(file).name}.webp`;
+  let thumbnailExists = true;
+
+  try {
+    await access(path.join(galleryDirectory, thumbnail));
+  } catch {
+    thumbnailExists = false;
+  }
+
+  entries.push({
     file,
+    ...(thumbnailExists ? { thumbnail } : {}),
     date: `${yearText}-${monthText}-${dayText}`,
     counter,
-  };
-});
+  });
+}
 
 const entriesByCounter = new Map();
 
