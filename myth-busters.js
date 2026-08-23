@@ -68,6 +68,10 @@
   });
 
   const formatDate = (isoDate) => dateFormatter.format(new Date(`${isoDate}T00:00:00Z`));
+  const encodeAssetPath = (relativePath) => relativePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
 
   const minimumZoom = 1;
   const maximumZoom = 3;
@@ -162,7 +166,10 @@
   const createCard = (entry) => {
     const formattedDate = formatDate(entry.date);
     const label = `Rudrankaa Myth Buster published ${formattedDate}`;
-    const imageSource = `assets/myth-busters/${encodeURIComponent(entry.file)}`;
+    const imageSource = `assets/myth-busters/${encodeAssetPath(entry.file)}`;
+    const thumbnailSource = typeof entry.thumbnail === "string" && entry.thumbnail.length > 0
+      ? `assets/myth-busters/${encodeAssetPath(entry.thumbnail)}`
+      : imageSource;
 
     const figure = document.createElement("figure");
     figure.className = "myth-buster-card";
@@ -177,7 +184,7 @@
 
     const image = document.createElement("img");
     image.className = "myth-buster-image";
-    image.src = imageSource;
+    image.src = thumbnailSource;
     image.alt = label;
     image.width = 853;
     image.height = 1280;
