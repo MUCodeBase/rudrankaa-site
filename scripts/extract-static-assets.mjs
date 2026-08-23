@@ -111,19 +111,22 @@ for (const markerStart of markerIndices) {
     .sort((left, right) => right.index - left.index);
 
   const nearestSelector = selectorCandidates[0];
-  const markerEnd = originalStylesheet.indexOf('");', markerStart);
+  const dataUrlEnd = originalStylesheet.indexOf('")', markerStart);
+  const declarationEnd = dataUrlEnd >= 0 ? originalStylesheet.indexOf(";", dataUrlEnd) : -1;
 
   if (
     !nearestSelector ||
     !expectedSelectors.has(nearestSelector.selector) ||
     markerStart - nearestSelector.index > 1500 ||
-    markerEnd < 0
+    dataUrlEnd < 0 ||
+    declarationEnd < 0 ||
+    declarationEnd - dataUrlEnd > 200
   ) {
     throw new Error("An embedded WebP could not be safely tied to an expected hidden watermark rule.");
   }
 
   matchedSelectors.add(nearestSelector.selector);
-  replacements.push({ start: markerStart, end: markerEnd + 3 });
+  replacements.push({ start: markerStart, end: declarationEnd + 1 });
 }
 
 if (matchedSelectors.size !== expectedSelectors.size) {
