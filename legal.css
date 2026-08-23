@@ -91,7 +91,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.55rem;
+  gap: 0.35rem;
 }
 
 .footer-directory-links a {
@@ -111,7 +111,7 @@
 }
 
 .footer-contact-links a:last-child {
-  margin-top: 0.15rem !important;
+  margin-top: 0 !important;
   color: rgba(255, 255, 255, 0.94);
   font-weight: 700;
 }
@@ -366,6 +366,10 @@
 
   .footer-directory-links a {
     font-size: 0.88rem;
+  }
+
+  .footer-contact-links a:last-child {
+    margin-top: 0.15rem !important;
   }
 
   .footer-legal-left {
