@@ -111,6 +111,17 @@ for (const requiredFile of ["assets/favicon.svg", "robots.txt", "sitemap.xml"]) 
   }
 }
 
+for (const requiredOptimizedAsset of [
+  "assets/rudrankaa-logo-440.webp",
+  "assets/watermarks/ardhanarishwar-watermark-520.webp",
+  "assets/watermarks/om-watermark-420.webp",
+  "myth-busters-loader.js",
+]) {
+  if (!repositoryFileSet.has(requiredOptimizedAsset)) {
+    errors.push(`Missing optimized display asset: ${requiredOptimizedAsset}`);
+  }
+}
+
 const homepageHtml = await readFile(path.join(repositoryRoot, "index.html"), "utf8");
 
 for (const requiredHomepageSeo of [

@@ -317,7 +317,7 @@
     const button = document.createElement("button");
     button.className = "myth-buster-open";
     button.type = "button";
-    button.setAttribute("aria-label", `Open ${label}`);
+    button.setAttribute("aria-label", `Myth Buster ${formattedDate}. Open flyer`);
 
     const imageFrame = document.createElement("span");
     imageFrame.className = "myth-buster-image-frame";
