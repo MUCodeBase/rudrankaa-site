@@ -93,6 +93,7 @@
   let pinchState = null;
   let gestureHadMultiplePointers = false;
   let lastTouchTap = null;
+  let lastInteractionPointerType = "mouse";
 
   const clampZoom = (value) => Math.min(maximumZoom, Math.max(minimumZoom, value));
 
@@ -452,7 +453,22 @@
 
   window.addEventListener("resize", refitFlyerWhenWidthChanges);
 
+  dialogViewport?.addEventListener("dblclick", (event) => {
+    if (lastInteractionPointerType !== "mouse") {
+      return;
+    }
+
+    event.preventDefault();
+    const targetZoom = zoom > minimumZoom ? minimumZoom : doubleTapZoom;
+    if (targetZoom === minimumZoom) {
+      renderZoom(minimumZoom, false);
+    } else {
+      renderZoomAroundPoint(targetZoom, event.clientX, event.clientY);
+    }
+  });
+
   dialogViewport?.addEventListener("pointerdown", (event) => {
+    lastInteractionPointerType = event.pointerType || "mouse";
     const pointerPoint = { x: event.clientX, y: event.clientY };
     activePointers.set(event.pointerId, pointerPoint);
     pointerStartPoints.set(event.pointerId, pointerPoint);
