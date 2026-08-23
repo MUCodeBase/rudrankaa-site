@@ -1,0 +1,459 @@
+.birth-number-form {
+  margin: -0.2rem 0 1.25rem;
+}
+
+.birth-number-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.birth-number-note {
+  display: block;
+  margin-bottom: 0.65rem;
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.birth-number-controls {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 0.55rem;
+}
+
+.birth-day-input,
+.birth-number-submit {
+  min-height: 42px;
+  border-radius: 0;
+  font: inherit;
+}
+
+.birth-day-input {
+  width: 100%;
+  padding: 0 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  text-align: center;
+  outline: none;
+  transition: color 160ms ease;
+}
+
+.birth-day-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px rgba(185, 133, 60, 0.12);
+}
+
+.birth-day-input[aria-invalid="true"] {
+  border-color: var(--maroon);
+}
+
+.birth-day-input.is-default-example {
+  color: #9a8f88;
+}
+
+.birth-number-submit {
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--maroon);
+  background: var(--maroon);
+  color: white;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  white-space: nowrap;
+}
+
+.birth-number-submit:hover,
+.birth-number-submit:focus-visible {
+  background: var(--maroon-deep);
+}
+
+.birth-number-error {
+  margin-top: 0.5rem;
+  color: var(--maroon);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.birth-calculation {
+  margin: 0.7rem 0 0;
+  padding-left: 0.65rem;
+  border-left: 2px solid var(--gold);
+  color: var(--maroon);
+  font-size: 0.74rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.number-grid .number-tile {
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.number-grid .number-tile:hover,
+.number-grid .number-tile:focus-visible {
+  border-color: var(--gold);
+  color: var(--maroon);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.number-grid .number-tile.is-selected,
+.number-grid .number-tile.is-selected:hover,
+.number-grid .number-tile.is-selected:focus-visible {
+  border-color: var(--maroon);
+  background: var(--maroon);
+  color: white;
+  font-size: 1.75rem;
+  transform: none;
+}
+
+.number-card .birth-summary {
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.number-card .birth-summary strong {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: var(--maroon);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.birth-number-detail {
+  padding: 0 0 12px;
+  background: var(--paper);
+  scroll-margin-top: 96px;
+}
+
+.birth-number-detail[hidden] {
+  display: none;
+}
+
+.birth-detail-card {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.3fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+  padding: clamp(1.65rem, 3.4vw, 2.8rem);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 10% 20%, rgba(217, 183, 121, 0.12), transparent 34%),
+    linear-gradient(135deg, rgba(248, 242, 232, 0.72), rgba(255, 253, 249, 0.96));
+}
+
+.birth-detail-kicker {
+  margin: 0 0 0.7rem;
+  color: var(--maroon);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.birth-detail-identity {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  max-width: 100%;
+  gap: 0.72rem;
+}
+
+.birth-detail-number {
+  width: auto;
+  max-width: 100%;
+  height: 1em;
+  min-height: 0;
+  display: flex;
+  align-items: flex-end;
+  align-self: flex-start;
+  margin: 0;
+  color: var(--maroon);
+  font-family: var(--serif);
+  font-size: clamp(5rem, 9vw, 7.8rem);
+  font-weight: 400;
+  line-height: 1;
+  transform-origin: left bottom;
+  will-change: transform;
+}
+
+.birth-detail-planet {
+  display: block;
+  margin: 0;
+  color: var(--gold);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.birth-detail-title {
+  margin: 0 0 0.55rem;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+}
+
+.birth-detail-keywords {
+  margin: 0 0 1.15rem;
+  color: var(--maroon);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.birth-detail-description {
+  max-width: 760px;
+  margin: 0;
+  color: var(--ink-soft);
+  font-family: var(--serif);
+  font-size: clamp(1.02rem, 1.45vw, 1.14rem);
+  line-height: 1.85;
+}
+
+.birth-detail-actions {
+  margin-top: 1.2rem;
+}
+
+.birth-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: var(--maroon);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  line-height: 1.5;
+  cursor: pointer;
+  text-underline-offset: 5px;
+}
+
+.birth-detail-back:hover,
+.birth-detail-back:focus-visible {
+  color: var(--maroon-deep);
+  outline: none;
+}
+
+.birth-scroll-cue-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 72px;
+  padding: 0.35rem 1rem 0.85rem;
+  background: var(--paper);
+  opacity: 1;
+  overflow: visible;
+  transition: opacity 220ms ease, min-height 220ms ease, padding 220ms ease;
+}
+
+.birth-scroll-cue-wrap[hidden] {
+  display: none;
+}
+
+.birth-scroll-cue-wrap.is-hidden {
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+}
+
+.birth-scroll-cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.14rem;
+  padding: 0.18rem 0.85rem;
+  border: 0;
+  background: transparent;
+  color: var(--maroon);
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+  cursor: pointer;
+}
+
+.birth-scroll-cue::before {
+  content: "⌄⌄";
+  display: block;
+  color: var(--gold);
+  font-size: 1.22rem;
+  line-height: 0.82;
+  letter-spacing: -0.1em;
+  animation: birth-scroll-nudge 1.6s ease-in-out 2;
+}
+
+.birth-scroll-cue:hover,
+.birth-scroll-cue:focus-visible {
+  color: var(--maroon-deep);
+  outline: none;
+}
+
+@keyframes birth-scroll-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .birth-scroll-cue::before {
+    animation: none;
+  }
+
+  .birth-scroll-cue-wrap {
+    transition: none;
+  }
+}
+
+@media (min-width: 901px) {
+  .hero .number-card {
+    padding: 2rem 2.15rem;
+  }
+
+  .hero .number-card .card-kicker {
+    margin-bottom: 1.05rem;
+  }
+
+  .hero .birth-number-form {
+    margin-bottom: 0.92rem;
+  }
+
+  .hero .birth-number-note {
+    margin-bottom: 0.44rem;
+  }
+
+  .hero .number-grid {
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero .hero-grid > div:first-child {
+    transform: translateY(-82px);
+  }
+
+  .hero .number-card,
+  .hero .floating-symbol {
+    transform: translateY(-228px);
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1199px) {
+  .hero .hero-grid > div:first-child {
+    transform: translateY(-55px);
+  }
+
+  .hero .number-card,
+  .hero .floating-symbol {
+    transform: translateY(-155px);
+  }
+}
+
+@media (min-width: 901px) and (max-width: 999px) {
+  .hero .hero-grid > div:first-child {
+    transform: translateY(-30px);
+  }
+
+  .hero .number-card,
+  .hero .floating-symbol {
+    transform: translateY(-100px);
+  }
+}
+
+@media (max-width: 640px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  @supports (overflow-x: clip) {
+    html,
+    body {
+      overflow-x: clip;
+    }
+  }
+
+  .birth-number-controls {
+    grid-template-columns: 66px minmax(0, 1fr);
+  }
+
+  .birth-number-submit {
+    font-size: 0.68rem;
+    letter-spacing: 0.02em;
+  }
+
+  .birth-number-detail {
+    padding-bottom: 10px;
+    scroll-margin-top: 72px;
+    overflow-x: clip;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .birth-detail-card {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 1.65rem 1.2rem 1.9rem;
+  }
+
+  .birth-detail-identity {
+    gap: 0.62rem;
+  }
+
+  .birth-detail-number {
+    font-size: 4.9rem;
+  }
+
+  .birth-detail-planet {
+    font-size: 0.94rem;
+  }
+
+  .birth-detail-description {
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .birth-detail-actions {
+    margin-top: 1.1rem;
+  }
+
+  .birth-scroll-cue-wrap {
+    min-height: 66px;
+    padding: 0.3rem 0.8rem 0.72rem;
+  }
+
+  .birth-scroll-cue {
+    padding: 0.15rem 0.65rem;
+    font-size: 0.8rem;
+  }
+
+  .birth-scroll-cue::before {
+    font-size: 1.14rem;
+  }
+}
