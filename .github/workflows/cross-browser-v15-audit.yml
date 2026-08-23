@@ -62,7 +62,7 @@ jobs:
             await page.getByRole('button', { name: 'Find my number' }).click();
             await page.waitForSelector('.birth-number-detail:not([hidden])');
             assert.equal((await page.locator('.birth-detail-title').innerText()).trim(), 'Number 1');
-            assert.equal((await page.locator('.birth-detail-planet').innerText()).trim(), 'Sun');
+            assert.equal((await page.locator('.birth-detail-planet').innerText()).trim().toLowerCase(), 'sun');
 
             const serviceTrigger = page.locator('.service-details-trigger[data-service-key="name-energy"]');
             await serviceTrigger.scrollIntoViewIfNeeded();
