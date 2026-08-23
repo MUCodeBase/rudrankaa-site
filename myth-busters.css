@@ -155,7 +155,7 @@
 
 .myth-buster-caption time {
   flex: 0 0 auto;
-  color: var(--gold);
+  color: var(--gold-text);
   font-size: 0.73rem;
   font-weight: 750;
   letter-spacing: 0.06em;

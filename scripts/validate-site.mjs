@@ -87,7 +87,48 @@ for (const htmlFile of repositoryFiles.filter((file) => file.endsWith(".html")))
   }
 }
 
+const publicPageCanonicals = new Map([
+  ["index.html", "https://rudrankaa.com/"],
+  ["myth-busters.html", "https://rudrankaa.com/myth-busters.html"],
+  ["disclaimer.html", "https://rudrankaa.com/disclaimer.html"],
+  ["terms.html", "https://rudrankaa.com/terms.html"],
+  ["privacy.html", "https://rudrankaa.com/privacy.html"],
+]);
+
+for (const [htmlFile, canonicalUrl] of publicPageCanonicals) {
+  const html = await readFile(path.join(repositoryRoot, htmlFile), "utf8");
+  if (!html.includes(`<link rel="canonical" href="${canonicalUrl}" />`)) {
+    errors.push(`${htmlFile}: missing or incorrect canonical URL.`);
+  }
+  if (!html.includes('assets/favicon.svg')) {
+    errors.push(`${htmlFile}: missing shared favicon reference.`);
+  }
+}
+
+for (const requiredFile of ["assets/favicon.svg", "robots.txt", "sitemap.xml"]) {
+  if (!repositoryFileSet.has(requiredFile)) {
+    errors.push(`Missing SEO asset: ${requiredFile}`);
+  }
+}
+
 const homepageHtml = await readFile(path.join(repositoryRoot, "index.html"), "utf8");
+
+for (const requiredHomepageSeo of [
+  'property="og:title"',
+  'property="og:description"',
+  'property="og:url" content="https://rudrankaa.com/"',
+  'name="twitter:card"',
+  'type="application/ld+json"',
+]) {
+  if (!homepageHtml.includes(requiredHomepageSeo)) {
+    errors.push(`index.html: missing SEO metadata marker ${requiredHomepageSeo}`);
+  }
+}
+
+if (homepageHtml.includes('Prevent the source logo from expanding if an external stylesheet is delayed or cached.')) {
+  errors.push('index.html: legacy inline logo fallback CSS should not be present.');
+}
+
 const serviceCardCount = (homepageHtml.match(/<article class="service-card(?: featured-card)?">/g) || []).length;
 const serviceKeyMatches = Array.from(homepageHtml.matchAll(/data-service-key="([^"]+)"/g), (match) => match[1]);
 const expectedServiceKeys = new Set([

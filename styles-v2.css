@@ -5,6 +5,7 @@
   --paper: #fffdf9;
   --sand: #e9dcc8;
   --gold: #b9853c;
+  --gold-text: #956323;
   --gold-light: #d9b779;
   --maroon: #4d201d;
   --maroon-deep: #2e1413;
@@ -92,7 +93,7 @@ a {
 .brand-logo-frame {
   position: relative;
   width: 220px;
-  height: 72px;
+  height: 88px;
   display: block;
   flex: 0 0 auto;
   overflow: hidden;
@@ -284,7 +285,7 @@ h2 {
 
 .signature-line {
   margin: -0.55rem 0 1rem;
-  color: var(--gold);
+  color: var(--gold-text);
   font-family: var(--serif);
   font-size: clamp(1rem, 1.6vw, 1.25rem);
   font-style: italic;
@@ -1540,7 +1541,7 @@ h2 {
 }
 
 .testimonial-card footer span {
-  color: var(--gold);
+  color: var(--gold-text);
   font-size: 0.73rem;
   font-weight: 750;
   letter-spacing: 0.12em;
@@ -1649,10 +1650,6 @@ h2 {
 
 
 /* Static credibility elements previously injected at runtime. */
-.site-header .brand-logo-frame {
-  height: 88px !important;
-}
-
 .site-header .brand-logo-frame::after {
   content: "";
   position: absolute;
@@ -1738,7 +1735,6 @@ h2 {
 }
 
 @media (max-width: 640px) {
-  .site-header .brand-logo-frame { height: 60px !important; }
   .site-header .brand-logo-frame::after { height: 3px; }
   .brand-trademark { right: 6px; top: 7px; font-size: 0.66rem; }
   .hero-credential { margin-top: 0.05rem; margin-bottom: 1.35rem; }
