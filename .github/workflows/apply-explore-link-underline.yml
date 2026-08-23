@@ -1,0 +1,60 @@
+name: Apply Explore services underline refinement
+
+on:
+  push:
+    branches:
+      - cleanup/v1.5-closure
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v7
+        with:
+          ref: cleanup/v1.5-closure
+
+      - name: Refine Explore services underline state
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          styles = Path('styles-v2.css')
+          css = styles.read_text(encoding='utf-8')
+          old = '''.text-link {\n  font-size: 0.92rem;\n  font-weight: 750;\n  text-underline-offset: 5px;\n}\n\n.text-link span {\n'''
+          new = '''.text-link {\n  font-size: 0.92rem;\n  font-weight: 750;\n  text-decoration: none;\n  text-underline-offset: 5px;\n}\n\n.text-link:hover,\n.text-link:focus-visible,\n.text-link:active {\n  text-decoration: underline;\n}\n\n.text-link span {\n'''
+          if css.count(old) != 1:
+              raise SystemExit(f'Expected one text-link block, found {css.count(old)}')
+          styles.write_text(css.replace(old, new, 1), encoding='utf-8')
+
+          index = Path('index.html')
+          html = index.read_text(encoding='utf-8')
+          old_key = 'styles-v2.css?v=10'
+          new_key = 'styles-v2.css?v=11'
+          if html.count(old_key) != 1:
+              raise SystemExit(f'Expected one homepage stylesheet key, found {html.count(old_key)}')
+          index.write_text(html.replace(old_key, new_key, 1), encoding='utf-8')
+          PY
+
+      - name: Validate site
+        run: node scripts/validate-site.mjs
+
+      - name: Check whitespace
+        run: git diff --check
+
+      - name: Commit refinement
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add styles-v2.css index.html
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Show Explore services underline on interaction only"
+          git push origin HEAD:cleanup/v1.5-closure
