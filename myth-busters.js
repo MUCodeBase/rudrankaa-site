@@ -93,6 +93,7 @@
   let pinchState = null;
   let gestureHadMultiplePointers = false;
   let lastTouchTap = null;
+  let lastInteractionPointerType = "mouse";
 
   const clampZoom = (value) => Math.min(maximumZoom, Math.max(minimumZoom, value));
 
@@ -436,9 +437,38 @@
   zoomReset?.addEventListener("click", () => renderZoom(minimumZoom, false));
   zoomIn?.addEventListener("click", () => renderZoom(zoom + zoomStep));
   dialogImage?.addEventListener("load", fitFlyer);
-  window.addEventListener("resize", fitFlyer);
+
+  const refitFlyerWhenWidthChanges = () => {
+    if (!dialog?.open || !dialogViewport || !fittedWidth) {
+      return;
+    }
+
+    const availableWidth = Math.max(1, dialogViewport.clientWidth);
+    if (Math.abs(availableWidth - fittedWidth) < 2) {
+      return;
+    }
+
+    fitFlyer();
+  };
+
+  window.addEventListener("resize", refitFlyerWhenWidthChanges);
+
+  dialogViewport?.addEventListener("dblclick", (event) => {
+    if (lastInteractionPointerType !== "mouse") {
+      return;
+    }
+
+    event.preventDefault();
+    const targetZoom = zoom > minimumZoom ? minimumZoom : doubleTapZoom;
+    if (targetZoom === minimumZoom) {
+      renderZoom(minimumZoom, false);
+    } else {
+      renderZoomAroundPoint(targetZoom, event.clientX, event.clientY);
+    }
+  });
 
   dialogViewport?.addEventListener("pointerdown", (event) => {
+    lastInteractionPointerType = event.pointerType || "mouse";
     const pointerPoint = { x: event.clientX, y: event.clientY };
     activePointers.set(event.pointerId, pointerPoint);
     pointerStartPoints.set(event.pointerId, pointerPoint);
@@ -483,10 +513,16 @@
       return;
     }
 
-    if (panPointerId === event.pointerId && panLastPoint && zoom > minimumZoom) {
+    const canScrollVertically = dialogViewport.scrollHeight > dialogViewport.clientHeight;
+
+    if (
+      panPointerId === event.pointerId &&
+      panLastPoint &&
+      (zoom > minimumZoom || canScrollVertically)
+    ) {
       event.preventDefault();
       dialogViewport.scrollBy({
-        left: panLastPoint.x - currentPoint.x,
+        left: zoom > minimumZoom ? panLastPoint.x - currentPoint.x : 0,
         top: panLastPoint.y - currentPoint.y,
       });
     }

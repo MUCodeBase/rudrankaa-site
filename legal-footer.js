@@ -1,9 +1,4 @@
 (() => {
-  const legalStylesheet = document.querySelector('link[href^="legal.css"]');
-  if (legalStylesheet && legalStylesheet.getAttribute("href") !== "legal.css?v=3") {
-    legalStylesheet.setAttribute("href", "legal.css?v=3");
-  }
-
   if (!document.querySelector("#footer-directory-spacing-fix")) {
     const compactFooterStyles = document.createElement("style");
     compactFooterStyles.id = "footer-directory-spacing-fix";

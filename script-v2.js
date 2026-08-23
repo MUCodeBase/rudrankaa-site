@@ -314,7 +314,7 @@ document.head.appendChild(heroNumberPadRefinement);
 if (!document.querySelector('link[href^="legal.css"]')) {
   const legalStylesheet = document.createElement("link");
   legalStylesheet.rel = "stylesheet";
-  legalStylesheet.href = "legal.css?v=2";
+  legalStylesheet.href = "legal.css?v=3";
   document.head.appendChild(legalStylesheet);
 }
 
