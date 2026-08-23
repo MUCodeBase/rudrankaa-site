@@ -77,14 +77,21 @@
   const minimumZoom = 1;
   const maximumZoom = 3;
   const zoomStep = 0.25;
+  const doubleTapZoom = 2;
+  const doubleTapDelay = 325;
+  const doubleTapDistance = 44;
+  const tapMovementLimit = 18;
   let zoom = minimumZoom;
   let fittedWidth = 0;
   let fittedHeight = 0;
 
   const activePointers = new Map();
+  const pointerStartPoints = new Map();
   let panPointerId = null;
   let panLastPoint = null;
   let pinchState = null;
+  let gestureHadMultiplePointers = false;
+  let lastTouchTap = null;
 
   const clampZoom = (value) => Math.min(maximumZoom, Math.max(minimumZoom, value));
 
@@ -196,8 +203,50 @@
       distance,
       zoom,
     };
+    gestureHadMultiplePointers = true;
+    lastTouchTap = null;
     panPointerId = null;
     panLastPoint = null;
+  };
+
+  const handleTouchTap = (event) => {
+    const startPoint = pointerStartPoints.get(event.pointerId);
+    pointerStartPoints.delete(event.pointerId);
+
+    if (!startPoint || gestureHadMultiplePointers || activePointers.size > 1) {
+      lastTouchTap = null;
+      return;
+    }
+
+    const endPoint = { x: event.clientX, y: event.clientY };
+    if (getDistance(startPoint, endPoint) > tapMovementLimit) {
+      lastTouchTap = null;
+      return;
+    }
+
+    const currentTap = {
+      time: event.timeStamp,
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (
+      lastTouchTap &&
+      currentTap.time - lastTouchTap.time <= doubleTapDelay &&
+      getDistance(lastTouchTap, currentTap) <= doubleTapDistance
+    ) {
+      event.preventDefault();
+      const targetZoom = zoom > minimumZoom ? minimumZoom : doubleTapZoom;
+      if (targetZoom === minimumZoom) {
+        renderZoom(minimumZoom, false);
+      } else {
+        renderZoomAroundPoint(targetZoom, event.clientX, event.clientY);
+      }
+      lastTouchTap = null;
+      return;
+    }
+
+    lastTouchTap = currentTap;
   };
 
   const finishPointerGesture = (pointerId) => {
@@ -217,6 +266,7 @@
     } else {
       panPointerId = null;
       panLastPoint = null;
+      gestureHadMultiplePointers = false;
     }
   };
 
@@ -391,7 +441,9 @@
   window.addEventListener("resize", fitFlyer);
 
   dialogViewport?.addEventListener("pointerdown", (event) => {
-    activePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    const pointerPoint = { x: event.clientX, y: event.clientY };
+    activePointers.set(event.pointerId, pointerPoint);
+    pointerStartPoints.set(event.pointerId, pointerPoint);
     dialogViewport.setPointerCapture?.(event.pointerId);
 
     if (activePointers.size >= 2) {
@@ -400,7 +452,7 @@
     }
 
     panPointerId = event.pointerId;
-    panLastPoint = { x: event.clientX, y: event.clientY };
+    panLastPoint = pointerPoint;
   });
 
   dialogViewport?.addEventListener("pointermove", (event) => {
@@ -445,10 +497,17 @@
   });
 
   dialogViewport?.addEventListener("pointerup", (event) => {
+    if (event.pointerType === "touch") {
+      handleTouchTap(event);
+    } else {
+      pointerStartPoints.delete(event.pointerId);
+    }
     finishPointerGesture(event.pointerId);
   });
 
   dialogViewport?.addEventListener("pointercancel", (event) => {
+    pointerStartPoints.delete(event.pointerId);
+    lastTouchTap = null;
     finishPointerGesture(event.pointerId);
   });
 
@@ -470,9 +529,12 @@
     fittedWidth = 0;
     fittedHeight = 0;
     activePointers.clear();
+    pointerStartPoints.clear();
     panPointerId = null;
     panLastPoint = null;
     pinchState = null;
+    gestureHadMultiplePointers = false;
+    lastTouchTap = null;
     dialogCanvas?.removeAttribute("style");
     updateZoomControls();
   });
