@@ -65,43 +65,82 @@ for (const token of requiredLogoLayoutTokens) {
   }
 }
 
-// The old pseudo-element watermark payload is no longer rendered: a later rule explicitly
-// hides that pseudo-element and the visible watermark uses the external watermark asset.
-// Remove only the one known embedded data URL; leave every other declaration untouched.
+// The old pseudo-element watermark payloads are no longer rendered: a later rule explicitly
+// hides both pseudo-elements and the visible artwork uses external watermark image elements.
 const hiddenLegacyWatermarkRule = /\.about::after,\s*\n\.contact-card::before\s*\{\s*\n\s*display:\s*none;\s*\n\}/;
+const visibleWatermarkTokens = [".about-watermark", ".contact-watermark"];
 
 if (!hiddenLegacyWatermarkRule.test(originalStylesheet)) {
-  throw new Error("The legacy watermark pseudo-element is not confirmed hidden. Stylesheet was not changed.");
+  throw new Error("The legacy watermark pseudo-elements are not confirmed hidden. Stylesheet was not changed.");
+}
+
+for (const token of visibleWatermarkTokens) {
+  if (!originalStylesheet.includes(token)) {
+    throw new Error(`Expected visible external watermark rule was not found: ${token}`);
+  }
 }
 
 const embeddedWatermarkMarker = 'background: url("data:image/webp;base64,';
-const markerCount = originalStylesheet.split(embeddedWatermarkMarker).length - 1;
+const markerIndices = [];
+let searchFrom = 0;
 
-if (markerCount !== 1) {
+while (true) {
+  const markerIndex = originalStylesheet.indexOf(embeddedWatermarkMarker, searchFrom);
+  if (markerIndex < 0) {
+    break;
+  }
+
+  markerIndices.push(markerIndex);
+  searchFrom = markerIndex + embeddedWatermarkMarker.length;
+}
+
+if (markerIndices.length !== 2) {
   throw new Error(
-    `Expected exactly one obsolete embedded WebP background, found ${markerCount}. Stylesheet was not changed.`
+    `Expected exactly two obsolete embedded WebP backgrounds, found ${markerIndices.length}. Stylesheet was not changed.`
   );
 }
 
-const markerStart = originalStylesheet.indexOf(embeddedWatermarkMarker);
-const aboutRuleStart = originalStylesheet.lastIndexOf(".about::after", markerStart);
-const markerEnd = originalStylesheet.indexOf('");', markerStart);
+const expectedSelectors = new Set([".about::after", ".contact-card::before"]);
+const replacements = [];
+const matchedSelectors = new Set();
 
-if (
-  aboutRuleStart < 0 ||
-  markerStart - aboutRuleStart > 1200 ||
-  markerEnd < 0
-) {
-  throw new Error("The embedded WebP could not be safely tied to the hidden .about::after rule.");
+for (const markerStart of markerIndices) {
+  const selectorCandidates = [".about::after", ".contact-card::before"]
+    .map((selector) => ({ selector, index: originalStylesheet.lastIndexOf(selector, markerStart) }))
+    .filter(({ index }) => index >= 0)
+    .sort((left, right) => right.index - left.index);
+
+  const nearestSelector = selectorCandidates[0];
+  const markerEnd = originalStylesheet.indexOf('");', markerStart);
+
+  if (
+    !nearestSelector ||
+    !expectedSelectors.has(nearestSelector.selector) ||
+    markerStart - nearestSelector.index > 1500 ||
+    markerEnd < 0
+  ) {
+    throw new Error("An embedded WebP could not be safely tied to an expected hidden watermark rule.");
+  }
+
+  matchedSelectors.add(nearestSelector.selector);
+  replacements.push({ start: markerStart, end: markerEnd + 3 });
 }
 
-const optimizedStylesheet =
-  originalStylesheet.slice(0, markerStart) +
-  "background: none;" +
-  originalStylesheet.slice(markerEnd + 3);
+if (matchedSelectors.size !== expectedSelectors.size) {
+  throw new Error("The two embedded WebP backgrounds did not map one-to-one to the hidden watermark rules.");
+}
+
+let optimizedStylesheet = originalStylesheet;
+
+for (const replacement of replacements.sort((left, right) => right.start - left.start)) {
+  optimizedStylesheet =
+    optimizedStylesheet.slice(0, replacement.start) +
+    "background: none;" +
+    optimizedStylesheet.slice(replacement.end);
+}
 
 if (optimizedStylesheet.includes(embeddedWatermarkMarker)) {
-  throw new Error("The obsolete embedded WebP background remains after cleanup. Stylesheet was not written.");
+  throw new Error("An obsolete embedded WebP background remains after cleanup. Stylesheet was not written.");
 }
 
 await writeFile(indexPath, optimizedIndex, "utf8");
