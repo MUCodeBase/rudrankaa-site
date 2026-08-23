@@ -9,15 +9,11 @@ on:
       - "scripts/build-myth-buster-thumbnails.mjs"
       - "scripts/build-myth-busters-manifest.mjs"
       - ".github/workflows/update-myth-busters.yml"
-  pull_request:
-    paths:
-      - "assets/myth-busters/**"
-      - "!assets/myth-busters/manifest.json"
-      - "!assets/myth-busters/thumbnails/**"
-      - "scripts/build-myth-buster-thumbnails.mjs"
-      - "scripts/build-myth-busters-manifest.mjs"
-      - ".github/workflows/update-myth-busters.yml"
   workflow_dispatch:
+
+concurrency:
+  group: update-myth-busters-${{ github.ref_name }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -29,12 +25,12 @@ jobs:
       - name: Check out the updated branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
+          ref: ${{ github.ref_name }}
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install WebP tools
         run: |
@@ -59,4 +55,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- assets/myth-busters/thumbnails assets/myth-busters/manifest.json
           git commit -m "Optimize Myth Busters gallery assets"
-          git push origin HEAD:${{ github.head_ref || github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
