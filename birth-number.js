@@ -352,7 +352,7 @@
 
     if (!valid) {
       input.setAttribute("aria-invalid", "true");
-      error.textContent = "Please enter a whole-number date from 1 to 31.";
+      error.textContent = "Please enter a whole-number day from 1 to 31.";
       error.hidden = false;
       calculation.hidden = true;
       input.focus();

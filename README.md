@@ -7,7 +7,7 @@ Responsive static website for Rudrankaa, published from the `main` branch with G
 - `index.html` — homepage structure and core content
 - `styles-v2.css` — shared responsive site styling
 - `site-navigation.js` — shared header, mobile navigation and footer-year behaviour
-- `birth-number.js`, `birth-number-refinements.js`, `hero-number-pad-refinement.js` — current interactive Birth Number experience
+- `birth-number.js` / `birth-number.css` — consolidated interactive Birth Number experience
 - `service-details.js` / `service-details.css` — service detail dialog interactions; approved service summaries remain in HTML
 - `myth-busters.html`, `myth-busters.js`, `myth-busters.css` — Myth Busters archive and viewer
 - `disclaimer.html`, `terms.html`, `privacy.html`, `legal.css` — legal content and shared footer styling
