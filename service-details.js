@@ -17,9 +17,9 @@
         title: "Name Energy Alignment",
         paragraphs: [
           "Your date of birth is fixed and carries its own numerical pattern. Your name, however, can be consciously reviewed and, where appropriate, adjusted to create greater numerological harmony.",
-          "Name Energy Alignment combines multiple layers of numerological calculations with the sound vibrations associated with individual alphabets to assess and create balanced name combinations.",
-          "The service also includes creating numerologically aligned names for newborn babies, taking the child’s date of birth into consideration.",
-          "The objective is to identify a name considered more supportive and harmonious within the Rudrankaa numerological framework.",
+          "Name Energy Alignment brings together Chaldean numerology and pronology, combining layered numerical calculations with the sound, pronunciation and vibrational qualities of individual alphabets to assess and create balanced name combinations.",
+          "The service also includes creating numerologically and phonetically aligned names for newborn babies, taking the child’s date of birth into consideration.",
+          "The objective is to identify a name considered more supportive, harmonious and well aligned within the Rudrankaa numerological framework.",
         ],
       },
     ],
