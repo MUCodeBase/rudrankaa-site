@@ -95,6 +95,64 @@
   const closeButton = dialog.querySelector(".service-dialog-close");
   const consultationLink = dialog.querySelector(".service-dialog-cta");
 
+  let lockedScrollY = 0;
+  let scrollLockSnapshot = null;
+
+  const lockPageScroll = () => {
+    if (scrollLockSnapshot) return;
+
+    const rootStyle = document.documentElement.style;
+    const bodyStyle = document.body.style;
+    const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+
+    lockedScrollY = window.scrollY;
+    scrollLockSnapshot = {
+      rootOverflow: rootStyle.overflow,
+      rootOverscrollBehavior: rootStyle.overscrollBehavior,
+      bodyPosition: bodyStyle.position,
+      bodyTop: bodyStyle.top,
+      bodyLeft: bodyStyle.left,
+      bodyRight: bodyStyle.right,
+      bodyWidth: bodyStyle.width,
+      bodyOverflow: bodyStyle.overflow,
+      bodyPaddingRight: bodyStyle.paddingRight,
+    };
+
+    rootStyle.overflow = "hidden";
+    rootStyle.overscrollBehavior = "none";
+    bodyStyle.position = "fixed";
+    bodyStyle.top = `-${lockedScrollY}px`;
+    bodyStyle.left = "0";
+    bodyStyle.right = "0";
+    bodyStyle.width = "100%";
+    bodyStyle.overflow = "hidden";
+    if (scrollbarWidth > 0) bodyStyle.paddingRight = `${scrollbarWidth}px`;
+  };
+
+  const unlockPageScroll = () => {
+    if (!scrollLockSnapshot) return;
+
+    const rootStyle = document.documentElement.style;
+    const bodyStyle = document.body.style;
+    const previousRootScrollBehavior = rootStyle.scrollBehavior;
+    const snapshot = scrollLockSnapshot;
+    scrollLockSnapshot = null;
+
+    rootStyle.overflow = snapshot.rootOverflow;
+    rootStyle.overscrollBehavior = snapshot.rootOverscrollBehavior;
+    bodyStyle.position = snapshot.bodyPosition;
+    bodyStyle.top = snapshot.bodyTop;
+    bodyStyle.left = snapshot.bodyLeft;
+    bodyStyle.right = snapshot.bodyRight;
+    bodyStyle.width = snapshot.bodyWidth;
+    bodyStyle.overflow = snapshot.bodyOverflow;
+    bodyStyle.paddingRight = snapshot.bodyPaddingRight;
+
+    rootStyle.scrollBehavior = "auto";
+    window.scrollTo(0, lockedScrollY);
+    rootStyle.scrollBehavior = previousRootScrollBehavior;
+  };
+
   const openService = (content) => {
     dialogTitle.textContent = content.title;
     dialogCopy.replaceChildren();
@@ -112,10 +170,16 @@
       dialogCopy.appendChild(conclusion);
     }
 
-    if (typeof dialog.showModal === "function") {
-      dialog.showModal();
-    } else {
-      dialog.setAttribute("open", "");
+    lockPageScroll();
+    try {
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute("open", "");
+      }
+    } catch (error) {
+      unlockPageScroll();
+      throw error;
     }
   };
 
@@ -125,6 +189,7 @@
     trigger.addEventListener("click", () => openService(content));
   });
 
+  dialog.addEventListener("close", unlockPageScroll);
   closeButton?.addEventListener("click", () => dialog.close());
   consultationLink?.addEventListener("click", () => {
     if (dialog.open) dialog.close();
