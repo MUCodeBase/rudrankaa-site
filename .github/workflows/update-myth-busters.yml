@@ -5,7 +5,15 @@ on:
     paths:
       - "assets/myth-busters/**"
       - "!assets/myth-busters/manifest.json"
+      - "!assets/myth-busters/thumbnails/**"
+      - "scripts/build-myth-buster-thumbnails.mjs"
+      - "scripts/build-myth-busters-manifest.mjs"
+      - ".github/workflows/update-myth-busters.yml"
   workflow_dispatch:
+
+concurrency:
+  group: update-myth-busters-${{ github.ref_name }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -22,21 +30,29 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+
+      - name: Install WebP tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y webp
+
+      - name: Generate lightweight card images
+        run: node scripts/build-myth-buster-thumbnails.mjs
 
       - name: Generate the gallery manifest
         run: node scripts/build-myth-busters-manifest.mjs
 
-      - name: Commit the manifest when it changed
+      - name: Commit generated gallery assets when changed
         shell: bash
         run: |
-          if git diff --quiet -- assets/myth-busters/manifest.json; then
-            echo "The Myth Busters manifest is already current."
+          if [[ -z "$(git status --porcelain -- assets/myth-busters/thumbnails assets/myth-busters/manifest.json)" ]]; then
+            echo "The Myth Busters gallery assets are already current."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- assets/myth-busters/manifest.json
-          git commit -m "Update Myth Busters gallery index"
-          git push
+          git add -- assets/myth-busters/thumbnails assets/myth-busters/manifest.json
+          git commit -m "Optimize Myth Busters gallery assets"
+          git push origin HEAD:${{ github.ref_name }}

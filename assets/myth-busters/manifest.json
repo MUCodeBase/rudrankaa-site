@@ -1,26 +1,31 @@
 [
   {
     "file": "MB_05_22082026.png",
+    "thumbnail": "thumbnails/MB_05_22082026.webp",
     "date": "2026-08-22",
     "counter": 5
   },
   {
     "file": "MB_04_22082026.png",
+    "thumbnail": "thumbnails/MB_04_22082026.webp",
     "date": "2026-08-22",
     "counter": 4
   },
   {
     "file": "MB_03_22082026.png",
+    "thumbnail": "thumbnails/MB_03_22082026.webp",
     "date": "2026-08-22",
     "counter": 3
   },
   {
     "file": "MB_02_22082026.png",
+    "thumbnail": "thumbnails/MB_02_22082026.webp",
     "date": "2026-08-22",
     "counter": 2
   },
   {
     "file": "MB_01_20082026.png",
+    "thumbnail": "thumbnails/MB_01_20082026.webp",
     "date": "2026-08-20",
     "counter": 1
   }

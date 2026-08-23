@@ -38,6 +38,8 @@
     const zoomIn = createZoomButton("myth-buster-zoom-button", "in", "Zoom in", "+");
 
     dialogViewport.className = "myth-buster-dialog-viewport";
+    dialogViewport.style.touchAction = "none";
+    dialogViewport.style.scrollbarGutter = "stable";
     dialogCanvas.className = "myth-buster-dialog-canvas";
     dialogActions.className = "myth-buster-dialog-actions";
     zoomControls.className = "myth-buster-zoom-controls";
@@ -68,13 +70,43 @@
   });
 
   const formatDate = (isoDate) => dateFormatter.format(new Date(`${isoDate}T00:00:00Z`));
+  const encodeAssetPath = (relativePath) => relativePath
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
 
   const minimumZoom = 1;
   const maximumZoom = 3;
   const zoomStep = 0.25;
+  const doubleTapZoom = 2;
+  const doubleTapDelay = 325;
+  const doubleTapDistance = 44;
+  const tapMovementLimit = 18;
   let zoom = minimumZoom;
   let fittedWidth = 0;
   let fittedHeight = 0;
+
+  const activePointers = new Map();
+  const pointerStartPoints = new Map();
+  let panPointerId = null;
+  let panLastPoint = null;
+  let pinchState = null;
+  let gestureHadMultiplePointers = false;
+  let lastTouchTap = null;
+
+  const clampZoom = (value) => Math.min(maximumZoom, Math.max(minimumZoom, value));
+
+  const getPointerPair = () => Array.from(activePointers.values()).slice(0, 2);
+
+  const getDistance = (firstPoint, secondPoint) => Math.hypot(
+    secondPoint.x - firstPoint.x,
+    secondPoint.y - firstPoint.y,
+  );
+
+  const getMidpoint = (firstPoint, secondPoint) => ({
+    x: (firstPoint.x + secondPoint.x) / 2,
+    y: (firstPoint.y + secondPoint.y) / 2,
+  });
 
   const updateZoomControls = () => {
     if (zoomReset) {
@@ -105,7 +137,7 @@
       ? (dialogViewport.scrollTop + dialogViewport.clientHeight / 2) / previousHeight
       : 0.5;
 
-    zoom = Math.min(maximumZoom, Math.max(minimumZoom, nextZoom));
+    zoom = clampZoom(nextZoom);
     const nextWidth = Math.round(fittedWidth * zoom);
     const nextHeight = Math.round(fittedHeight * zoom);
     dialogCanvas.style.width = `${nextWidth}px`;
@@ -125,6 +157,120 @@
     });
   };
 
+  const renderZoomAroundPoint = (nextZoom, clientX, clientY) => {
+    if (!dialogViewport || !dialogCanvas || !fittedWidth || !fittedHeight) {
+      return;
+    }
+
+    const previousWidth = fittedWidth * zoom;
+    const previousHeight = fittedHeight * zoom;
+    const viewportRect = dialogViewport.getBoundingClientRect();
+    const viewportX = clientX - viewportRect.left;
+    const viewportY = clientY - viewportRect.top;
+    const contentX = dialogViewport.scrollLeft + viewportX;
+    const contentY = dialogViewport.scrollTop + viewportY;
+    const contentRatioX = previousWidth > 0 ? contentX / previousWidth : 0.5;
+    const contentRatioY = previousHeight > 0 ? contentY / previousHeight : 0.5;
+
+    zoom = clampZoom(nextZoom);
+    const nextWidth = Math.round(fittedWidth * zoom);
+    const nextHeight = Math.round(fittedHeight * zoom);
+    dialogCanvas.style.width = `${nextWidth}px`;
+    dialogCanvas.style.height = `${nextHeight}px`;
+    updateZoomControls();
+
+    requestAnimationFrame(() => {
+      dialogViewport.scrollTo({
+        left: Math.max(0, contentRatioX * nextWidth - viewportX),
+        top: Math.max(0, contentRatioY * nextHeight - viewportY),
+      });
+    });
+  };
+
+  const beginPinch = () => {
+    const [firstPoint, secondPoint] = getPointerPair();
+    if (!firstPoint || !secondPoint) {
+      pinchState = null;
+      return;
+    }
+
+    const distance = getDistance(firstPoint, secondPoint);
+    if (!distance) {
+      pinchState = null;
+      return;
+    }
+
+    pinchState = {
+      distance,
+      zoom,
+    };
+    gestureHadMultiplePointers = true;
+    lastTouchTap = null;
+    panPointerId = null;
+    panLastPoint = null;
+  };
+
+  const handleTouchTap = (event) => {
+    const startPoint = pointerStartPoints.get(event.pointerId);
+    pointerStartPoints.delete(event.pointerId);
+
+    if (!startPoint || gestureHadMultiplePointers || activePointers.size > 1) {
+      lastTouchTap = null;
+      return;
+    }
+
+    const endPoint = { x: event.clientX, y: event.clientY };
+    if (getDistance(startPoint, endPoint) > tapMovementLimit) {
+      lastTouchTap = null;
+      return;
+    }
+
+    const currentTap = {
+      time: event.timeStamp,
+      x: event.clientX,
+      y: event.clientY,
+    };
+
+    if (
+      lastTouchTap &&
+      currentTap.time - lastTouchTap.time <= doubleTapDelay &&
+      getDistance(lastTouchTap, currentTap) <= doubleTapDistance
+    ) {
+      event.preventDefault();
+      const targetZoom = zoom > minimumZoom ? minimumZoom : doubleTapZoom;
+      if (targetZoom === minimumZoom) {
+        renderZoom(minimumZoom, false);
+      } else {
+        renderZoomAroundPoint(targetZoom, event.clientX, event.clientY);
+      }
+      lastTouchTap = null;
+      return;
+    }
+
+    lastTouchTap = currentTap;
+  };
+
+  const finishPointerGesture = (pointerId) => {
+    activePointers.delete(pointerId);
+
+    if (activePointers.size >= 2) {
+      beginPinch();
+      return;
+    }
+
+    pinchState = null;
+
+    if (activePointers.size === 1) {
+      const [remainingPointerId, remainingPoint] = activePointers.entries().next().value;
+      panPointerId = remainingPointerId;
+      panLastPoint = remainingPoint;
+    } else {
+      panPointerId = null;
+      panLastPoint = null;
+      gestureHadMultiplePointers = false;
+    }
+  };
+
   const fitFlyer = () => {
     if (
       !dialog?.open ||
@@ -135,13 +281,10 @@
       return;
     }
 
-    const fitScale = Math.min(
-      dialogViewport.clientWidth / dialogImage.naturalWidth,
-      dialogViewport.clientHeight / dialogImage.naturalHeight,
-      1,
-    );
-    fittedWidth = Math.max(1, Math.floor(dialogImage.naturalWidth * fitScale));
-    fittedHeight = Math.max(1, Math.floor(dialogImage.naturalHeight * fitScale));
+    const availableWidth = Math.max(1, dialogViewport.clientWidth);
+    const fitScale = availableWidth / dialogImage.naturalWidth;
+    fittedWidth = Math.floor(availableWidth);
+    fittedHeight = Math.max(1, Math.round(dialogImage.naturalHeight * fitScale));
     zoom = minimumZoom;
     renderZoom(minimumZoom, false);
   };
@@ -162,7 +305,10 @@
   const createCard = (entry) => {
     const formattedDate = formatDate(entry.date);
     const label = `Rudrankaa Myth Buster published ${formattedDate}`;
-    const imageSource = `assets/myth-busters/${encodeURIComponent(entry.file)}`;
+    const imageSource = `assets/myth-busters/${encodeAssetPath(entry.file)}`;
+    const thumbnailSource = typeof entry.thumbnail === "string" && entry.thumbnail.length > 0
+      ? `assets/myth-busters/${encodeAssetPath(entry.thumbnail)}`
+      : imageSource;
 
     const figure = document.createElement("figure");
     figure.className = "myth-buster-card";
@@ -177,7 +323,7 @@
 
     const image = document.createElement("img");
     image.className = "myth-buster-image";
-    image.src = imageSource;
+    image.src = thumbnailSource;
     image.alt = label;
     image.width = 853;
     image.height = 1280;
@@ -292,6 +438,77 @@
   dialogImage?.addEventListener("load", fitFlyer);
   window.addEventListener("resize", fitFlyer);
 
+  dialogViewport?.addEventListener("pointerdown", (event) => {
+    const pointerPoint = { x: event.clientX, y: event.clientY };
+    activePointers.set(event.pointerId, pointerPoint);
+    pointerStartPoints.set(event.pointerId, pointerPoint);
+    dialogViewport.setPointerCapture?.(event.pointerId);
+
+    if (activePointers.size >= 2) {
+      beginPinch();
+      return;
+    }
+
+    panPointerId = event.pointerId;
+    panLastPoint = pointerPoint;
+  });
+
+  dialogViewport?.addEventListener("pointermove", (event) => {
+    if (!activePointers.has(event.pointerId)) {
+      return;
+    }
+
+    const currentPoint = { x: event.clientX, y: event.clientY };
+    activePointers.set(event.pointerId, currentPoint);
+
+    if (activePointers.size >= 2) {
+      event.preventDefault();
+      const [firstPoint, secondPoint] = getPointerPair();
+      if (!firstPoint || !secondPoint) {
+        return;
+      }
+
+      if (!pinchState) {
+        beginPinch();
+      }
+
+      if (!pinchState) {
+        return;
+      }
+
+      const distance = getDistance(firstPoint, secondPoint);
+      const midpoint = getMidpoint(firstPoint, secondPoint);
+      const nextZoom = pinchState.zoom * (distance / pinchState.distance);
+      renderZoomAroundPoint(nextZoom, midpoint.x, midpoint.y);
+      return;
+    }
+
+    if (panPointerId === event.pointerId && panLastPoint && zoom > minimumZoom) {
+      event.preventDefault();
+      dialogViewport.scrollBy({
+        left: panLastPoint.x - currentPoint.x,
+        top: panLastPoint.y - currentPoint.y,
+      });
+    }
+
+    panLastPoint = currentPoint;
+  });
+
+  dialogViewport?.addEventListener("pointerup", (event) => {
+    if (event.pointerType === "touch") {
+      handleTouchTap(event);
+    } else {
+      pointerStartPoints.delete(event.pointerId);
+    }
+    finishPointerGesture(event.pointerId);
+  });
+
+  dialogViewport?.addEventListener("pointercancel", (event) => {
+    pointerStartPoints.delete(event.pointerId);
+    lastTouchTap = null;
+    finishPointerGesture(event.pointerId);
+  });
+
   dialog?.addEventListener("keydown", (event) => {
     if (event.key === "+" || event.key === "=") {
       event.preventDefault();
@@ -309,6 +526,13 @@
     zoom = minimumZoom;
     fittedWidth = 0;
     fittedHeight = 0;
+    activePointers.clear();
+    pointerStartPoints.clear();
+    panPointerId = null;
+    panLastPoint = null;
+    pinchState = null;
+    gestureHadMultiplePointers = false;
+    lastTouchTap = null;
     dialogCanvas?.removeAttribute("style");
     updateZoomControls();
   });
