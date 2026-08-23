@@ -39,6 +39,7 @@
 
     dialogViewport.className = "myth-buster-dialog-viewport";
     dialogViewport.style.touchAction = "none";
+    dialogViewport.style.scrollbarGutter = "stable";
     dialogCanvas.className = "myth-buster-dialog-canvas";
     dialogActions.className = "myth-buster-dialog-actions";
     zoomControls.className = "myth-buster-zoom-controls";
@@ -280,13 +281,10 @@
       return;
     }
 
-    const fitScale = Math.min(
-      dialogViewport.clientWidth / dialogImage.naturalWidth,
-      dialogViewport.clientHeight / dialogImage.naturalHeight,
-      1,
-    );
-    fittedWidth = Math.max(1, Math.floor(dialogImage.naturalWidth * fitScale));
-    fittedHeight = Math.max(1, Math.floor(dialogImage.naturalHeight * fitScale));
+    const availableWidth = Math.max(1, dialogViewport.clientWidth);
+    const fitScale = availableWidth / dialogImage.naturalWidth;
+    fittedWidth = Math.floor(availableWidth);
+    fittedHeight = Math.max(1, Math.round(dialogImage.naturalHeight * fitScale));
     zoom = minimumZoom;
     renderZoom(minimumZoom, false);
   };
