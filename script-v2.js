@@ -21,6 +21,31 @@ menuButton?.addEventListener("click", () => {
   navigation?.classList.toggle("open", !isOpen);
 });
 
+document.addEventListener(
+  "click",
+  (event) => {
+    if (menuButton?.getAttribute("aria-expanded") !== "true" || !navigation) {
+      return;
+    }
+
+    const target = event.target;
+    if (!(target instanceof Node)) {
+      return;
+    }
+
+    if (navigation.contains(target) || menuButton.contains(target)) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    navigation.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Open navigation");
+  },
+  true
+);
+
 navigation?.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     navigation.classList.remove("open");
