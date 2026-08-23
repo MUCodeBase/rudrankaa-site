@@ -13,6 +13,7 @@ const filenamePattern = /^MB_(\d+)_(\d{2})(\d{2})(\d{4})\.png$/i;
 
 const warningSizeBytes = 3 * 1024 * 1024;
 const maximumSizeBytes = 5 * 1024 * 1024;
+const thumbnailWidth = 720;
 
 await mkdir(thumbnailsDirectory, { recursive: true });
 
@@ -51,6 +52,7 @@ for (const file of sourceFiles) {
     "-q", "90",
     "-m", "6",
     "-sharp_yuv",
+    "-resize", String(thumbnailWidth), "0",
     sourcePath,
     "-o", thumbnailPath,
   ]);
@@ -58,7 +60,7 @@ for (const file of sourceFiles) {
   const thumbnailStats = await stat(thumbnailPath);
   console.log(
     `${file}: ${(sourceStats.size / 1024).toFixed(0)} KiB -> ` +
-      `${(thumbnailStats.size / 1024).toFixed(0)} KiB card image`
+      `${(thumbnailStats.size / 1024).toFixed(0)} KiB card image (${thumbnailWidth}px wide)`
   );
 }
 
