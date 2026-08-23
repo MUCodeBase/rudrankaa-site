@@ -80,6 +80,8 @@
   color: var(--ink);
   box-shadow: 0 30px 90px rgba(46, 20, 19, 0.28);
   overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .service-details-dialog::backdrop {

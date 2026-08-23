@@ -1,10 +1,9 @@
 (() => {
   const serviceContent = new Map([
     [
-      "Manifestation Grid Activation",
+      "manifestation-grid",
       {
-        summary:
-          "A personalised manifestation grid and 3-digit Lucky Number, calculated from your date of birth, to support focused intentions and purposeful action towards your goals.",
+        title: "Manifestation Grid Activation",
         paragraphs: [
           "A personalised Manifestation Grid is created using your date of birth and a unique combination of numbers. It can be used repeatedly, focusing on one wish or intention at a time, as a numerological aid alongside your own efforts.",
           "A personalised 3-digit Lucky Number is also calculated for you, giving you a simple number that can be carried or used in everyday life.",
@@ -13,10 +12,9 @@
       },
     ],
     [
-      "Name Energy Alignment",
+      "name-energy",
       {
-        summary:
-          "Numerology-based name alignment using your date of birth, layered calculations and sound-vibration analysis, including personalised naming guidance for newborns.",
+        title: "Name Energy Alignment",
         paragraphs: [
           "Your date of birth is fixed and carries its own numerical pattern. Your name, however, can be consciously reviewed and, where appropriate, adjusted to create greater numerological harmony.",
           "Name Energy Alignment combines multiple layers of numerological calculations with the sound vibrations associated with individual alphabets to assess and create balanced name combinations.",
@@ -26,10 +24,9 @@
       },
     ],
     [
-      "Personal Numerology Guidance",
+      "personal-numerology",
       {
-        summary:
-          "A detailed personal numerology review covering name alignment, current numerical cycles, favourable timing, important numbers, relationships and customised guidance.",
+        title: "Personal Numerology Guidance",
         paragraphs: [
           "Personal Numerology Guidance helps you understand the numerical influences relevant to different areas of your life.",
           "The consultation may include alignment of your name with your date of birth, your current Name & Number Mahadasha, your Personal Year and its opportunities and cautions, and the compatibility of your mobile number with your date of birth.",
@@ -41,10 +38,9 @@
       },
     ],
     [
-      "Business & Career Numerology",
+      "business-career",
       {
-        summary:
-          "Numerology-based guidance for career direction, business and brand naming, partnership compatibility and the timing of important career or business decisions.",
+        title: "Business & Career Numerology",
         paragraphs: [
           "Business & Career Numerology uses your numerical profile to provide additional perspective when considering important professional and business decisions.",
           "It may include identifying career directions considered more compatible with your numerical profile, guidance for business and brand naming, and assessment of numerological compatibility between business partners.",
@@ -53,10 +49,9 @@
       },
     ],
     [
-      "Critical Number Alignment",
+      "critical-number",
       {
-        summary:
-          "Check how important everyday numbers—such as your mobile, house, vehicle and bank-account numbers—align with your date of birth.",
+        title: "Critical Number Alignment",
         paragraphs: [
           "Numbers surround us in everyday life—from our mobile and house numbers to vehicle and bank-account numbers.",
           "Critical Number Alignment assesses the compatibility of these important numbers with your date of birth, helping identify combinations considered more supportive within the Rudrankaa numerological framework and highlighting combinations that may warrant reconsideration.",
@@ -65,11 +60,9 @@
       },
     ],
     [
-      "Rudraksha Consultancy",
+      "rudraksha-crystal-yantra",
       {
-        displayTitle: "Rudraksha, Crystal & Yantra Guidance",
-        summary:
-          "Personalised guidance for selecting Rudraksha, crystals and yantras based on your date of birth and intended purpose, with emphasis on authenticity and trusted sourcing.",
+        title: "Rudraksha, Crystal & Yantra Guidance",
         paragraphs: [
           "Rudraksha, crystals and yantras have traditionally been used for different spiritual and personal intentions.",
           "Rudraksha is referenced in traditional scriptures and associated with different purposes according to its type. Crystals are traditionally associated with practices relating to energy and chakra balance, while yantras are associated with particular intentions and spiritual practices.",
@@ -80,8 +73,8 @@
     ],
   ]);
 
-  const cards = Array.from(document.querySelectorAll(".service-card"));
-  if (!cards.length) return;
+  const triggers = Array.from(document.querySelectorAll(".service-details-trigger[data-service-key]"));
+  if (!triggers.length) return;
 
   const dialog = document.createElement("dialog");
   dialog.className = "service-details-dialog";
@@ -102,8 +95,66 @@
   const closeButton = dialog.querySelector(".service-dialog-close");
   const consultationLink = dialog.querySelector(".service-dialog-cta");
 
-  const openService = (title, content) => {
-    dialogTitle.textContent = content.displayTitle || title;
+  let lockedScrollY = 0;
+  let scrollLockSnapshot = null;
+
+  const lockPageScroll = () => {
+    if (scrollLockSnapshot) return;
+
+    const rootStyle = document.documentElement.style;
+    const bodyStyle = document.body.style;
+    const scrollbarWidth = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+
+    lockedScrollY = window.scrollY;
+    scrollLockSnapshot = {
+      rootOverflow: rootStyle.overflow,
+      rootOverscrollBehavior: rootStyle.overscrollBehavior,
+      bodyPosition: bodyStyle.position,
+      bodyTop: bodyStyle.top,
+      bodyLeft: bodyStyle.left,
+      bodyRight: bodyStyle.right,
+      bodyWidth: bodyStyle.width,
+      bodyOverflow: bodyStyle.overflow,
+      bodyPaddingRight: bodyStyle.paddingRight,
+    };
+
+    rootStyle.overflow = "hidden";
+    rootStyle.overscrollBehavior = "none";
+    bodyStyle.position = "fixed";
+    bodyStyle.top = `-${lockedScrollY}px`;
+    bodyStyle.left = "0";
+    bodyStyle.right = "0";
+    bodyStyle.width = "100%";
+    bodyStyle.overflow = "hidden";
+    if (scrollbarWidth > 0) bodyStyle.paddingRight = `${scrollbarWidth}px`;
+  };
+
+  const unlockPageScroll = () => {
+    if (!scrollLockSnapshot) return;
+
+    const rootStyle = document.documentElement.style;
+    const bodyStyle = document.body.style;
+    const previousRootScrollBehavior = rootStyle.scrollBehavior;
+    const snapshot = scrollLockSnapshot;
+    scrollLockSnapshot = null;
+
+    rootStyle.overflow = snapshot.rootOverflow;
+    rootStyle.overscrollBehavior = snapshot.rootOverscrollBehavior;
+    bodyStyle.position = snapshot.bodyPosition;
+    bodyStyle.top = snapshot.bodyTop;
+    bodyStyle.left = snapshot.bodyLeft;
+    bodyStyle.right = snapshot.bodyRight;
+    bodyStyle.width = snapshot.bodyWidth;
+    bodyStyle.overflow = snapshot.bodyOverflow;
+    bodyStyle.paddingRight = snapshot.bodyPaddingRight;
+
+    rootStyle.scrollBehavior = "auto";
+    window.scrollTo(0, lockedScrollY);
+    rootStyle.scrollBehavior = previousRootScrollBehavior;
+  };
+
+  const openService = (content) => {
+    dialogTitle.textContent = content.title;
     dialogCopy.replaceChildren();
 
     content.paragraphs.forEach((paragraph) => {
@@ -119,55 +170,30 @@
       dialogCopy.appendChild(conclusion);
     }
 
-    if (typeof dialog.showModal === "function") {
-      dialog.showModal();
-    } else {
-      dialog.setAttribute("open", "");
+    lockPageScroll();
+    try {
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      } else {
+        dialog.setAttribute("open", "");
+      }
+    } catch (error) {
+      unlockPageScroll();
+      throw error;
     }
   };
 
-  cards.forEach((card) => {
-    const titleElement = card.querySelector("h3");
-    const description = card.querySelector("p");
-    const originalTitle = titleElement?.textContent.trim();
-    const content = originalTitle ? serviceContent.get(originalTitle) : null;
-
-    if (!content || !titleElement || !description) return;
-
-    titleElement.textContent = content.displayTitle || originalTitle;
-    description.textContent = content.summary;
-    description.classList.add("service-summary");
-
-    const existingTrigger = card.querySelector(".service-details-trigger");
-    if (existingTrigger) existingTrigger.remove();
-
-    const trigger = document.createElement("button");
-    trigger.type = "button";
-    trigger.className = "service-details-trigger";
-    trigger.setAttribute("aria-haspopup", "dialog");
-    trigger.textContent = "View details";
-    trigger.addEventListener("click", () => openService(originalTitle, content));
-
-    const enquiryLink = Array.from(card.querySelectorAll("a")).find((link) =>
-      link.textContent.trim().toLowerCase().startsWith("enquire")
-    );
-
-    const actions = document.createElement("div");
-    actions.className = "service-card-actions";
-
-    if (enquiryLink) {
-      actions.appendChild(enquiryLink);
-    }
-    actions.appendChild(trigger);
-    card.appendChild(actions);
+  triggers.forEach((trigger) => {
+    const content = serviceContent.get(trigger.dataset.serviceKey);
+    if (!content) return;
+    trigger.addEventListener("click", () => openService(content));
   });
 
+  dialog.addEventListener("close", unlockPageScroll);
   closeButton?.addEventListener("click", () => dialog.close());
-
   consultationLink?.addEventListener("click", () => {
     if (dialog.open) dialog.close();
   });
-
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
