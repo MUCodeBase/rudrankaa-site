@@ -6,11 +6,11 @@ Responsive static website for Rudrankaa, published from the `main` branch with G
 
 - `index.html` — homepage structure and core content
 - `styles-v2.css` — shared responsive site styling
-- `script-v2.js` — homepage behaviour and feature bootstrap
+- `site-navigation.js` — shared header, mobile navigation and footer-year behaviour
 - `birth-number.js`, `birth-number-refinements.js`, `hero-number-pad-refinement.js` — current interactive Birth Number experience
-- `service-details.js` / `service-details.css` — service detail interactions
+- `service-details.js` / `service-details.css` — service detail dialog interactions; approved service summaries remain in HTML
 - `myth-busters.html`, `myth-busters.js`, `myth-busters.css` — Myth Busters archive and viewer
-- `disclaimer.html`, `terms.html`, `privacy.html`, `legal.css`, `legal-footer.js` — legal and footer content
+- `disclaimer.html`, `terms.html`, `privacy.html`, `legal.css` — legal content and shared footer styling
 - `assets/` — approved site images, service icons, watermarks and Myth Buster assets
 - `scripts/` — repository automation and validation scripts
 
@@ -21,6 +21,10 @@ Use the controlled workflow for website changes:
 **stable release → branch → preview → inspect → iterate → approve → merge → production → release**
 
 Avoid direct feature changes on `main`. Preview branches are deployed separately through the configured Cloudflare Workers preview environment.
+
+## Structural source of truth
+
+Approved visitor-facing credentials, service summaries, FAQ answers, disclaimers and footer content live directly in the HTML rather than being rewritten after page load. JavaScript is reserved for interaction and progressive enhancement.
 
 ## Automated health checks
 

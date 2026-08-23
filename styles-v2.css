@@ -1646,3 +1646,111 @@ h2 {
     box-shadow: none;
   }
 }
+
+
+/* Static credibility elements previously injected at runtime. */
+.site-header .brand-logo-frame {
+  height: 88px !important;
+}
+
+.site-header .brand-logo-frame::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 15px;
+  background: #fffdf9;
+  pointer-events: none;
+}
+
+.hero-credential {
+  max-width: 680px;
+  margin: 0.2rem 0 1.55rem;
+  color: var(--maroon);
+}
+
+.hero-credential-message {
+  display: block;
+  margin-bottom: 0.62rem;
+  font-family: var(--serif);
+  font-size: clamp(1.02rem, 1.35vw, 1.18rem);
+  font-weight: 600;
+  line-height: 1.42;
+}
+
+.hero-credential-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.18rem 0 0.18rem 0.78rem;
+  border-left: 2px solid var(--gold);
+  background: transparent;
+  color: var(--maroon);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.hero-credential-detail::before {
+  content: "✦";
+  color: var(--gold);
+  font-size: 0.7rem;
+}
+
+.about-credential {
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  color: var(--maroon);
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.7;
+}
+
+.about-credential::before {
+  content: "✦";
+  margin-right: 0.55rem;
+  color: var(--gold);
+  font-size: 0.8rem;
+}
+
+.brand-trademark {
+  position: absolute;
+  right: 7px;
+  top: 10px;
+  z-index: 4;
+  color: var(--maroon);
+  font-family: var(--sans);
+  font-size: 0.76rem;
+  font-weight: 750;
+  line-height: 1;
+  pointer-events: none;
+}
+
+@media (min-width: 901px) {
+  .hero-credential-message { max-width: 620px; }
+  .hero-credential-detail { font-size: 0.92rem; }
+}
+
+@media (max-width: 640px) {
+  .site-header .brand-logo-frame { height: 60px !important; }
+  .site-header .brand-logo-frame::after { height: 3px; }
+  .brand-trademark { right: 6px; top: 7px; font-size: 0.66rem; }
+  .hero-credential { margin-top: 0.05rem; margin-bottom: 1.35rem; }
+  .hero-credential-message { margin-bottom: 0.5rem; font-size: 0.98rem; line-height: 1.38; }
+  .hero-credential-detail {
+    display: flex;
+    width: 100%;
+    padding: 0.12rem 0 0.12rem 0.65rem;
+    font-size: 0.77rem;
+    letter-spacing: 0.025em;
+    line-height: 1.45;
+  }
+  .signature-line { margin-bottom: 0.8rem; }
+  .hero-lead { margin-top: 0.1rem; margin-bottom: 1.55rem; font-size: 1.02rem; line-height: 1.55; }
+}

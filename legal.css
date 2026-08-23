@@ -416,3 +416,13 @@
     flex-direction: column;
   }
 }
+
+
+.testimonial-experience-note {
+  max-width: 760px;
+  margin: 1.35rem auto 0;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  text-align: center;
+}

@@ -18,9 +18,15 @@
         .site-header .brand-logo { top: -30px !important; width: 174px !important; }
       }
     </style>
-    <link rel="stylesheet" href="styles-v2.css?v=8" />
+    <link rel="stylesheet" href="styles-v2.css?v=9" />
     <link rel="stylesheet" href="myth-busters.css?v=2" />
-    <script defer src="script-v2.js?v=11"></script>
+    <link rel="stylesheet" href="legal.css?v=3" />
+    <link rel="stylesheet" href="service-details.css?v=1" />
+    <script defer src="site-navigation.js?v=1"></script>
+    <script defer src="birth-number.js?v=3"></script>
+    <script defer src="birth-number-refinements.js?v=9"></script>
+    <script defer src="hero-number-pad-refinement.js?v=7"></script>
+    <script defer src="service-details.js?v=2"></script>
     <script defer src="myth-busters.js?v=6"></script>
   </head>
   <body id="top">
@@ -35,6 +41,7 @@
               src="assets/rudrankaa-logo-600.png"
               alt="Rudrankaa"
             />
+            <span class="brand-trademark" aria-hidden="true">™</span>
           </span>
         </a>
 
@@ -69,6 +76,10 @@
             <p class="eyebrow destiny-kicker"><span></span> Destiny Architect</p>
             <h1>Discover the numbers behind <em>your journey.</em></h1>
             <p class="signature-line">Mathematics of Destiny guided by Ardhnarishwarra</p>
+            <div class="hero-credential">
+              <span class="hero-credential-message">Numerology guidance backed by experience, academic distinction &amp; insight</span>
+              <span class="hero-credential-detail">Ph.D. in Numerology • Gold Medallist • Experienced Practitioner</span>
+            </div>
             <p class="hero-lead">
               Thoughtful numerology guidance to help you understand your natural
               strengths, recurring patterns and the possibilities ahead.
@@ -126,8 +137,9 @@
         />
         <div class="shell split-layout">
           <div>
-            <p class="section-label">About Rudrankaa</p>
+            <p class="section-label">About Rudrankaa™</p>
             <h2>Ancient insight, interpreted for modern life.</h2>
+            <p class="about-credential">Every consultation is personally guided, drawing on deep numerological knowledge and practical experience, with careful attention to what matters most to you.</p>
           </div>
           <div class="body-copy">
             <p>
@@ -158,64 +170,15 @@
           </div>
 
           <div class="service-grid">
-            <article class="service-card">
-              <span class="service-number">01</span>
-              <div class="service-icon" aria-hidden="true">▦</div>
-              <h3>Manifestation Grid Activation</h3>
-              <p>
-                Activate your intentions. Align energy. Accelerate results.
-              </p>
-              <a href="#contact" aria-label="Enquire about Manifestation Grid Activation">Enquire <span aria-hidden="true">→</span></a>
-            </article>
-
-            <article class="service-card featured-card">
-              <span class="service-number">02</span>
-              <div class="service-icon" aria-hidden="true">✽</div>
-              <h3>Name Energy Alignment</h3>
-              <p>
-                Align your name with your destiny for harmony and success.
-              </p>
-              <a href="#contact" aria-label="Enquire about Name Energy Alignment">Enquire <span aria-hidden="true">→</span></a>
-            </article>
-
-            <article class="service-card">
-              <span class="service-number">03</span>
-              <div class="service-icon" aria-hidden="true">✦</div>
-              <h3>Personal Numerology Guidance</h3>
-              <p>
-                Life • Health • Relationships.
-              </p>
-              <a href="#contact" aria-label="Enquire about Personal Numerology Guidance">Enquire <span aria-hidden="true">→</span></a>
-            </article>
-
-            <article class="service-card">
-              <span class="service-number">04</span>
-              <div class="service-icon" aria-hidden="true">◇</div>
-              <h3>Business &amp; Career Numerology</h3>
-              <p>
-                Career Direction • Business Growth • Brand &amp; Business Alignment.
-              </p>
-              <a href="#contact" aria-label="Enquire about Business and Career Numerology">Enquire <span aria-hidden="true">→</span></a>
-            </article>
-
-            <article class="service-card featured-card">
-              <span class="service-number">05</span>
-              <div class="service-icon" aria-hidden="true">#</div>
-              <h3>Critical Number Alignment</h3>
-              <p>
-                Mobile • House • Vehicle • Bank Account.
-              </p>
-              <a href="#contact" aria-label="Enquire about Critical Number Alignment">Enquire <span aria-hidden="true">→</span></a>
-            </article>
-
-            <article class="service-card">
+                                                                                    <article class="service-card">
               <span class="service-number">06</span>
               <div class="service-icon" aria-hidden="true">◌</div>
-              <h3>Rudraksha Consultancy</h3>
-              <p>
-                Personalised Rudraksha selection and guidance.
-              </p>
-              <a href="#contact" aria-label="Enquire about Rudraksha Consultancy">Enquire <span aria-hidden="true">→</span></a>
+              <h3>Rudraksha, Crystal &amp; Yantra Guidance</h3>
+              <p class="service-summary">Personalised guidance for selecting Rudraksha, crystals and yantras based on your date of birth and intended purpose, with emphasis on authenticity and trusted sourcing.</p>
+              <div class="service-card-actions">
+                <a href="#contact" aria-label="Enquire about Rudraksha, Crystal and Yantra Guidance">Enquire <span aria-hidden="true">→</span></a>
+                <button type="button" class="service-details-trigger" data-service-key="rudraksha-crystal-yantra" aria-haspopup="dialog">View details</button>
+              </div>
             </article>
           </div>
         </div>
@@ -377,6 +340,7 @@
               </footer>
             </article>
           </div>
+          <p class="testimonial-experience-note">Testimonials reflect individual experiences and do not guarantee similar outcomes.</p>
         </div>
       </section>
 
@@ -390,23 +354,23 @@
           <div class="faq-list">
             <details>
               <summary>What information is needed for a consultation?</summary>
-              <p>Your relevant name and date-of-birth details, together with the question or area where you are seeking clarity.</p>
+              <p>Your relevant name and date-of-birth details, together with the question or area where you are seeking clarity. Depending on the Service requested, additional details relevant to the numerological analysis may be needed. Please provide only information reasonably necessary for the consultation.</p>
             </details>
             <details>
               <summary>Are consultations private?</summary>
-              <p>Yes. Your details remain private and the conversation stays focused on the guidance you have requested.</p>
+              <p>Rudrankaa treats consultation details with care and confidentiality and uses personal information only as reasonably necessary to provide and administer the requested Service, in accordance with the Rudrankaa <a href="privacy.html">Privacy Policy</a>.</p>
             </details>
             <details>
               <summary>Does numerology predict every outcome?</summary>
-              <p>Rudrankaa uses numerology to highlight patterns, strengths and reflection points, offering guidance that supports greater awareness and more informed choices.</p>
+              <p>Numerology is an interpretive discipline that may highlight patterns, cycles and tendencies. It does not determine or guarantee future events or outcomes, and personal choice and free will remain important.</p>
             </details>
             <details>
               <summary>Can one consultation cover more than one area?</summary>
-              <p>Yes. You may focus on one question or bring together relevant insights across personal, name, career, business or number-alignment themes.</p>
+              <p>Yes. Depending on the scope of the consultation, you may bring together relevant insights across personal, name, career, business or number-alignment themes. The appropriate scope can be discussed when arranging the consultation.</p>
             </details>
             <details>
               <summary>How can I book?</summary>
-              <p>Use WhatsApp, phone or email from the consultation section below to share your question and arrange a suitable time.</p>
+              <p>Use WhatsApp, phone or email from the consultation section below to share your question and arrange a suitable time. A request does not by itself guarantee availability; a consultation is confirmed when Rudrankaa communicates confirmation.</p>
             </details>
           </div>
         </div>
@@ -442,10 +406,13 @@
               >WhatsApp +91 91523 76399</a>
               <a class="button button-outline-light" href="mailto:contact@rudrankaa.com">contact@rudrankaa.com</a>
             </div>
+            <div class="consultation-disclaimer">
+              <p>Numerology is an interpretive discipline. Rudrankaa guidance is intended for reflection and self-development, does not guarantee outcomes, and is not a substitute for qualified medical, psychological, legal, financial, investment or tax advice. <a href="disclaimer.html">Read full disclaimer</a></p>
+            </div>
           </div>
           <div class="qr-card">
             <img
-              src="data:image/png;base64,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"
+              src="assets/whatsapp-qr.png"
               alt="WhatsApp QR code for Rudrankaa"
             />
             <strong>Scan to connect on WhatsApp</strong>
@@ -456,27 +423,48 @@
     </main>
 
     <footer class="site-footer">
-      <div class="shell footer-main">
-        <div>
-          <a class="brand footer-brand" href="#top" aria-label="Rudrankaa home">
+      <div class="shell footer-main footer-directory">
+        <div class="footer-directory-column footer-directory-brand-column">
+          <a class="brand footer-brand footer-directory-brand" href="#top" aria-label="Rudrankaa home">
             <span class="brand-mark" aria-hidden="true">ॐ</span>
-            <span class="brand-name">RUDRANKAA</span>
+            <span class="brand-name">RUDRANKAA™</span>
           </a>
-          <p>Turning numerical intelligence into purposeful growth.</p>
+          <p class="footer-directory-tagline">DESTINY ARCHITECT</p>
+          <p class="footer-directory-copy">Thoughtful numerology guidance for greater clarity, reflection and informed personal choices.</p>
         </div>
-        <nav aria-label="Footer navigation">
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#process">How it works</a>
-          <a href="#myth-busters">Myth Busters</a>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#faq">FAQ</a>
-          <a href="#contact">Contact</a>
-        </nav>
+        <div class="footer-directory-column">
+          <h2 class="footer-directory-heading">Explore</h2>
+          <nav class="footer-directory-links" aria-label="Explore Rudrankaa">
+            <a href="#about">About Rudrankaa</a>
+            <a href="#services">Services</a>
+            <a href="#process">How It Works</a>
+            <a href="#myth-busters">Myth Busters</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#faq">FAQ</a>
+          </nav>
+        </div>
+        <div class="footer-directory-column">
+          <h2 class="footer-directory-heading">Legal</h2>
+          <nav class="footer-directory-links" aria-label="Legal information">
+            <a href="disclaimer.html">Disclaimer</a>
+            <a href="terms.html">Terms &amp; Conditions</a>
+            <a href="privacy.html">Privacy Policy</a>
+          </nav>
+        </div>
+        <div class="footer-directory-column">
+          <h2 class="footer-directory-heading">Get in touch</h2>
+          <div class="footer-directory-links footer-contact-links">
+            <a href="https://wa.me/919152376399?text=Namaste%2C%20I%20would%20like%20to%20book%20a%20Rudrankaa%20consultation." target="_blank" rel="noopener noreferrer">WhatsApp +91 91523 76399</a>
+            <a href="mailto:contact@rudrankaa.com">contact@rudrankaa.com</a>
+            <a href="#contact">Book a Consultation</a>
+          </div>
+        </div>
       </div>
-      <div class="shell footer-bottom">
-        <span>© <span id="year"></span> Rudrankaa. All rights reserved.</span>
-        <span>Numerology guidance is intended for personal reflection and does not replace professional advice.</span>
+      <div class="shell footer-bottom footer-bottom-clean">
+        <div class="footer-legal-left">
+          <span>© <span id="year">2026</span> Rudrankaa. All rights reserved.</span>
+          <p class="trademark-notice">RUDRANKAA™ and the Rudrankaa logo are trademarks.</p>
+        </div>
       </div>
     </footer>
   </body>
