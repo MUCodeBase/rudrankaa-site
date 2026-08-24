@@ -63,9 +63,12 @@ Upload only the single portrait PNG source flyer used for both mobile and deskto
 When a matching source image is added, changed or removed, the `Update Myth Busters gallery` workflow automatically:
 
 1. checks the source PNG size;
-2. generates a lightweight 720 px-wide WebP card image;
-3. removes orphaned generated thumbnails; and
-4. regenerates the manifest in descending counter order.
+2. generates a lightweight 720 px-wide WebP card image only for a new or changed source;
+3. reuses existing thumbnails when the source fingerprint and thumbnail recipe are unchanged;
+4. removes orphaned generated thumbnails; and
+5. regenerates the manifest in descending counter order.
+
+Incremental thumbnail fingerprints are stored in `assets/myth-busters/thumbnails/.source-hashes.json`. The cache includes the thumbnail-generation recipe as well as the source content hash, so a future change to the WebP recipe can invalidate and regenerate affected thumbnails safely. Existing thumbnails are trusted during the one-time cache bootstrap; the cache is first persisted when a real thumbnail generation or orphan cleanup occurs.
 
 Source PNGs above 3 MiB generate a warning. A source above 5 MiB causes gallery generation and Site health validation to fail. If such a file was already pushed to a branch, the failure prevents it from being treated as a healthy release but does not remove that object from Git history.
 
