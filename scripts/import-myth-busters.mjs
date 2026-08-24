@@ -48,7 +48,8 @@ for (const name of published) {
 const uploads = fs.readdirSync(uploadDir, { withFileTypes: true })
   .filter((entry) => entry.isFile())
   .map((entry) => entry.name)
-  .filter((name) => !name.startsWith('.'));
+  .filter((name) => !name.startsWith('.'))
+  .filter((name) => name.toLowerCase() !== 'readme.md');
 
 const seenUploadCounters = new Map();
 const seenUploadLowerNames = new Set();
