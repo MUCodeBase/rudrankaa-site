@@ -1,0 +1,44 @@
+name: Verify Myth Busters publisher
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/publish-myth-busters.yml"
+      - ".github/workflows/verify-myth-busters-publisher.yml"
+      - "scripts/import-myth-busters.mjs"
+      - ".github/MYTH_BUSTERS_PUBLISHER_*.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-publisher-access:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Create short-lived Rudrankaa Publisher token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RUDRANKAA_PUBLISHER_CLIENT_ID }}
+          private-key: ${{ secrets.RUDRANKAA_PUBLISHER_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: |
+            rudrankaa-site
+            rudrankaa-myth-busters
+
+      - name: Verify private upload repository access
+        uses: actions/checkout@v7
+        with:
+          repository: MUCodeBase/rudrankaa-myth-busters
+          token: ${{ steps.app-token.outputs.token }}
+          path: incoming-myth-busters
+          persist-credentials: false
+
+      - name: Verify upload directory
+        shell: bash
+        run: |
+          test -d incoming-myth-busters/uploads
+          echo "Rudrankaa Publisher can securely read the private Myth Busters upload repository."
