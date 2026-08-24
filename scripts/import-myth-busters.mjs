@@ -19,9 +19,21 @@ if (!fs.existsSync(uploadDir) || !fs.statSync(uploadDir).isDirectory()) {
 const filenamePattern = /^MB_(\d+)_(\d{8})\.png$/i;
 const maxBytes = 5 * 1024 * 1024;
 const warnBytes = 3 * 1024 * 1024;
+const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
 function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
+}
+
+function isPng(filePath) {
+  const fd = fs.openSync(filePath, 'r');
+  try {
+    const header = Buffer.alloc(pngSignature.length);
+    const bytesRead = fs.readSync(fd, header, 0, header.length, 0);
+    return bytesRead === pngSignature.length && header.equals(pngSignature);
+  } finally {
+    fs.closeSync(fd);
+  }
 }
 
 function listPublishedSources() {
@@ -89,6 +101,10 @@ for (const name of uploads.sort()) {
   }
   if (stat.size > warnBytes) {
     console.warn(`WARNING: ${name} exceeds 3 MiB (${(stat.size / 1024 / 1024).toFixed(2)} MiB).`);
+  }
+  if (!isPng(uploadPath)) {
+    console.error(`${name} is not a valid PNG file despite its .png filename.`);
+    process.exit(1);
   }
 
   const existingName = publishedByLowerName.get(lowerName);
