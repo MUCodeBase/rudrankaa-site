@@ -23,22 +23,22 @@ Use minimum repository permissions required by the publishing workflow:
 
 Do not grant Administration or Actions write permission unless a later implementation proves it is required.
 
-## Secrets
+## Secrets and variables
 
 Store the GitHub App private key as a GitHub Actions secret in `rudrankaa-site` only. Never commit the private key or an installation token to the repository.
 
-Recommended names:
+Required names:
 
-- `RUDRANKAA_PUBLISHER_APP_ID` (the App ID is not sensitive, but storing it as a variable/secret is convenient)
-- `RUDRANKAA_PUBLISHER_PRIVATE_KEY` (secret)
+- `RUDRANKAA_PUBLISHER_CLIENT_ID` — repository Actions variable containing the GitHub App Client ID
+- `RUDRANKAA_PUBLISHER_PRIVATE_KEY` — repository Actions secret containing the complete GitHub App private key
 
-The workflow should generate a short-lived installation access token at runtime. Do not store the generated installation token as a long-lived repository secret.
+The workflow generates a short-lived installation access token at runtime. Do not store the generated installation token as a long-lived repository secret.
 
 ## Public repository note
 
 `rudrankaa-site` being public does not make GitHub Actions secrets public. Repository files can reference a secret by name, but visitors cannot read the secret value. GitHub encrypts Actions secrets and redacts secret values from logs. Workflows triggered by pull requests from forks do not receive repository secrets.
 
-The publishing workflow should therefore run only from trusted events such as `schedule` and `workflow_dispatch` on the default branch, not from untrusted pull-request code.
+The publishing workflow therefore runs only from trusted events such as `schedule` and `workflow_dispatch` on the default branch, not from untrusted pull-request code.
 
 ## Collaborator workflow
 
