@@ -29,7 +29,27 @@ jobs:
             rudrankaa-site
             rudrankaa-myth-busters
 
+      - name: Check for an existing publishing PR
+        id: pending
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          pending_count="$(gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --json number,headRefName \
+            --jq '[.[] | select(.headRefName | startswith("content/myth-busters-"))] | length')"
+
+          if [[ "$pending_count" != "0" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "An automated Myth Busters publishing PR is already open; skipping this cycle."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check out website repository
+        if: steps.pending.outputs.skip != 'true'
         uses: actions/checkout@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -37,6 +57,7 @@ jobs:
           persist-credentials: false
 
       - name: Check out Myth Busters upload repository
+        if: steps.pending.outputs.skip != 'true'
         uses: actions/checkout@v7
         with:
           repository: MUCodeBase/rudrankaa-myth-busters
@@ -45,20 +66,24 @@ jobs:
           persist-credentials: false
 
       - name: Set up Node.js
+        if: steps.pending.outputs.skip != 'true'
         uses: actions/setup-node@v7
         with:
           node-version: 24
           package-manager-cache: false
 
       - name: Install WebP tools
+        if: steps.pending.outputs.skip != 'true'
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y webp
 
       - name: Import new Myth Buster sources
+        if: steps.pending.outputs.skip != 'true'
         run: node scripts/import-myth-busters.mjs incoming-myth-busters/uploads
 
       - name: Stop when nothing is new
+        if: steps.pending.outputs.skip != 'true'
         id: changes
         shell: bash
         run: |
@@ -70,19 +95,19 @@ jobs:
           fi
 
       - name: Generate thumbnails
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.pending.outputs.skip != 'true' && steps.changes.outputs.changed == 'true'
         run: node scripts/build-myth-buster-thumbnails.mjs
 
       - name: Generate manifest
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.pending.outputs.skip != 'true' && steps.changes.outputs.changed == 'true'
         run: node scripts/build-myth-busters-manifest.mjs
 
       - name: Run Site Health validation
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.pending.outputs.skip != 'true' && steps.changes.outputs.changed == 'true'
         run: node scripts/validate-site.mjs
 
       - name: Create publishing branch and commit
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.pending.outputs.skip != 'true' && steps.changes.outputs.changed == 'true'
         id: branch
         shell: bash
         env:
@@ -100,7 +125,7 @@ jobs:
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${branch}"
 
       - name: Open protected publishing PR
-        if: steps.changes.outputs.changed == 'true'
+        if: steps.pending.outputs.skip != 'true' && steps.changes.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           BRANCH: ${{ steps.branch.outputs.name }}
@@ -113,6 +138,5 @@ jobs:
             --body "Automated Myth Busters publishing batch from the dedicated upload repository. Source PNGs were validated and generated gallery assets were rebuilt before this PR was opened.")"
           echo "Created $pr_url"
 
-          # This succeeds only when repository auto-merge is enabled. The main
-          # ruleset and its required validate check remain authoritative.
-          gh pr merge "$pr_url" --auto --squash
+          # Auto-merge still respects the main ruleset and required validate check.
+          gh pr merge "$pr_url" --auto --squash --delete-branch
