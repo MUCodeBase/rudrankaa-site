@@ -66,7 +66,27 @@ consultationLink?.addEventListener(
 
       const rootStyle = document.documentElement.style;
       const previousScrollBehavior = rootStyle.scrollBehavior;
+      const previousRootOverflowAnchor = rootStyle.overflowAnchor;
+      const previousBodyOverflowAnchor = document.body.style.overflowAnchor;
+
       rootStyle.scrollBehavior = "smooth";
+      rootStyle.overflowAnchor = "none";
+      document.body.style.overflowAnchor = "none";
+
+      let cleanupTimer = null;
+      let cleanedUp = false;
+      const cleanup = () => {
+        if (cleanedUp) return;
+        cleanedUp = true;
+        if (cleanupTimer) window.clearTimeout(cleanupTimer);
+        window.removeEventListener("scrollend", cleanup);
+        rootStyle.scrollBehavior = previousScrollBehavior;
+        rootStyle.overflowAnchor = previousRootOverflowAnchor;
+        document.body.style.overflowAnchor = previousBodyOverflowAnchor;
+      };
+
+      window.addEventListener("scrollend", cleanup, { once: true });
+      cleanupTimer = window.setTimeout(cleanup, 1800);
 
       window.requestAnimationFrame(() => {
         const targetTop = target.getBoundingClientRect().top + window.scrollY;
@@ -75,10 +95,6 @@ consultationLink?.addEventListener(
           left: 0,
           behavior: "smooth",
         });
-
-        window.setTimeout(() => {
-          rootStyle.scrollBehavior = previousScrollBehavior;
-        }, 1000);
       });
     };
 
