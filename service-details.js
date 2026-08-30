@@ -191,9 +191,44 @@
 
   dialog.addEventListener("close", unlockPageScroll);
   closeButton?.addEventListener("click", () => dialog.close());
-  consultationLink?.addEventListener("click", () => {
-    if (dialog.open) dialog.close();
-  });
+  consultationLink?.addEventListener(
+    "click",
+    (event) => {
+      const target = document.getElementById("contact");
+      if (!target) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      const navigateToContact = () => {
+        window.history.replaceState(null, "", "#contact");
+
+        const rootStyle = document.documentElement.style;
+        const previousScrollBehavior = rootStyle.scrollBehavior;
+        rootStyle.scrollBehavior = "auto";
+
+        window.requestAnimationFrame(() => {
+          const targetTop = target.getBoundingClientRect().top + window.scrollY;
+          window.scrollTo({
+            top: Math.max(0, targetTop),
+            left: 0,
+            behavior: "auto",
+          });
+          rootStyle.scrollBehavior = previousScrollBehavior;
+        });
+      };
+
+      if (dialog.open) dialog.close();
+
+      const preloadMythBusters = window.rudrankaaLoadMythBusters;
+      if (typeof preloadMythBusters === "function") {
+        preloadMythBusters().then(navigateToContact);
+      } else {
+        navigateToContact();
+      }
+    },
+    true
+  );
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
