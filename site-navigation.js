@@ -57,7 +57,16 @@ consultationLink?.addEventListener(
 
     event.preventDefault();
     event.stopImmediatePropagation();
+
+    const isMobileMenuOpen = menuButton?.getAttribute("aria-expanded") === "true";
     actionCloseMenu();
+
+    // Closing the mobile menu changes the navigation layout. Do not leave the
+    // CTA focused while that happens: mobile browsers may scroll the focused
+    // element back into view and override the pending Contact navigation.
+    if (isMobileMenuOpen && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
 
     const finishNavigation = () => {
       window.history.replaceState(null, "", "#contact");
