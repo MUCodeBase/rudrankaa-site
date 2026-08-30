@@ -25,11 +25,9 @@ document.addEventListener(
   "click",
   (event) => {
     if (menuButton?.getAttribute("aria-expanded") !== "true" || !navigation) return;
-
     const target = event.target;
     if (!(target instanceof Node)) return;
     if (navigation.contains(target) || menuButton.contains(target)) return;
-
     event.preventDefault();
     event.stopPropagation();
     navigation.classList.remove("open");
@@ -69,32 +67,21 @@ consultationLink?.addEventListener(
       const previousRootOverflowAnchor = rootStyle.overflowAnchor;
       const previousBodyOverflowAnchor = document.body.style.overflowAnchor;
 
-      rootStyle.scrollBehavior = "smooth";
+      rootStyle.scrollBehavior = "auto";
       rootStyle.overflowAnchor = "none";
       document.body.style.overflowAnchor = "none";
 
-      let cleanupTimer = null;
-      let cleanedUp = false;
-      const cleanup = () => {
-        if (cleanedUp) return;
-        cleanedUp = true;
-        if (cleanupTimer) window.clearTimeout(cleanupTimer);
-        window.removeEventListener("scrollend", cleanup);
+      const targetTop = target.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        left: 0,
+        behavior: "auto",
+      });
+
+      window.requestAnimationFrame(() => {
         rootStyle.scrollBehavior = previousScrollBehavior;
         rootStyle.overflowAnchor = previousRootOverflowAnchor;
         document.body.style.overflowAnchor = previousBodyOverflowAnchor;
-      };
-
-      window.addEventListener("scrollend", cleanup, { once: true });
-      cleanupTimer = window.setTimeout(cleanup, 1800);
-
-      window.requestAnimationFrame(() => {
-        const targetTop = target.getBoundingClientRect().top + window.scrollY;
-        window.scrollTo({
-          top: Math.max(0, targetTop),
-          left: 0,
-          behavior: "smooth",
-        });
       });
     };
 
