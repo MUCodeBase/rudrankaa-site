@@ -53,3 +53,42 @@ navigation?.querySelectorAll("a").forEach((link) => {
     menuButton?.setAttribute("aria-label", "Open navigation");
   });
 });
+
+const consultationLink = navigation?.querySelector("a.nav-cta[href=\"#contact\"]");
+
+consultationLink?.addEventListener(
+  "click",
+  (event) => {
+    const target = document.getElementById("contact");
+    if (!target) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const finishNavigation = () => {
+      window.history.replaceState(null, "", "#contact");
+
+      const rootStyle = document.documentElement.style;
+      const previousScrollBehavior = rootStyle.scrollBehavior;
+      rootStyle.scrollBehavior = "auto";
+
+      window.requestAnimationFrame(() => {
+        const targetTop = target.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({
+          top: Math.max(0, targetTop),
+          left: 0,
+          behavior: "auto",
+        });
+        rootStyle.scrollBehavior = previousScrollBehavior;
+      });
+    };
+
+    const preloadMythBusters = window.rudrankaaLoadMythBusters;
+    if (typeof preloadMythBusters === "function") {
+      preloadMythBusters().then(finishNavigation);
+    } else {
+      finishNavigation();
+    }
+  },
+  true
+);
