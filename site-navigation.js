@@ -39,7 +39,7 @@ document.addEventListener(
   true
 );
 
-actionCloseMenu = () => {
+const actionCloseMenu = () => {
   navigation?.classList.remove("open");
   menuButton?.setAttribute("aria-expanded", "false");
   menuButton?.setAttribute("aria-label", "Open navigation");
@@ -78,7 +78,7 @@ consultationLink?.addEventListener(
 
         window.setTimeout(() => {
           rootStyle.scrollBehavior = previousScrollBehavior;
-        }, 700);
+        }, 1000);
       });
     };
 
